@@ -2,11 +2,11 @@
 ###############################
                   ##################
             ############
+import hashlib, sqlite3
 from papersite import app
 from flask import session, flash, redirect, url_for
 from papersite.db import query_db, get_db
 from flask import abort, request, render_template
-import hashlib, sqlite3
 from papersite.config import SALT1
 
 def hash(password):

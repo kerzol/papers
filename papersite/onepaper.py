@@ -2,13 +2,13 @@
 ###############################
                   ##################
             ############
-from papersite import app
-from papersite.db import query_db, get_db
-from papersite.user import get_user_id,  user_authenticated
-from papersite.main_list_of_papers import (get_authors, get_domains,
-                                           get_keywords, get_comments)
-from werkzeug import secure_filename
 import os
+from papersite import app
+from papersite.db import (query_db, get_db, get_authors,  get_domains,
+                          get_keywords, get_comments, get_insert_keyword,
+                          get_insert_author, get_insert_domain)
+from papersite.user import get_user_id,  user_authenticated
+from werkzeug import secure_filename
 from flask import render_template, request, flash, redirect, url_for
 
 @app.route('/paper/<int:paperid>/<string:title>', methods=['GET'])
@@ -85,40 +85,6 @@ ALLOWED_EXTENSIONS = set(['pdf'])
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-
-# If there is no such keyword/author/domain in db, 
-# we will insert in into db
-def get_insert_keyword(keyword):
-    con = get_db()
-    with con:
-        con.execute("INSERT OR IGNORE INTO keywords(keyword)     \
-                     VALUES(?)", [keyword])
-        id = con.execute("SELECT keywordid FROM keywords         \
-                          WHERE keyword = ?", 
-                         [keyword]).fetchone()['keywordid']
-    return id
-
-
-def get_insert_author(fullname):
-    con = get_db()
-    with con:
-        con.execute("INSERT OR IGNORE INTO authors(fullname)      \
-                     VALUES(?)", [fullname])
-        id = con.execute("SELECT authorid FROM authors            \
-                     WHERE fullname = ?",
-                    [fullname]).fetchone()['authorid']
-    return id
-
-
-def get_insert_domain(domainname):
-    con = get_db()
-    with con:
-        con.execute("INSERT OR IGNORE INTO domains(domainname)    \
-                     VALUES(?)", [domainname])
-        id = con.execute("SELECT domainid FROM domains            \
-                     WHERE domainname = ?", 
-                         [domainname]).fetchone()['domainid']
-    return id
 
 
 def parse_list(list):

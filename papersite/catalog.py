@@ -4,9 +4,8 @@
             ############
 from papersite import app
 from flask import request, render_template
-from papersite.db import query_db
-from papersite.main_list_of_papers import (get_domains,
-                                           get_keywords, get_authors)
+from papersite.db import (query_db, get_domains,
+                          get_keywords, get_authors)
 
 def render_catalog(template_name, **context):
     domains=query_db ("select * from domains order by domainname")

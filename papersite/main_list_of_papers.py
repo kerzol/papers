@@ -3,54 +3,13 @@
                   ##################
             ############
 from papersite import app
-from papersite.db import query_db
+from papersite.db import (query_db, get_authors, get_domains,
+                          get_keywords, get_comments)
 from flask import redirect, url_for, render_template
 from math import ceil
 from papersite.user import get_user_id
 
-def get_authors(paperid):
-    return query_db("select                                      \
-                        a.authorid, a.fullname                   \
-                      from                                       \
-                        papers_authors as pa,                    \
-                        authors as a                             \
-                      where                                      \
-                           pa.authorid = a.authorid and          \
-                           pa.paperid = ?",
-                     [paperid])
 
-def get_domains(paperid): 
-    return query_db("select                                      \
-                        d.domainid, d.domainname from            \
-                        domains as d, papers_domains as pd       \
-                      where                                      \
-                        pd.domainid = d.domainid and             \
-                        pd.paperid = ?",
-                     [paperid])
-
-                       
-def get_keywords(paperid):
-    return query_db("select                                      \
-                         k.keywordid, k.keyword                  \
-                       from keywords as k, papers_keywords as pk \
-                       where                                     \
-                         pk.keywordid = k.keywordid and          \
-                         pk.paperid = ?",
-                      [paperid])
-
-def get_comments(paperid):
-    return query_db("select                                      \
-                          c.commentid, c.comment, c.userid,      \
-                                           c.createtime,         \
-                          u.username                             \
-                          from                                   \
-                               comments as c,                    \
-                               users as u                        \
-                          where c.userid = u.userid and          \
-                                c.paperid = ?                    \
-                          order by c.commentid                   \
-                          ",
-                     [paperid])
 
 
 def previews(seq):
