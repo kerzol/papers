@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+
+{% block body %}
+{% block someinfo %}{% endblock%}
+
+{% if seq | length > 0 %}
+
+  {% for entry in seq %}
+    {% if not loop.first %}
+    <div class="blueline"></div>
+    {% endif %}
+    {% include "paper/preview.html" %}
+  {% endfor %}
+
+  {% set comma = joiner(", ") %}
+  <div class="pages">
+    <span class="text" >Pages:</span>
+    {% for page in range(1,maxpage+1) %}
+      <span>
+        {% if curpage == page %}
+          <a href="{{headurl}}/page/{{page}}" 
+             class="selectedpage">{{page}}</a>
+        {% else %}
+          <a href="{{headurl}}/page/{{page}}">{{page}}</a>
+        {% endif %}
+      </span>
+    {% endfor %}
+  </div>
+
+{% else %}
+  <div style="background-color:white;
+              text-align:center;
+              padding: 2em;
+              ">
+  <img src="/static/img/717px-Kolbenluftpumpe_hg.jpg"/>
+  </div>
+{% endif %}
+
+
+{% endblock %}

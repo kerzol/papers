@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+{% import 'comment/comments.html' as c %}
+
+{% block title %} {{ entry.title|e}} – {% endblock %}
+
+{% block body %}
+      <div class="entry">
+
+           <div class="vote-block">
+            {% if user_authenticated() %}
+             {% if liked %}
+              <a 
+                href="/paper/{{ entry.paperid|e }}/{{ entry.title|e}}/unlike"
+                title="Unlike this paper"
+                class="liked"
+                >★</a>
+              {% else %}
+               <a href="/paper/{{ entry.paperid|e }}/{{ entry.title|e}}/like"
+                  title="Click if you like this paper">☆</a>
+              {% endif %}
+            {% else %} {# anonymous #}
+               <a class="anon"
+                  href="#you should login to like the paper" 
+                  title="You should login to like the paper">☆</a>
+            {% endif%}
+          <!--
+           <div class="likes"
+                title="{{likes}} people like this paper">
+             {{likes}}
+           </div>
+           -->
+          </div> <!-- /vote-block -->
+        <!-- ★ ☆ -->
+
+        <div class="paper">
+
+          <a class="preview" 
+             href="{{ entry.getlink|e }}"
+             title="Click to read the entire paper">
+
+            <img src="/static/memory/previews/{{ entry.paperid}}.png" 
+                 alt="{{entry.title | e}}"/>
+          </a>
+
+           
+          <div class="paper-info">
+            <div class="downloadbut">
+            <a class="btn" 
+               target="_new"
+               title="Click to read the entiry paper"
+               href="{{ entry.getlink|e }}"> 
+              Download</a>
+            </div>
+
+            <div class="paper-info-right">
+
+              Authors:
+             {% set comma = joiner(",") %}
+             {% for a in authors %}{{
+             comma()}}
+             <a href="/author/{{a.fullname | e}}">{{a.fullname}}</a>{%
+             endfor %}
+
+             <br/>Domains:
+             {% set comma = joiner(",") %}
+             {% for d in domains %}{{
+             comma()}}
+             <a href="/domain/{{d.domainname | e}}">{{d.domainname}}</a>{% 
+             endfor %}
+
+             <br/> Keywords:
+             {% set comma = joiner(",") %}
+             {% for k in keywords %}{{
+             comma()}}
+             <a href="/keyword/{{k.keyword | e}}">{{k.keyword}}</a>{%
+             endfor %}
+             
+             <br/> Uploaded by:
+             <a href="/{{entry.username | e}}">{{entry.username}}</a>
+             
+             <br/> Upload date: {{entry.createtime | e}}
+             </div>
+          </div>
+
+        </div> <!-- /paper -->
+
+        <hr style="max-width:60em"/>
+
+        <div class="comment-block">
+          
+          <h3> Discussion: </h3>
+          
+          {{ c.build_list(comments) }}
+
+          {% include "comment/newcomment.html" %}
+        </div>  <!-- /comment-block -->
+
+
+
+      </div> <!-- /entry -->
+
+
+{% endblock %}

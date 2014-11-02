@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="icon" type="image/png" href="/static/img/favicon.png" />
+    <link rel="stylesheet" href="/static/style.css">    
+
+    <!-- wtf? from MathJax sample.html -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+    <script type="text/javascript" src="/static/lib/marked/lib/marked.js"></script>
+    <script type="text/javascript"
+        src="/static/lib/jquery-1.10.2.min.js"></script>
+
+    <script src="/static/lib/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
+
+    <script>
+      marked.setOptions({
+      renderer: new marked.Renderer(),
+      gfm: true,
+      tables: true,
+      breaks: false,
+      pedantic: false,
+      sanitize: false, //because of mathjax
+      smartLists: true,
+      smartypants: false
+      });
+
+    </script>  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        showProcessingMessages: false,
+        tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      });
+      MathJax.Hub.Queue(function () {
+        $(".cbody").each(function(){
+           o=$(this).html();
+           $(this).html(marked(o));
+        });
+      });
+    </script>
+    <script type="text/javascript"
+            src="/static/lib/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+
+    <script>
+
+       $(document).ready(function(){
+          $(".vote-block a").not('.anon').each(function(){
+            $(this).mouseenter(function() {
+               if ($(this).text() == '★') {
+                  $(this).text('☆') 
+               } else {
+                  $(this).text('★') 
+               }
+            });
+
+            $(this).mouseleave(function() {
+               if ($(this).hasClass("liked")) {
+                  $(this).text('★') 
+               } else {
+                  $(this).text('☆') 
+               }
+            }); 
+
+
+            $(this).click(function() {
+               a = $(this);
+               target = $(this).attr("href");
+               $.get(target, function( data ) {
+                 a.siblings("div").text(data);
+
+                 a.siblings("div").attr("title", 
+       data + " people like this paper")
+        
+                 if (a.hasClass("liked")) {
+                    // paper is liked we unlike
+                    a.removeClass("liked");
+                    //dirty hack
+                    //url..unlike  -> url..like
+                    a.attr("href",
+                           a.attr("href").replace(/\/unlike/,"/like"));
+                    a.text('☆');
+                 } else {
+                    // paper is not liked we like
+                    a.addClass("liked");
+                    // dirty hack
+                    // url..like  -> url..unlike
+                    a.attr("href",
+                           a.attr("href").replace(/\/like/,"/unlike"));
+                    a.text('★');
+
+                 }
+               });
+               return (false); //do not follow the link!
+            });
+          });
+       });
+
+
+    </script>
+
+
+    {% block scripts %}{% endblock %}
+
+    <title>{% block title %}{% endblock %} Papersᵞ {% block title2 %}{% endblock %}</title>
+<!-- ᵅ ᵝ ᵞ ᵟ ᵋ ᶿ ᶥ ᶲ ᵠ ᵡ ᵦ ᵧ ᵨ ᵩ ᵪ -->
+  </head>
+  <body>
+
+    <noscript>
+      <div style="color:#CC0000; text-align:center">
+        <b>Warning: <a href="http://www.mathjax.org/">MathJax</a>
+          requires JavaScript to process the mathematics on this page.<br />
+          If your browser supports JavaScript, be sure it is enabled.</b>
+      </div>
+      <hr>
+    </noscript>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class=flashes>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    
+    <div id="big-container" class="{% block bigcontainerclass %}{% endblock %}">
+    <div id="banner">
+      <h1>
+        <a href="/" title="main page">
+          Papers<sup>γ</sup></a>
+        {% block banner2 %}{% endblock %}
+      </h1>
+
+
+      <div class="menuitem">
+         {% if user_authenticated() %}
+         <b><a 
+                     href="/{{session['user']['username'] | e}}"
+                     title="Your home page">
+           {{session['user']['username'] | e}}</a></b> 
+         {% endif %}
+          <a href="/paper/add" title="add a new paper">Add paper</a> /
+          <a href="/catalog" 
+             title="lists of domains, authors, keywords and users">See catalog</a> /
+
+          {% if not user_authenticated() %}
+           <a href="/login" title="Login">Login</a> / 
+           <a href="/register" title="or register">Register</a> 
+         {% else %}
+            <a href="/logout" title="Logout">Logout</a>
+          {% endif %}
+            <br>
+
+      {% if not search_page %}
+      <div class="search">
+        <form action="/catalog" method="get">
+          <input type="search" value=""
+                 placeholder="Search"
+                 name="q" 
+                 size="23"/><input type="submit" value="Go!" >
+        </form>
+      </div>
+      {% endif %}
+
+      </div> 
+       
+
+
+    </div> <!-- /banner -->
+
+
+  {% block body %}
+  {% endblock %}
+
+
+    
+    </div> <!-- /big-container -->
+
+    <div id="banner-bottom">
+      Discussing board for scientific
+      papers<br>
+      <a href="/about">About</a> / <a href="/faq">F.A.Q</a>
+    </div> <!-- /banner-bottom -->
+
+    
+    
+      
+
+  </body>
+</html>
+

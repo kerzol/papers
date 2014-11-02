@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+{% block title %} Catalog – {% endblock %}
+{% block bigcontainerclass %}white{% endblock %}
+{% block body %}
+
+  <div class="catalog-left">
+
+      {% block before_list %}{% endblock %}
+
+      {% if error %}
+      <p class=error><strong>Error:</strong> {{ error }}
+      {% endif %}
+        
+      {% block list_of_papers %}
+        <ol class="list-of-papers">
+          {% for p in papers %}
+          <li>
+            <a href="/paper/{{p.paperid|e}}/{{p.title|e}}"
+               class="title">
+              {{p.title|e}}
+            </a>
+            
+            <div class="short-description">
+              <em>
+                {{ p.authors | join(", ", attribute="fullname") }}
+              </em>
+              <br>
+              {{ p.domains | join(", ", attribute="domainname") }}
+              <br>
+              {{ p.keywords | join(", ", attribute="keyword") }}
+              
+            </div>
+          </li>
+          {% endfor %}
+        </ol>
+        {% endblock %}
+        {% block after_list %}{% endblock %}
+  </div> <!-- /catalog-left -->
+
+  <div class="catalog-right">
+    
+    <div>
+      <h4>Domains</h4>
+      {% set comma = joiner(",") %}
+      {% for d in domains %}{{
+      comma()}}
+      <a href="/domain/{{d.domainname | e}}">{{d.domainname}}</a>{%
+      endfor %}
+    </div>
+   
+    <div>
+      <h4> Keywords </h4>
+      {% set comma = joiner(",") %}
+      {% for k in keywords %}{{
+      comma()}}
+      <a href="/keyword/{{k.keyword | e}}">{{k.keyword}}</a>{%
+      endfor %}
+    </div>
+
+    <div>
+      <h4> Authors </h4>
+      {% set comma = joiner(",") %}
+      {% for a in authors %}{{
+      comma()}}
+      <a href="/author/{{a.fullname | e}}">{{a.fullname}}</a>{%
+      endfor %}
+    </div>
+
+    <div>
+      <h4> Users </h4>
+      {% set comma = joiner(",") %}
+      {% for u in users %}
+      {#- not anonymous anonymous -#}
+      {%- if u.userid != 1 -%}
+      {{comma()}} <a href="/user/{{u.username | e}}">{{u.username}}</a>
+      {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+  </div> 
+
+
+
+{% endblock %}
+

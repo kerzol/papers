@@ -1,0 +1,18 @@
+{% extends "catalog/catalog.html" %}
+{% block title %}{{username}} – {% endblock %}
+
+{% block before_list %}
+  <h4>Papers liked by 
+    <a href="/{{username | e}}" title="Personal page of this user">{{username}}</a>:
+  </h4>
+{% endblock %}
+
+
+{# todo 
+{% block after_list %}
+  <h4>Favourite domains:</h4> todo
+  <h4>Favourite authors:</h4> todo
+  <h4>Favourite keywords:</h4> todo
+  <h4>Friends:</h4> todo
+{% endblock %}
+#}

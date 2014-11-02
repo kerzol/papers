@@ -1,0 +1,161 @@
+### Authentication
+###############################
+                  ##################
+            ############
+from papersite import app
+from flask import session, flash, redirect, url_for
+from papersite.db import query_db, get_db
+from flask import abort, request, render_template
+import hashlib, sqlite3
+from papersite.config import SALT1
+
+def hash(password):
+    m = hashlib.sha256()
+    m.update(password)
+    m.update(SALT1)
+    return m.hexdigest()
+
+def user_authenticated():
+    return ('user' in session)
+
+def get_user_id():
+    if user_authenticated(): 
+        return session['user']['userid']
+    else:
+        # Anoynomous
+        return 1 
+
+# populate user_authenticated() into jinja2 templates
+@app.context_processor
+def utility_processor():
+    return dict(user_authenticated=user_authenticated)
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    error = None
+    if request.method == 'POST':
+        if request.form['email'] == "":
+            error = 'Please use a valid email adress'
+        elif request.form['username'] == "":
+            error = 'Do not forget about your name'
+        elif request.form['password1'] != request.form['password2']:
+            error = 'Password and retyped password do not match.'
+        elif request.form['password1'] == "":
+            error = 'Password cannot be empty'
+        elif request.form['username'] == "register" or \
+             request.form['username'] == "login"    or \
+             request.form['username'] == "logout"   or \
+             request.form['username'] == "all"      or \
+             request.form['username'] == "stranger" or \
+             request.form['username'] == "about" or \
+             request.form['username'] == "catalog":
+            error = 'You cannot user username "' + \
+                    request.form['username']     + \
+                    '", please choose another.'
+        else:
+            con = get_db()
+            try:
+                with con:
+                    con.execute('insert into users \
+                    (username,email,password) \
+                    values (?,?,?)',
+                                [request.form['username'],
+                                 request.form['email'],
+                                 hash (request.
+                                       form['password1'].
+                                       encode('utf-8'))])
+                u = query_db('select userid,username,email,createtime  \
+                          from users                                   \
+                          where password = ? and email = ?',
+                             [hash (request.
+                                    form['password1']
+                                    .encode('utf-8')),
+                              request.form['email']], one=True)
+                if 'rememberme' in request.form:
+                    session.permanent = True
+                session['user'] = u
+                flash('You were successfully logged in')
+                return redirect(url_for('index'))
+            except sqlite3.IntegrityError:
+                error="Sorry, that user name has already been taken \
+                (or the e-mail has already been used by someone)"
+    return render_template('users/register.html', error=error)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        u = query_db('select userid,username,email,createtime      \
+                      from users                                   \
+                      where password = ? and email = ?',
+                     [hash (request.
+                            form['password']
+                            .encode('utf-8')),
+                      request.form['email']], one=True)
+        if u is not None:
+            if 'rememberme' in request.form:
+                session.permanent = True
+            session['user'] = u            
+            flash('You were successfully logged in')
+            # TODO save into session\cookies
+            return redirect(url_for('index'))
+        else:
+            error = 'Invalid credentials'
+    return render_template('users/login.html', error=error)
+
+@app.route("/logout")
+def logout():
+    # remove the user from the session if it's there
+    session.pop('user', None)
+    return redirect(url_for('index'))
+
+
+
+
+### Main list of papers liked or uploaded by user
+###############################
+                  ##################
+            ############
+
+@app.route('/<string:username>')
+@app.route('/<string:username>/page/<int:page>')
+def usersite(username,page=1):
+    """ Generate previews of papers uploaded/liked by specified user
+    """
+    u=query_db("select * from users where username = ?",
+                      [username],one=True)
+    if not u: abort(404)
+    # count the paper uploaded/liked by this user
+    count = query_db("select count(distinct p.paperid) as c        \
+                      from papers as p, likes as l                 \
+                      where                                        \
+                         p.userid = ? or                           \
+                         (p.paperid = l.paperid and l.userid = ?)  \
+                     ", [u['userid'],u['userid']], one=True)['c']
+    # how many papers on page?
+    onpage = 3
+    maxpage = int(ceil(float(count)/onpage))
+    # todo. some papers ... are bad
+    seq=query_db("select distinct p.*                            \
+                    from papers as p, likes as l                 \
+                    where                                        \
+                       p.userid = ? or                           \
+                       (p.paperid = l.paperid and l.userid = ?)  \
+                  order by p.lastcommentat DESC                  \
+                  limit ?, ?", [u['userid'],u['userid'],
+                                (page-1)*onpage,onpage])
+
+    commentsTail, commentsHead, likes, liked = previews(seq)
+
+    return render_template('usersite.html', seq=seq,
+                           user=u,
+                           commentsTail=commentsTail, 
+                           commentsHead=commentsHead,
+                           likes=likes,liked=liked,
+                           maxpage=maxpage, curpage=page,
+                           headurl='/'+username)
+
+@app.route('/<string:username>&Co')
+def user_and_co(username):
+    return "<h1> hello " + username + " and Company", 200
+    

@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block title %}Login – {% endblock %}
+{% block bigcontainerclass %}white{% endblock %}
+{% block body %}
+
+
+
+  <form action="/login" method="post" class=usualform 
+        style="width:18em;">
+    {% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+    {% endif %}
+    <h1>Login</h1>
+    
+    <div class=right>
+      <label for=email> E-mail: </label>
+      <input id=email type=email name=email autofocus
+             value="{{ request.form.email|e }}">
+      <br/>
+      <label for=pass> Password: </label>
+      <input id=pass type=password name=password>
+      <br/>
+      <label for=remebmerme> Remember me: </label>
+      <input id=rememberme type="checkbox" name="rememberme">
+    </div>
+    
+    <div class="send">
+      <input class=btn type=submit value="Login"/>
+    </div>
+
+  </form>
+
+{% endblock %}

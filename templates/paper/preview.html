@@ -1,0 +1,71 @@
+{% import 'comment/comments.html' as c %}
+
+      <div class="entry-preview">
+        <div class="vote-block">
+            {% if user_authenticated() %}
+             {% if liked[entry.paperid] %}
+              <a 
+                href="/paper/{{ entry.paperid|e }}/{{ entry.title|e}}/unlike"
+                title="Unlike this paper"
+                class="liked"
+                >★</a>
+              {% else %}
+               <a href="/paper/{{ entry.paperid|e }}/{{ entry.title|e}}/like"
+                  title="Click if you like this paper">☆</a>
+              {% endif %}
+            {% else %} {# anonymous #}
+               <a class="anon"
+                  href="#you should login to like the paper" 
+                  title="You should login to like the paper">☆</a>
+            {% endif%}
+          <!--     
+          <div class="likes"
+               title="{{likes[entry.paperid]}} people like this paper">
+            {{likes[entry.paperid]}}
+          </div> -->
+        </div>
+        <!-- ★ ☆ -->
+
+        <div class="paper-preview">
+
+          <a class="preview" 
+             href="/paper/{{ entry.paperid|e }}/{{ entry.title|e}}"
+             title="Read the paper and discussion">
+
+            <img src="/static/memory/previews/{{ entry.paperid}}.png" 
+                 alt="{{entry.title | e}}"/>
+          </a>
+        </div> <!-- /paper-preview -->
+        
+        <div class="comment-block-preview">
+          <h3> Some comments: </h3>
+
+          {{ c.build_list(commentsHead[entry.paperid]) }}
+
+          {% if commentsTail[entry.paperid] %}
+          <a class="seeallcomments"
+             href="/paper/{{ entry.paperid|e }}/{{ entry.title|e}}"
+             title="See all comments"> … </a> 
+
+          {{ c.build_list(commentsTail[entry.paperid]) }}
+          {% endif %}
+
+
+
+        </div>  <!-- /comment-block-preview -->
+        
+         <a class="discussbtn" href="/paper/{{ entry.paperid|e }}/{{
+             entry.title|e}}" 
+
+             title="Read the paper, add your comments">
+             Read the paper, add your comments… </a>
+
+      </div> <!-- /entry-preview -->
+
+      <div class="spacer"></div>
+
+
+
+
+
+

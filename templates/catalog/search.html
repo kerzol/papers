@@ -1,0 +1,15 @@
+{% extends "catalog/list-of-papers.html" %}
+{% set search_page = "trueEEE!!!11" %}
+{% block title %} Search – {% endblock %}
+{% block before_list %}
+  <div class="search-big">
+    <form action="/search" method="get">
+      Search: 
+      <input type="search"
+             value="{{request.args.text|e}}" name="text"
+             size="50%"/><input type="submit" value="Go!" >
+    </form>
+  </div>
+
+  <h4>Results (in titles only):</h4>
+{% endblock %}

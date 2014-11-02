@@ -1,0 +1,37 @@
+{% macro build_list(comments) %}
+<div class="comments">
+  {% set hrrr = joiner('<hr style="width: 95%;"/>') %}
+  {% for c in comments %}
+
+  {{ hrrr()|safe }}
+
+  <div class="comment">
+
+    <h4>
+      {% if c.userid == 1 %}
+          Stranger:
+      {% else %}
+        <a href="/{{c.username|e}}">
+          {{ c.username|e }}:</a>
+      {% endif %}
+        <a name="comment-{{c.commentid}}"></a>
+    </h4>
+
+    <div class="cbody">{{c.comment|e}}</div>
+    
+    <div class="cfooter">
+      <span class="datetime"> {{ c.createtime|e }} </span>
+    </div>
+
+  </div>
+
+
+  {% endfor %}
+</div> <!-- /comments -->
+{% endmacro %}
+
+
+
+
+
+

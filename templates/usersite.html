@@ -1,0 +1,34 @@
+{% extends "main-list.html" %}
+
+{% block title %}{{user['username'] | e}} — {% endblock %}
+{% block banner2 %}  
+/
+<a href="/{{user['username'] | e}}" 
+   title="Papers liked/uploaded by {{user['username'] | e}}">
+ {{user['username'] | e}}
+</a>
+{% endblock %}
+
+
+{% block someinfo %}
+<div class="userinfo">
+  <h3>Wellcome to <em>{{user['username'] | e}}'s</em> library</h3>
+  
+  About <em>{{user['username'] | e}}</em>: 
+  <div class="aboutuser">
+    {{user['about']}}
+  </div>
+  <pre>
+              ====    INFO-PAGE FOR THE USER    ====
+                           username
+                  avatar?
+                  some words about this user
+                  [follow/unfollow] button
+                  list of friends
+                  number of posts
+                  comments/etc
+
+  </pre>
+</div>
+<div class="blueline"></div>
+{% endblock %}
