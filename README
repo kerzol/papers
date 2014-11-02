@@ -18,7 +18,9 @@ USERS SHOULD NOT BE ABLE TO REGISTER USERS UNDER THE NAMES:
     all, registers, and other 1-word urls...
 
 
-BEFORE RUNNING, YOU SHOULD CHANGE THE SALT in papersite/config.py
+BEFORE RUNNING,
+you should copy papersite/config.py.example to papersite/config.py
+and change SALT1, SALT2 and mail-server's parameters
 
 Discussion
 ~~~~~~~~~~

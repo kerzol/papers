@@ -4,6 +4,10 @@ DATABASE = 'db/papers.db'
 SALT1=b"aiur afaf 34#%3 RANDOM SALT? f44ih ?A?233 3###$ fa 95?"
 SALT2='FIXME CHANGME TO REALLY RADOMM STRING'
 
+MAIL_SERVER = 'smtp.hushmail.com:25'
+MAIL_USER = 'username'
+MAIL_PASS = 'password'
+
 
 # Load default config and override config from an environment variable
 appc = dict(

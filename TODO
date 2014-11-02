@@ -1,6 +1,6 @@
 ★ follow, unfollow buttons
 ★ /    ---> /<logged_username> + friends posts
-★ password restorer
+★ password restorer email integration
 ★ https
 ★ about/faq
 ★ log
@@ -10,6 +10,7 @@
 GOTO ONLINE (server, domainname, etc)
 
 ▪ info-page for the user
+▪ edit/delete messages
 ▪ captcha or smth againsth spam
 
 
