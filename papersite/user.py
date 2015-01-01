@@ -8,6 +8,7 @@ from flask import session, flash, redirect, url_for
 from papersite.db import query_db, get_db
 from flask import abort, request, render_template
 from papersite.config import SALT1
+from papersite.email import send_confirmation_mail
 
 def hash(password):
     m = hashlib.sha256()
@@ -42,14 +43,11 @@ def register():
             error = 'Password and retyped password do not match.'
         elif request.form['password1'] == "":
             error = 'Password cannot be empty'
-        elif request.form['username'] == "register" or \
-             request.form['username'] == "login"    or \
-             request.form['username'] == "logout"   or \
-             request.form['username'] == "all"      or \
-             request.form['username'] == "stranger" or \
-             request.form['username'] == "about" or \
-             request.form['username'] == "catalog":
-            error = 'You cannot user username "' + \
+        elif "/" in request.form['username']:
+            error = 'Username cannot contain symbol "/"'
+        elif request.form['username'] in \
+        [r.rule.split('/', maxsplit=2)[1] for r in app.url_map.iter_rules()]:
+            error = 'You cannot use username "' + \
                     request.form['username']     + \
                     '", please choose another.'
         else:
@@ -64,22 +62,23 @@ def register():
                                  hash (request.
                                        form['password1'].
                                        encode('utf-8'))])
-                u = query_db('select userid,username,email,createtime  \
-                          from users                                   \
-                          where password = ? and email = ?',
-                             [hash (request.
-                                    form['password1']
-                                    .encode('utf-8')),
-                              request.form['email']], one=True)
-                if 'rememberme' in request.form:
-                    session.permanent = True
-                session['user'] = u
-                flash('You were successfully logged in')
+                send_confirmation_mail (request.form['username'],
+                                        request.form['email'])
+                flash('A confirmation link has been sent to you. \n\
+Please, check your mailbox (%s)' % request.form['email'])
                 return redirect(url_for('index'))
             except sqlite3.IntegrityError:
                 error="Sorry, that user name has already been taken \
                 (or the e-mail has already been used by someone)"
     return render_template('users/register.html', error=error)
+
+
+@app.route('/register/<string:key>')
+def register_confirmation(key):
+    # TODO: remove key from db.
+    # make this user active.
+    # login this user.
+    pass
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
