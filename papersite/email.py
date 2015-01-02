@@ -15,7 +15,6 @@ def send_confirmation_mail(username, usermail):
     key = ''.join(map( lambda x : random.choice(string.ascii_letters),
                        range(100)))
 
-    # TODO: write key into db
     con = get_db()
     with con:
         con.execute('update users set key = ? \
