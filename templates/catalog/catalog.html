@@ -71,10 +71,10 @@
       {% set comma = joiner(",") %}
       {% for u in users %}
       {#- not anonymous anonymous -#}
-      {%- if u.userid != 1 -%}
+      {#%- if u.userid != 1 -%#}
       {{comma()}} <a href="/user/{{u.username | e}}">{{u.username}}</a>
-      {%- endif -%}
-      {%- endfor -%}
+      {#%- endif -%#}
+      {% endfor %}
     </div>
 
   </div> 

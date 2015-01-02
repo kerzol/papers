@@ -112,10 +112,9 @@ def login():
                 sent you an email.'
             elif 'rememberme' in request.form:
                 session.permanent = True
-                session['user'] = u
-                flash('You were successfully logged in')
-                # TODO save into session\cookies
-                return redirect(url_for('index'))
+            session['user'] = u
+            flash('You were successfully logged in')
+            return redirect(url_for('index'))
         else:
             error = 'Invalid credentials'
     return render_template('users/login.html', error=error)

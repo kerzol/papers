@@ -481,7 +481,7 @@ hr {
     padding-left: 0.4ex;
     border-color: white;
     background-color: #73A0C5;
-    width: 85%;
+/*    width: 85%; */
 }
 
 .search input[type=submit] {

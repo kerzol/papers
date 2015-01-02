@@ -119,27 +119,24 @@ def add_paper():
 
               authors_ids = map(get_insert_author,
                                 parse_list(request.form['authors']))
-              map(lambda authorid:
+              for authorid in authors_ids:
                   con.execute('insert into papers_authors             \
                               (paperid, authorid)                     \
-                              values(?,?)',[paperid, authorid]),
-                  authors_ids)
+                              values(?,?)',[paperid, authorid])
 
               domains_ids = map(get_insert_domain,
                                parse_list(request.form['domains']))
-              map(lambda domainid:
+              for domainid in domains_ids:
                   con.execute('insert into papers_domains             \
                                (paperid, domainid)                    \
-                               values(?,?)',[paperid, domainid]),
-                  domains_ids)
+                               values(?,?)',[paperid, domainid])
 
               keywords_ids = map(get_insert_keyword,
                                parse_list(request.form['keywords']))
-              map(lambda keywordid:
+              for keywordid in keywords_ids:
                   con.execute('insert into papers_keywords            \
                             (paperid, keywordid)                      \
-                            values(?,?)',[paperid, keywordid]),
-                  keywords_ids)
+                            values(?,?)',[paperid, keywordid])
               
 
               filename = str(paperid) + "-" +                       \
