@@ -5,6 +5,8 @@ create table users (
   email    TEXT UNIQUE,
   password TEXT,
   about    TEXT,
+  valid    INTEGER, -- 1 means valid, 0 means need a confirmation
+  key      TEXT UNIQUE,
   createtime  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
@@ -121,7 +123,9 @@ create unique index friends_index3 on friends (userid, friendid);
 -- insert
 
 
-INSERT INTO users(userid, username) VALUES(1,'Stranger');
+-- Anonyomous is a user with id = 1.
+-- Anonymous is a stranger.
+INSERT INTO users(userid, username, valid) VALUES(1,'Stranger', 0);
 
 
 

@@ -40,7 +40,7 @@ def register():
         elif request.form['username'] == "":
             error = 'Do not forget about your name'
         elif request.form['password1'] != request.form['password2']:
-            error = 'Password and retyped password do not match.'
+            error = 'Password and retyped password do not match'
         elif request.form['password1'] == "":
             error = 'Password cannot be empty'
         elif "/" in request.form['username']:
@@ -55,13 +55,15 @@ def register():
             try:
                 with con:
                     con.execute('insert into users \
-                    (username,email,password) \
-                    values (?,?,?)',
+                    (username, email, password, valid) \
+                    values (?, ?, ?, ?)',
                                 [request.form['username'],
                                  request.form['email'],
                                  hash (request.
                                        form['password1'].
-                                       encode('utf-8'))])
+                                       encode('utf-8')),
+                                 0
+                             ])
                 send_confirmation_mail (request.form['username'],
                                         request.form['email'])
                 flash('A confirmation link has been sent to you. \n\
@@ -75,29 +77,45 @@ Please, check your mailbox (%s)' % request.form['email'])
 
 @app.route('/register/<string:key>')
 def register_confirmation(key):
-    # TODO: remove key from db.
-    # make this user active.
-    # login this user.
-    pass
+    error = None
+    u = query_db('select userid,username,email,createtime,valid  \
+                  from users     \
+                  where key = ?',
+                 [key], one=True)
+    if u is not None:
+        con = get_db()
+        with con:
+            con.execute('update users set valid = 1 \
+                         where key = ?',
+                         [key])
+        session.permanent = True
+        session['user'] = u
+        flash('Hello ' + u['username'] +  \
+              '. You were successfully confirm your email adress')
+    return redirect(url_for('index'))
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
     if request.method == 'POST':
-        u = query_db('select userid,username,email,createtime      \
-                      from users                                   \
+        u = query_db('select userid,username,email,createtime,valid     \
+                      from users                                        \
                       where password = ? and email = ?',
                      [hash (request.
                             form['password']
                             .encode('utf-8')),
                       request.form['email']], one=True)
         if u is not None:
-            if 'rememberme' in request.form:
+            if u['valid'] == 0:
+                error = 'Please, check your mail box. We have \
+                sent you an email.'
+            elif 'rememberme' in request.form:
                 session.permanent = True
-            session['user'] = u            
-            flash('You were successfully logged in')
-            # TODO save into session\cookies
-            return redirect(url_for('index'))
+                session['user'] = u
+                flash('You were successfully logged in')
+                # TODO save into session\cookies
+                return redirect(url_for('index'))
         else:
             error = 'Invalid credentials'
     return render_template('users/login.html', error=error)

@@ -27,5 +27,5 @@ GOTO ONLINE (server, domainname, etc)
 ✦ write a new paper directly using wiki-like editor.
 ✦ gittip into user profile
 
-> twitter, facebook, linkedin, openid,oauth integrations?
-> cache, 
+> twitter, facebook, linkedin, openid, oauth integrations
+> cache, captcha, anonyomous posting/comments
