@@ -1,25 +1,24 @@
 ★ follow, unfollow buttons
 ★ /    ---> /<logged_username> + friends posts
-★ https
+★ delete posts
+★ info-page for the user
 ★ about/faq
+★ https
 ★ log
-★ delete
+
 + on github
 + gittip, bitcointip, paypal donate.
 
 GOTO ONLINE (server, domainname, etc)
 
-▪ info-page for the user
-▪ edit/delete messages
+▪ edit posts
 ▪ captcha or smth againsth spam
-
 
 ◯ admin panel
 
 ▽ mobile version
 ▽ search improvements
 ▽ private flows
-▽ edit posts
 ▽ auto first page, recommendations (Machine learning?)
 ▽ arxiv/hal/google scholar integration
 
