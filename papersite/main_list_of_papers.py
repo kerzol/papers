@@ -100,7 +100,7 @@ def all(page=1):
     commentsTail, commentsHead, likes, liked = previews(seq)
 
     return render_template('main-list.html', seq=seq,
-                           commentsTail=commentsTail, 
+                           commentsTail=commentsTail,
                            commentsHead=commentsHead,
                            likes=likes,liked=liked,
                            maxpage=maxpage, curpage=page,
@@ -115,3 +115,52 @@ def index(page=1):
     # else:
     #     return redirect(url_for('all'))
     return redirect(url_for('all'))
+
+
+
+### Main list of papers liked or uploaded by user
+###############################
+                  ##################
+            ############
+
+@app.route('/<string:username>')
+@app.route('/<string:username>/page/<int:page>')
+def usersite(username,page=1):
+    """ Generate previews of papers uploaded/liked by specified user """
+    u=query_db("select * from users where username = ?",
+                      [username],one=True)
+    if not u: abort(404)
+    # count the paper uploaded/liked by this user
+    count = query_db("select count(distinct p.paperid) as c        \
+                      from papers as p, likes as l                 \
+                      where                                        \
+                         p.userid = ? or                           \
+                         (p.paperid = l.paperid and l.userid = ?)  \
+                     ", [u['userid'],u['userid']], one=True)['c']
+    # how many papers on page?
+    onpage = 3
+    maxpage = int(ceil(float(count)/onpage))
+    # todo. some papers ... are bad
+    seq=query_db("select *, lastcommentat as sorttime             \
+                    from papers                                   \
+                    where userid = ?                              \
+                  union                                           \
+                  select p.*, CASE                                \
+                              WHEN l.liketime > p.lastcommentat   \
+                              THEN l.liketime                     \
+                              ELSE p.lastcommentat END as sorttime\
+                    from papers as p, likes as l                  \
+                    where p.paperid = l.paperid and l.userid = ?  \
+                  order by sorttime DESC                          \
+                  limit ?, ?", [u['userid'],u['userid'],
+                                (page-1)*onpage,onpage])
+
+    commentsTail, commentsHead, likes, liked = previews(seq)
+
+    return render_template('usersite.html', seq=seq,
+                           user=u,
+                           commentsTail=commentsTail,
+                           commentsHead=commentsHead,
+                           likes=likes,liked=liked,
+                           maxpage=maxpage, curpage=page,
+                           headurl='/'+username)

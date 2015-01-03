@@ -329,13 +329,13 @@ hr {
     margin-top:1ex;
 }
 
-.new-comment .hint {
+.hint {
     text-align: right;
     color: #555555;
     font-size: small;
 }
 
-.new-comment .hint a{
+.hint a{
     color: #555555;
 }
 
@@ -387,6 +387,10 @@ hr {
 
 .right {
     text-align: right;
+}
+
+.center {
+    text-align: center;
 }
 
 .btn {
@@ -614,8 +618,9 @@ hr {
     margin-bottom: 1em;
 }
 
-.userinfo pre {
-    margin: 0;
+
+.userinfo h3 {
+    margin-bottom: 0.5ex;
 }
 
 .faq {
@@ -626,6 +631,6 @@ hr {
     margin-top: 2em;
     margin-bottom: 1ex;
     font-size: large;
-    font-width: bold;
+    font-weight: bold;
 }
 

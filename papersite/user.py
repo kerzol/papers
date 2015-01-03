@@ -8,7 +8,9 @@ from flask import session, flash, redirect, url_for
 from papersite.db import query_db, get_db
 from flask import abort, request, render_template
 from papersite.config import SALT1
-from papersite.email import send_confirmation_mail, send_password_change_mail
+from papersite.email import send_confirmation_mail, \
+    send_password_change_mail
+from math import ceil
 
 def hash(password):
     m = hashlib.sha256()
@@ -55,14 +57,15 @@ def register():
             try:
                 with con:
                     con.execute('insert into users \
-                    (username, email, password, valid) \
-                    values (?, ?, ?, ?)',
+                    (username, email, password, valid, about) \
+                    values (?, ?, ?, ?, ?)',
                                 [request.form['username'],
                                  request.form['email'],
                                  hash (request.
                                        form['password1'].
                                        encode('utf-8')),
-                                 0
+                                 0,
+                                 'Some information about this user'
                              ])
                 send_confirmation_mail (request.form['username'],
                                         request.form['email'])
@@ -77,7 +80,8 @@ Please, check your mailbox (%s)' % request.form['email'])
 @app.route('/change-password/<string:key>', methods=['GET','POST'])
 def set_new_password(key):
     error = None
-    u = query_db('select userid, username, email, createtime, valid \
+    u = query_db('select userid, username, email,                   \
+                         createtime, valid, about                   \
                   from users                                        \
                   where key = ?                                     \
                   and chpasstime > datetime("now","-2 days")',
@@ -133,8 +137,9 @@ def new_password_link():
 @app.route('/register/<string:key>')
 def register_confirmation(key):
     error = None
-    u = query_db('select userid,username,email,createtime,valid  \
-                  from users     \
+    u = query_db('select userid,username,email,   \
+                         createtime,valid,about   \
+                  from users                      \
                   where key = ?',
                  [key], one=True)
     if u is not None:
@@ -154,7 +159,8 @@ def register_confirmation(key):
 def login():
     error = None
     if request.method == 'POST':
-        u = query_db('select userid,username,email,createtime,valid     \
+        u = query_db('select userid,username,email,                     \
+                             createtime,valid,about                     \
                       from users                                        \
                       where password = ? and email = ?',
                      [hash (request.
@@ -174,59 +180,28 @@ def login():
             error = 'Invalid credentials'
     return render_template('users/login.html', error=error)
 
+@app.route("/editinfo", methods=['GET','POST'])
+def editinfo():
+    if not user_authenticated():
+        return "<h1>Forbidden (maybe you forgot to login)</h1>", 403
+
+    error = None
+    if request.method == 'POST':
+        con = get_db()
+        with con:
+            con.execute('update users set about = ? \
+                         where userid = ?',
+                         [request.form['about'],
+                          session['user']['userid']])
+        session['user']['about'] = request.form['about']
+        return redirect(url_for('usersite',
+                                username=session['user']['username']))
+    return render_template('users/editinfo.html', error=error)
+
+
+
 @app.route("/logout")
 def logout():
     # remove the user from the session if it's there
     session.pop('user', None)
     return redirect(url_for('index'))
-
-
-
-
-### Main list of papers liked or uploaded by user
-###############################
-                  ##################
-            ############
-
-@app.route('/<string:username>')
-@app.route('/<string:username>/page/<int:page>')
-def usersite(username,page=1):
-    """ Generate previews of papers uploaded/liked by specified user
-    """
-    u=query_db("select * from users where username = ?",
-                      [username],one=True)
-    if not u: abort(404)
-    # count the paper uploaded/liked by this user
-    count = query_db("select count(distinct p.paperid) as c        \
-                      from papers as p, likes as l                 \
-                      where                                        \
-                         p.userid = ? or                           \
-                         (p.paperid = l.paperid and l.userid = ?)  \
-                     ", [u['userid'],u['userid']], one=True)['c']
-    # how many papers on page?
-    onpage = 3
-    maxpage = int(ceil(float(count)/onpage))
-    # todo. some papers ... are bad
-    seq=query_db("select distinct p.*                            \
-                    from papers as p, likes as l                 \
-                    where                                        \
-                       p.userid = ? or                           \
-                       (p.paperid = l.paperid and l.userid = ?)  \
-                  order by p.lastcommentat DESC                  \
-                  limit ?, ?", [u['userid'],u['userid'],
-                                (page-1)*onpage,onpage])
-
-    commentsTail, commentsHead, likes, liked = previews(seq)
-
-    return render_template('usersite.html', seq=seq,
-                           user=u,
-                           commentsTail=commentsTail, 
-                           commentsHead=commentsHead,
-                           likes=likes,liked=liked,
-                           maxpage=maxpage, curpage=page,
-                           headurl='/'+username)
-
-@app.route('/<string:username>&Co')
-def user_and_co(username):
-    return "<h1> hello " + username + " and Company", 200
-    

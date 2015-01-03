@@ -12,23 +12,38 @@
 
 {% block someinfo %}
 <div class="userinfo">
-  <h3>Wellcome to <em>{{user['username'] | e}}'s</em> library</h3>
+  <h3>Wellcome to <em>{{user['username'] | e}}'s</em> library,</h3>
   
-  About <em>{{user['username'] | e}}</em>: 
-  <div class="aboutuser">
-    {{user['about']}}
-  </div>
-  <pre>
-              ====    INFO-PAGE FOR THE USER    ====
-                           username
-                  avatar?
-                  some words about this user
-                  [follow/unfollow] button
-                  list of friends
-                  number of posts
-                  comments/etc
+  &nbsp;  where  you  can  find  all  papers  liked  or  uploaded  by
+  {{user['username'] | e}}.
 
-  </pre>
+  <p>
+    <big> About {{user['username'] | e}}:</big>
+    {{user['about'] | urlize }}
+    {% if user_authenticated() and
+          user['userid'] == session['user']['userid'] %}
+      <br>
+      <small style="margin-left:10em">
+        <a href="/editinfo">Change this information</a> </small>
+    {% endif %}
+  </p>
+
+<!--
+  <p>
+    <big> {{user['username'] | e}} follows: </big>
+    i follow you, you and he.
+  </p>
+
+  <p>
+    <big> They follow {{user['username'] | e}}: </big>
+    he, she and he follows me.
+  </p>
+
+  <div style="margin-left:1ex; margin-top: 2em; margin-bottom: 1ex">
+    <a href="/follow/{{user['username'] | e}}" title="Follow this user" class="btn">
+      Follow this user</a>
+  </div>
+  -->
 </div>
 <div class="blueline"></div>
 {% endblock %}

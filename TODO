@@ -1,7 +1,6 @@
 ★ follow, unfollow buttons
 ★ /    ---> /<logged_username> + friends posts
 ★ delete posts
-★ info-page for the user
 ★ about/faq
 ★ https
 ★ log
@@ -27,4 +26,6 @@ GOTO ONLINE (server, domainname, etc)
 ✦ gittip into user profile
 
 > twitter, facebook, linkedin, openid, oauth integrations
+> userpics
 > cache, captcha, anonyomous posting/comments
+> Should one be able to like his own papers ?

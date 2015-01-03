@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block title %}Edit info – {% endblock %}
+{% block bigcontainerclass %}white{% endblock %}
+{% block body %}
+
+
+
+  <form action="/editinfo" method="post" class=usualform
+        style="max-width: 40em">
+    {% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+    {% endif %}
+    <h1>Edit your personal information</h1>
+    
+    <div >
+      <input id=about type=about name=about
+             style="width: 39em"
+             value="{% if request.form.about is defined %}
+{{request.form.about|e }}
+{% else %}
+{{session['user']['about']}}
+{% endif %}">
+    </div>
+    
+    <div class="send">
+      <input class=btn type=submit value="Save"/>
+    </div>
+
+  </form>
+
+{% endblock %}
