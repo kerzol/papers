@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block title %}Restore password – {% endblock %}
+{% block bigcontainerclass %}white{% endblock %}
+{% block body %}
+
+
+
+  <form action="/change-password/{{key|e}}" method="post" class=usualform
+        style="width: 22em;">
+    {% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+    {% endif %}
+    <h1>Change password</h1>
+    
+    <div class=right>
+      <label for=email> Your e-mail: </label>
+      <input id=email type=email name=email
+             required readonly
+             value="{{email|e}}">
+      <br/>
+      <label for=pass1> New password: </label>
+      <input id=pass1 type=password name=password1 required autofocus>
+      <br/>
+
+      <label for=pass2> Retype password: </label>
+      <input id=pass2 type=password name=password2 required>
+
+    </div>
+    
+    <div class="send">
+      <input class=btn type=submit value="Change password"/>
+    </div>
+
+  </form>
+
+{% endblock %}

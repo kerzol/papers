@@ -357,6 +357,11 @@ hr {
     border-color: #73A0C5;
 }
 
+.usualform input[readonly] {
+    border-width: 0 0 0px 0;
+    border-color: #999;
+}
+
 .usualform h1 {
     margin-left: 1ex;
 }

@@ -6,7 +6,7 @@
 
 
   <form action="/login" method="post" class=usualform 
-        style="width:18em;">
+        style="width:21em;">
     {% if error %}
     <p class=error><strong>Error:</strong> {{ error }}
     {% endif %}
@@ -20,13 +20,22 @@
       <label for=pass> Password: </label>
       <input id=pass type=password name=password>
       <br/>
-      <label for=remebmerme> Remember me: </label>
-      <input id=rememberme type="checkbox" name="rememberme">
+      <small>
+        <a href="/change-password"> Forgot your password? </a>
+      </small>
+      <br/>
+
+      <div style="margin-right:11em;">
+        <label for=remebmerme> Remember me: </label>
+        <input id=rememberme type="checkbox" name="rememberme">
+      </div>
     </div>
+
     
     <div class="send">
-      <input class=btn type=submit value="Login"/>
+      <input class=btn type=submit name=login value=Login>
     </div>
+
 
   </form>
 

@@ -7,6 +7,7 @@ create table users (
   about    TEXT,
   valid    INTEGER, -- 1 means valid, 0 means need a confirmation
   key      TEXT UNIQUE,
+  chpasstime  TIMESTAMP,
   createtime  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 

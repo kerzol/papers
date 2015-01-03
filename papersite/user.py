@@ -8,7 +8,7 @@ from flask import session, flash, redirect, url_for
 from papersite.db import query_db, get_db
 from flask import abort, request, render_template
 from papersite.config import SALT1
-from papersite.email import send_confirmation_mail
+from papersite.email import send_confirmation_mail, send_password_change_mail
 
 def hash(password):
     m = hashlib.sha256()
@@ -74,6 +74,61 @@ Please, check your mailbox (%s)' % request.form['email'])
                 (or the e-mail has already been used by someone)"
     return render_template('users/register.html', error=error)
 
+@app.route('/change-password/<string:key>', methods=['GET','POST'])
+def set_new_password(key):
+    error = None
+    u = query_db('select userid, username, email, createtime, valid \
+                  from users                                        \
+                  where key = ?                                     \
+                  and chpasstime > datetime("now","-2 days")',
+                     [key], one=True)
+    if u is not None:
+        email = u['email']
+        if request.method == 'POST':
+            if request.form['password1'] != request.form['password2']:
+                error = 'Password and retyped password do not match'
+            elif request.form['password1'] == "":
+                error = 'Password cannot be empty'
+            else:
+                con = get_db()
+                with con:
+                    con.execute('update users set \
+                                 password = ?, valid = 1, key = null \
+                                 where key = ?',
+                                [hash (request.form['password1'].
+                                       encode('utf-8')),
+                                 key
+                             ])
+                    session.permanent = True
+                    session['user'] = u
+                    flash('Hello ' + u['username'] +  \
+                          '. You have successfully changed your password')
+                return redirect(url_for('index'))
+    else:
+        email = 'brrrr. See red error above.'
+        error = 'Not valid key'
+
+    return render_template('users/restore2.html', key=key,
+                           email=email,
+                           error=error)
+
+@app.route('/change-password', methods=['GET', 'POST'])
+def new_password_link():
+    error = None
+    if request.method == 'POST':
+        u = query_db('select userid,username,email,createtime,valid     \
+                      from users                                        \
+                      where email = ?',
+                     [request.form['email']], one=True)
+        if u is not None:
+            send_password_change_mail (request.form['email'])
+            flash('A confirmation link has been sent to you. \n\
+                   Please, check your mailbox (%s)' %
+                  request.form['email'])
+            return redirect(url_for('index'))
+        else:
+            error = 'User with this email does not exists'
+    return render_template('users/restore.html', error = error)
 
 @app.route('/register/<string:key>')
 def register_confirmation(key):
@@ -85,13 +140,13 @@ def register_confirmation(key):
     if u is not None:
         con = get_db()
         with con:
-            con.execute('update users set valid = 1 \
+            con.execute('update users set valid = 1, key = null \
                          where key = ?',
                          [key])
         session.permanent = True
         session['user'] = u
         flash('Hello ' + u['username'] +  \
-              '. You were successfully confirm your email adress')
+              '. You have successfully confirmed your email adress')
     return redirect(url_for('index'))
 
 
