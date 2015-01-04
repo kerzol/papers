@@ -11,4 +11,4 @@ logger = logging.getLogger('werkzeug')
 handler = logging.FileHandler('./logs/access.log')
 logger.addHandler(handler)
 
-app.run(host='0.0.0.0', debug=False)
+app.run(host='0.0.0.0', debug=True)
