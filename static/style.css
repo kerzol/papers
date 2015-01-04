@@ -653,6 +653,6 @@ hr {
 }
 
 .about ul li:before{
-    content: '★';
+/*    content: '★'; */
 /*    margin: 0 1em;   */
 }
