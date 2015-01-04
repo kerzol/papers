@@ -1,21 +1,19 @@
 Papersᵞ — Discussing board for scientific papers 
 ================================================
 
-we use python3, flask, werkzeug, sqlite3, gs
+Install python3, flask, sqlite3, ghostscript
 
 
 Installation
 ------------
 
-0. ./clear.sh will initialize sqlite database and pdf's storage
+0. ./clear.sh will initialize sqlite database, pdf's storage and log directory
 
 1. Copy papersite/config.py.example to papersite/config.py
  
 2. Read, understand and modify papersite/config.py.
    Do not forget to change SALT1, SALT2 and mail-server's parameters.
 
-3. Prepare (virtualenv... etc TODO)
-
-3. ./run.sh
+3. ./run.sh 
 
  
