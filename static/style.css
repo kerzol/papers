@@ -634,3 +634,25 @@ hr {
     font-weight: bold;
 }
 
+.about {
+    font-size: large;
+    margin: 2em;
+}
+
+.about li {
+    margin: 1.3em;
+}
+
+.about  p {
+    margin-top: 1ex;
+    font-size: 80%;
+}
+
+.about ul {
+    list-style: none;
+}
+
+.about ul li:before{
+    content: '★';
+/*    margin: 0 1em;   */
+}

@@ -1,82 +1,18 @@
-Discuss scientific papers!
---------------------------
-
-Discuss scientific papers with your friends.
-Follow not journals, but authors, reposts etc.
-like twitter but with papers.
-              do the presentation about
-              open peer review, etc.
-
-
-
-Technical info
-~~~~~~~~~~~~~~
+Papersᵞ — Discussing board for scientific papers 
+================================================
 
 we use python3, flask, werkzeug, sqlite3, gs
 
-USERS SHOULD NOT BE ABLE TO REGISTER USERS UNDER THE NAMES:
-    all, registers, and other 1-word urls...
 
+Installation
+------------
 
-BEFORE RUNNING,
-you should copy papersite/config.py.example to papersite/config.py
-and change SALT1, SALT2 and mail-server's parameters
+1. Copy papersite/config.py.example to papersite/config.py
+ 
+2. Read, understand and modify papersite/config.py.
+   Do not forget to change SALT1, SALT2 and mail-server's parameters.
 
-Discussion
-~~~~~~~~~~
+3. Prepare 
 
+3. ./run.sh
 
-Concurent friends : 
-                    https://researchgate.net/
-                    https://www.academia.edu/ 
-                    plosone
-                    ncatlab
-                    http://polymathprojects.org/
-
-                    http://en.wikipedia.org/wiki/Open_peer_review
-                    http://en.wikipedia.org/wiki/Open_Peer_Commentary
-                    http://www.naboj.com/ (!)
-                    http://www.papersinphysics.org/index.php/papersinphysics 
-                    http://philica.com/
-                    http://peerj.com/
-
-                    http://boolesrings.org/krautzberger/2014/02/23/how-to-publish-all-my-research-notes/
-                    http://Hypothes.is (!!)
-                    http://project-soap.eu/ (study aout open access)
-                    twirpx.com
-                    gen.lib.rus.ec
-                    http://sibac.info/index.php/2009-07-01-10-21-16/7419-vii------l------r
-                    ???
-
-People
-~~~~~~
- twitter : 
-          @Peter Krautzberger
-          @vasilenkos
-          @JediAkai
-          @w_495
-          @alexanius
-
-http://lj.rossia.org/users/tiphareth/1632365.html?replyto=86706029
-
-
-Investors (?)
-          http://www.usv.com/
-          ycombinator 
-
-@BoolesRings
-Online presence of mathematical researchers, experimenting with tools
-for decentralized, connected research homepages using wordpress &
-other open source tools.
-  ·  boolesrings.org 
-
-Peter Krautzberger
-@pkrautz
-Mathematician. Works for @MathJax. Tweets are my own. Involved in @mathblogging and @BoolesRings.
-  ·  peter.krautzberger.info 
-
-
-mathblogging.org
-@mathblogging
-mathblogging.org -- your one-stop shop for mathematical blogs.
-  ·  mathblogging.org 

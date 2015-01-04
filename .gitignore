@@ -1,4 +1,5 @@
 papersite/config.py
+logs/
 worknotes
 mirror.sh
 __pycache__
@@ -9,3 +10,4 @@ VENV
 papers.db
 previews
 pdfs
+README.old

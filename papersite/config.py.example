@@ -1,8 +1,8 @@
 from datetime import timedelta
 
 DATABASE = 'db/papers.db'
-SALT1=b"aiur afaf 34#%3 RANDOM SALT? f44ih ?A?233 3###$ fa 95?"
-SALT2='FIXME CHANGME TO REALLY RADOMM STRING'
+SALT1=b"some random sstringg"
+SALT2='another random string'
 
 MAIL_SERVER = 'smtp.hushmail.com:25'
 MAIL_USER = 'username'
