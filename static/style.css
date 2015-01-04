@@ -643,8 +643,9 @@ hr {
     margin: 1.3em;
 }
 
-.about  p {
+.about p {
     margin-top: 1ex;
+    margin-left: 1ex;
     font-size: 80%;
 }
 

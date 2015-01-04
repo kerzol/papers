@@ -12,7 +12,7 @@ Installation
 2. Read, understand and modify papersite/config.py.
    Do not forget to change SALT1, SALT2 and mail-server's parameters.
 
-3. Prepare 
+3. Prepare (virtualenv... etc TODO)
 
 3. ./run.sh
 

@@ -18,15 +18,18 @@
   {{user['username'] | e}}.
 
   <p>
-    <big> About {{user['username'] | e}}:</big>
-    {{user['about'] | urlize }}
+
+
+  <h3> Who is <em>{{user['username'] | e}}?</em></h3>
+
+  &nbsp;  {{user['about'] | urlize }}
     {% if user_authenticated() and
           user['userid'] == session['user']['userid'] %}
       <br>
-      <small style="margin-left:10em">
-        <a href="/editinfo">Change this information</a> </small>
+      <div style="text-align:right">
+        <a href="/editinfo">Edit your personal information</a> </div>
     {% endif %}
-  </p>
+
 
 <!--
   <p>
