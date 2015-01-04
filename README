@@ -7,6 +7,8 @@ we use python3, flask, werkzeug, sqlite3, gs
 Installation
 ------------
 
+0. ./clear.sh will initialize sqlite database and pdf's storage
+
 1. Copy papersite/config.py.example to papersite/config.py
  
 2. Read, understand and modify papersite/config.py.
@@ -16,3 +18,4 @@ Installation
 
 3. ./run.sh
 
+ 

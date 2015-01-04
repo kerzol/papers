@@ -131,3 +131,6 @@ INSERT INTO users(userid, username, valid) VALUES(1,'Stranger', 0);
 
 
 -- todo authors_papers, fulltexts ?
+
+
+.quit
