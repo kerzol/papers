@@ -1,13 +1,13 @@
 Papersᵞ — Discussing board for scientific papers 
 ================================================
+http://papers-gamma.link
 
-Library of papers/preprints written by you.
+Library  of papers/preprints  written  by you.
 Comfortable place to discuss articles/preprints.
 
 Use  it to  organise  open peer  review process  or  to discuss  final
-versions of papers.  List of papers/preprints that you like.
-
-Here "you" can refer to a new generation scientific journal. When such
+versions of  papers.  List  of papers/preprints  that you  like.  Here
+"you" can  refer to  a new generation  scientific journal.   When such
 journal likes  (using a symbol ☆)  a paper it means  that this article
 got published.
 
@@ -32,7 +32,7 @@ Install python3, flask, sqlite3, and ghostscript
 AUTHOR(S)
 ---------
 
-Sergey Kirgizov <kerzolster@gmail.com>
+Sergey Kirgizov : https://gratipay.com/kerzol/
 
 
 LICENSE
