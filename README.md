@@ -26,8 +26,10 @@ Install python3, flask, sqlite3, and ghostscript
 3. Read, understand and modify papersite/config.py.
    Do not forget to change SALT1, SALT2 and mail-server's parameters.
 
-4. ./run.sh
+4. ./run.sh will run the system in the debug mode. Never run as root!
 
+5. Consider [deploying to a Web Server](http://flask.pocoo.org/docs/0.10/deploying/) or at least 
+   change debug=True to debug=False in ./run.py
 
 AUTHOR(S)
 ---------
