@@ -115,3 +115,19 @@ def get_insert_domain(domainname):
                          [domainname]).fetchone()['domainid']
     return id
 
+
+def likes(paperid):
+    return query_db(
+        "select count(*) as c                   \
+        from likes                              \
+        where paperid=?",
+        [paperid],
+        one=True)['c']
+
+def liked_by(paperid):
+    return query_db(
+        "select u.username as username          \
+        from likes as l, users as u             \
+        where l.userid = u.userid and           \
+        l.paperid=?",
+        [paperid])

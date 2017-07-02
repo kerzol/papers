@@ -4,7 +4,7 @@
             ############
 from papersite import app
 from papersite.db import (query_db, get_authors, get_domains,
-                          get_keywords, get_comments)
+                          get_keywords, get_comments, liked_by)
 from flask import redirect, url_for, render_template
 from math import ceil
 from papersite.user import get_user_id
@@ -18,18 +18,12 @@ def previews(seq):
         In order to render the list of previews <paper|comments>.
         We use this at main page and also at sites of users
     """
-    likes = {}
+    liked_by_l = {}
     liked = {}
     commentsHead = {}
     commentsTail = {}
     for paper in seq:
-        likes[paper['paperid']] = query_db(
-                         "select count(*) as c                   \
-                          from likes                             \
-                          where paperid=?",
-            [paper['paperid']],
-            one=True)['c']
-
+        liked_by_l[paper['paperid']] = liked_by (paper['paperid'])
         liked[paper['paperid']] = query_db(
             "select *                        \
             from likes                       \
@@ -81,7 +75,7 @@ def previews(seq):
                        ",
             [paper['paperid']]);
 
-    return (commentsTail, commentsHead, likes, liked)
+    return (commentsTail, commentsHead, liked_by_l, liked)
 
 @app.route('/all/')
 @app.route('/all/page/<int:page>')
@@ -97,12 +91,12 @@ def all(page=1):
                   order by p.lastcommentat DESC                  \
                   limit ?, ?", [(page-1)*onpage,onpage])
 
-    commentsTail, commentsHead, likes, liked = previews(seq)
+    commentsTail, commentsHead, liked_by, liked = previews(seq)
 
     return render_template('main-list.html', seq=seq,
                            commentsTail=commentsTail,
                            commentsHead=commentsHead,
-                           likes=likes,liked=liked,
+                           liked_by=liked_by, liked=liked,
                            maxpage=maxpage, curpage=page,
                            headurl='/all')
 
@@ -155,12 +149,12 @@ def usersite(username,page=1):
                   limit ?, ?", [u['userid'],u['userid'],
                                 (page-1)*onpage,onpage])
 
-    commentsTail, commentsHead, likes, liked = previews(seq)
+    commentsTail, commentsHead, liked_by, liked = previews(seq)
 
     return render_template('usersite.html', seq=seq,
                            user=u,
                            commentsTail=commentsTail,
                            commentsHead=commentsHead,
-                           likes=likes,liked=liked,
+                           liked_by=liked_by,liked=liked,
                            maxpage=maxpage, curpage=page,
                            headurl='/'+username)

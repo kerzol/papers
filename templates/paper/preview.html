@@ -18,11 +18,10 @@
                   href="#you should login to like the paper" 
                   title="You should login to like the paper">☆</a>
             {% endif%}
-          <!--     
           <div class="likes"
-               title="{{likes[entry.paperid]}} people like this paper">
-            {{likes[entry.paperid]}}
-          </div> -->
+               title="{{liked_by[entry.paperid]|length}} people like this paper">
+            {{liked_by[entry.paperid]|length}}
+          </div>
         </div>
         <!-- ★ ☆ -->
 

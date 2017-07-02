@@ -23,12 +23,10 @@
                   href="#you should login to like the paper" 
                   title="You should login to like the paper">☆</a>
             {% endif%}
-          <!--
-           <div class="likes"
-                title="{{likes}} people like this paper">
-             {{likes}}
+               <div class="likes"
+                    title="{{liked_by|length}} people like this paper">
+             {{liked_by|length}}
            </div>
-           -->
           </div> <!-- /vote-block -->
         <!-- ★ ☆ -->
 
@@ -60,6 +58,14 @@
              comma()}}
              <a href="/author/{{a.fullname | e}}">{{a.fullname}}</a>{%
              endfor %}
+             
+             <br/> Liked by:
+             {% set comma = joiner(",") %}
+             {% for l in liked_by %}{{
+             comma()}}
+             <a href="/domain/{{l.username | e}}">{{l.username}}</a>{% 
+             endfor %}
+
 
              <br/>Domains:
              {% set comma = joiner(",") %}
@@ -74,7 +80,7 @@
              comma()}}
              <a href="/keyword/{{k.keyword | e}}">{{k.keyword}}</a>{%
              endfor %}
-             
+            
              <br/> Uploaded by:
              <a href="/{{entry.username | e}}">{{entry.username}}</a>
              

@@ -4,9 +4,10 @@
             ############
 import os
 from papersite import app
-from papersite.db import (query_db, get_db, get_authors,  get_domains,
-                          get_keywords, get_comments, get_insert_keyword,
-                          get_insert_author, get_insert_domain)
+from papersite.db import (query_db, get_db, get_authors, get_domains,
+                          get_keywords, get_comments,
+                          get_insert_keyword, get_insert_author,
+                          get_insert_domain, liked_by, likes)
 from papersite.user import get_user_id,  user_authenticated
 from werkzeug import secure_filename
 from flask import render_template, request, flash, redirect, url_for
@@ -39,7 +40,8 @@ def onepaper(paperid, title):
                            authors=authors,
                            domains=domains,
                            keywords=keywords,
-                           likes=likes(paperid),liked=liked)
+                           liked=liked,
+                           liked_by=liked_by(paperid))
 
 
 @app.route('/paper/<int:paperid>/<string:title>/add-comment',
@@ -170,13 +172,6 @@ def add_paper():
                   ##################
             ############
 
-def likes(paperid):
-    return query_db(
-        "select count(*) as c                   \
-        from likes                              \
-        where paperid=?",
-        [paperid],
-        one=True)['c']
 
 @app.route('/paper/<int:paperid>/<string:title>/like', methods=['GET'])
 def like_paper(paperid,title):
