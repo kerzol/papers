@@ -74,11 +74,11 @@
              <a href="/domain/{{d.domainname | e}}">{{d.domainname}}</a>{% 
              endfor %}
 
-             <br/> Keywords:
+             <br/> Tags:
              {% set comma = joiner(",") %}
              {% for k in keywords %}{{
              comma()}}
-             <a href="/keyword/{{k.keyword | e}}">{{k.keyword}}</a>{%
+             <a href="/tag/{{k.keyword | e}}">{{k.keyword}}</a>{%
              endfor %}
             
              <br/> Uploaded by:
