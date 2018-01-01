@@ -10,8 +10,6 @@ from math import ceil
 from papersite.user import get_user_id
 
 
-
-
 def previews(seq):
     """ for a sequence of papers, i.e. 'select * from papers',
         we extract additional info about comments, authors, etc.
@@ -22,6 +20,7 @@ def previews(seq):
     liked = {}
     commentsHead = {}
     commentsTail = {}
+    review = {}
     for paper in seq:
         liked_by_l[paper['paperid']] = liked_by (paper['paperid'])
         liked[paper['paperid']] = query_db(
@@ -31,6 +30,17 @@ def previews(seq):
             [paper['paperid'],get_user_id()],
             one=True)
 
+        
+        review[paper['paperid']] = query_db(
+            " select r.reviewid, r.review, r.userid,         \
+                     r.createtime, u.username                \
+              from reviews as r, users as u                  \
+              where r.userid = u.userid and                  \
+                    r.paperid = ?                            \
+              order by r.createtime desc                     \
+              limit 1                                        \
+            ",
+            [paper['paperid']], one=True);
 
         commentsHead[paper['paperid']] = query_db(
                        "                                         \
@@ -75,7 +85,7 @@ def previews(seq):
                        ",
             [paper['paperid']]);
 
-    return (commentsTail, commentsHead, liked_by_l, liked)
+    return (commentsTail, commentsHead, liked_by_l, liked, review)
 
 @app.route('/all/')
 @app.route('/all/page/<int:page>')
@@ -91,12 +101,14 @@ def all(page=1):
                   order by p.lastcommentat DESC                  \
                   limit ?, ?", [(page-1)*onpage,onpage])
 
-    commentsTail, commentsHead, liked_by, liked = previews(seq)
+    (commentsTail, commentsHead,
+     liked_by, liked, review) = previews(seq)
 
     return render_template('main-list.html', seq=seq,
                            commentsTail=commentsTail,
                            commentsHead=commentsHead,
                            liked_by=liked_by, liked=liked,
+                           review=review,
                            maxpage=maxpage, curpage=page,
                            headurl='/all')
 
@@ -120,7 +132,9 @@ def index(page=1):
 @app.route('/<string:username>')
 @app.route('/<string:username>/page/<int:page>')
 def usersite(username,page=1):
-    """ Generate previews of papers uploaded/liked by specified user """
+    """ Generate previews of papers uploaded/liked 
+        by specified user
+    """
     u=query_db("select * from users where username = ?",
                       [username],one=True)
     if not u: abort(404)
@@ -149,12 +163,14 @@ def usersite(username,page=1):
                   limit ?, ?", [u['userid'],u['userid'],
                                 (page-1)*onpage,onpage])
 
-    commentsTail, commentsHead, liked_by, liked = previews(seq)
+    (commentsTail, commentsHead,
+     liked_by, liked, review) = previews(seq)
 
     return render_template('usersite.html', seq=seq,
                            user=u,
                            commentsTail=commentsTail,
                            commentsHead=commentsHead,
                            liked_by=liked_by,liked=liked,
+                           review=review,
                            maxpage=maxpage, curpage=page,
                            headurl='/'+username)

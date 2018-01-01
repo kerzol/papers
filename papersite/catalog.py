@@ -65,14 +65,14 @@ def domain(domainname):
                            papers=with_description(papers), 
                            domainname=domainname)
 
-@app.route('/keyword/<string:keyword>', methods=['GET'])
+@app.route('/tag/<string:keyword>', methods=['GET'])
 def keyword(keyword):
     k=query_db("select keywordid from keywords where      \
                        keyword = ?", 
                       [keyword], one=True)
     if (k is None):
         return render_catalog('catalog/papers-with-keyword.html', 
-                               error = "Keyword " + \
+                               error = "Tag " + \
                                         keyword + " is not found",
                                keyword=keyword)
     keywordid=k['keywordid']

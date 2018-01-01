@@ -5,7 +5,7 @@
 import os
 from papersite import app
 from papersite.db import (query_db, get_db, get_authors, get_domains,
-                          get_keywords, get_comments,
+                          get_keywords, get_comments, get_review,
                           get_insert_keyword, get_insert_author,
                           get_insert_domain, liked_by, likes)
 from papersite.user import get_user_id,  user_authenticated
@@ -34,6 +34,7 @@ def onepaper(paperid, title):
     domains=get_domains(paperid)                       
     keywords=get_keywords(paperid)
     comments=get_comments(paperid)
+    review=get_review(paperid)
     return render_template('paper/onepaper.html', 
                            entry=paper,
                            comments=comments,
@@ -41,6 +42,7 @@ def onepaper(paperid, title):
                            domains=domains,
                            keywords=keywords,
                            liked=liked,
+                           review=review,
                            liked_by=liked_by(paperid))
 
 
@@ -74,6 +76,34 @@ def add_comment(paperid, title):
                     + "#comment-"
                     + str(last_c_id))
 
+
+
+@app.route('/paper/<int:paperid>/<string:title>/add-review',
+           methods=['POST'])
+def add_review(paperid, title):
+    con = get_db()
+    error = None
+    with con:
+        con.execute('insert into reviews \
+        (review,userid,paperid) \
+        values (?,?,?)',
+                        [
+                            # here we do not escape, because we will
+                            # do it in jinja
+                            request.form['review'],
+                            get_user_id(),
+                            paperid
+                        ])
+        con.execute('update papers set lastcommentat=datetime() \
+                       where paperid = ?', [paperid])
+        if user_authenticated(): 
+            flash('You successfully updated the review of the paper')
+        else: 
+            flash('You anonymously updated the review of the paper')
+
+    return redirect(url_for('onepaper',paperid=paperid,
+                                    title=title, error=error)
+                    + "#review")
 
 
 
@@ -149,6 +179,12 @@ def add_paper():
                            where paperid=?",
                           ['/static/memory/pdfs/'+filename, paperid])
 
+              ## Bootstrap collaborative review
+              con.execute('insert into reviews                \
+                            (paperid, userid, review)         \
+                            values(?, ?, "Feel free to start a marvelous review by editing this.")',
+                          [paperid, get_user_id()])
+              
               ## this is just a hack.
               filename = str(paperid) + ".png"
               ppng = os.path.join(app.config['PREVIEW_FOLDER'],

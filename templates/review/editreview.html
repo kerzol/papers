@@ -1,0 +1,147 @@
+{% block scrpits %}
+<script>
+var REVIEW_Preview = {
+  delay: 50,        // delay after keystroke before updating
+
+  preview: null,     // filled in by Init below
+  buffer: null,      // filled in by Init below
+
+  timeout: null,     // store setTimout id
+  mjRunning: false,  // true when MathJax is processing
+  oldText: null,     // used to check if an update is needed
+
+  //
+  //  Get the preview and buffer DIV's
+  //
+  Init: function () {
+    this.preview = document.getElementById("REVIEW_marked-mathjax-preview");
+    this.buffer = document.getElementById("REVIEW_marked-mathjax-preview-buffer");
+  },
+
+  //
+  //  Switch the buffer and preview, and display the right one.
+  //  (We use visibility:hidden rather than display:none since
+  //  the results of running MathJax are more accurate that way.)
+  //
+  SwapBuffers: function () {
+    var buffer = this.preview, preview = this.buffer;
+    this.buffer = buffer; this.preview = preview;
+    buffer.style.display = "none";
+    buffer.style.position = "absolute";
+    preview.style.position = ""; 
+    preview.style.display = "";
+  },
+
+  //
+  //  This gets called when a key is pressed in the textarea.
+  //  We check if there is already a pending update and clear it if so.
+  //  Then set up an update to occur after a small delay (so if more keys
+  //    are pressed, the update won't occur until after there has been 
+  //    a pause in the typing).
+  //  The callback function is set up below, after the Preview object is set up.
+  //
+  Update: function () {
+    if (this.timeout) {clearTimeout(this.timeout)}
+    this.timeout = setTimeout(this.callback,this.delay);
+  },
+
+  //
+  //  Creates the preview and runs MathJax on it.
+  //  If MathJax is already trying to render the code, return
+  //  If the text hasn't changed, return
+  //  Otherwise, indicate that MathJax is running, and start the
+  //    typesetting.  After it is done, call PreviewDone.
+  //  
+  CreatePreview: function () {
+    Preview.timeout = null;
+    if (this.mjRunning) return;
+    var text = document.getElementById("REVIEW_marked-mathjax-input").value;
+    if (text === this.oldtext) return;
+    text = this.Escape(text);      //Escape tags before doing stuff
+    this.buffer.innerHTML = this.oldtext = text;
+    this.mjRunning = true;
+    MathJax.Hub.Queue(
+      ["Typeset",MathJax.Hub,this.buffer],
+      ["PreviewDone",this]
+    );
+  },
+
+  //
+  //  Indicate that MathJax is no longer running,
+  //  and swap the buffers to show the results.
+  //
+  PreviewDone: function () {
+    this.mjRunning = false;
+    text = this.buffer.innerHTML;
+    this.buffer.innerHTML = marked (text);
+    this.SwapBuffers();
+  },
+
+  Escape: function (html, encode) {
+    return html
+      .replace(!encode ? /&(?!#?\w+;)/g : /&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+     .replace(/'/g, '&#39;');
+  }
+
+};
+
+//
+//  Cache a callback to the CreatePreview action
+//
+REVIEW_Preview.callback = MathJax.Callback(["CreatePreview", REVIEW_Preview]);
+REVIEW_Preview.callback.autoReset = true;  // make sure it can run more than once
+
+</script>
+{% endblock %}
+
+<div class="new-comment">
+
+  <a name="review"></a>
+  <form action="/paper/{{entry.paperid}}/{{entry.title}}/add-review"
+        method="post">
+
+    {% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+    {% endif %}
+
+
+    <h4>Review 
+      {% if not user_authenticated() %} 
+       (anonymously) 
+      {% endif %}
+
+    </h4>
+    <textarea id="REVIEW_marked-mathjax-input"
+              onkeyup="REVIEW_Preview.Update()"
+              name="review"
+              "autofocus">{{review.review}}</textarea>
+
+
+  <div class="hint">Use 
+    <a href="http://en.wikibooks.org/wiki/LaTeX/Mathematics">$\LaTeX$</a>
+    to type formulæ 
+    and <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">markdown</a> to format text.
+  </div>
+
+  <div class="preview" id="REVIEW_marked-mathjax-preview"></div>
+  <div class="preview" id="REVIEW_marked-mathjax-preview-buffer" 
+       style="display:none;
+              position:absolute; 
+              top:0; left: 0"></div>
+  {% include "remark.html" %}
+
+  <div class="send">
+    <input class="btn" type="submit" value="Submit"/>
+  </div>
+
+  </form>
+
+  <script>
+    REVIEW_Preview.Init();
+    REVIEW_Preview.Update()
+  </script>
+      
+</div>

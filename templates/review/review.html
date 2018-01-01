@@ -1,0 +1,25 @@
+{% macro show_review(review) %}
+  <div class="comments">
+    {% set hrrr = joiner('<hr style="width: 95%;"/>') %}
+
+    {{ hrrr()|safe }}
+
+    <div class="comment">
+      <div class="cbody">{{review.review|e}}</div>
+      <div class="cfooter">
+        <span >
+          updated by
+          {% if review.userid == 1 %}
+          Stranger
+          {% else %}
+          <a href="/{{review.username|e}}">
+            {{ review.username|e }}:</a>
+          {% endif %}
+          <a name="review-{{review.reviewid}}"></a>
+        </span>
+        <span class="datetime"> at {{ review.createtime|e }} </span>
+      </div>
+
+    </div>
+  </div>
+{% endmacro %}
