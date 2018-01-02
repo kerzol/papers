@@ -34,7 +34,8 @@ Install python3, flask, sqlite3, and ghostscript
 AUTHOR(S)
 ---------
 
-Sergey Kirgizov : https://gratipay.com/kerzol/
+Sergey Kirgizov
+
 
 
 LICENSE
