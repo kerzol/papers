@@ -20,9 +20,10 @@
   <p>
 
 
-  <h3> Who is <em>{{user['username'] | e}}?</em></h3>
+  <h3> More info about <em>{{user['username'] | e}}:</em></h3>
 
-  &nbsp;  {{user['about'] | urlize }}
+  <div class="cbody">{{user['about']|e}}</div>
+  
     {% if user_authenticated() and
           user['userid'] == session['user']['userid'] %}
       <br>
