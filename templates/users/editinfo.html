@@ -13,13 +13,14 @@
     <h1>Edit your personal information</h1>
     
     <div >
-      <input id=about type=about name=about
-             style="width: 39em"
-             value="{% if request.form.about is defined %}
+      <textarea id=about name=about
+             style="width: 39em">
+{% if request.form.about is defined %}
 {{request.form.about|e }}
 {% else %}
 {{session['user']['about']}}
-{% endif %}">
+{% endif %}
+</textarea>
     </div>
     
     <div class="send">
