@@ -17,7 +17,7 @@ Installation
 
 Install python3, flask, sqlite3, and ghostscript
 
-0. run 'git submodule init && git sumbodule update' to fetch required librarires (MathJax and marked)
+0. run 'git submodule init && git submodule update' to fetch required librarires (MathJax and marked)
 
 1. ./clear.sh will initialize sqlite database, pdf's storage and log directory
 
