@@ -40,11 +40,11 @@
         <div class="comment-block-preview">
 
           {% if review[entry.paperid] != None %}
-             <h3> Open collaborative review: </h3>
+             <h3> Open collaborative discussion: </h3>
              {{ r.show_review(review[entry.paperid]) }}
           {% endif %}
 
-          <h3> Comments: </h3>
+          <h3> Personal comments: </h3>
 
           {{ c.build_list(commentsHead[entry.paperid]) }}
 
