@@ -108,12 +108,6 @@ REVIEW_Preview.callback.autoReset = true;  // make sure it can run more than onc
     {% endif %}
 
 
-    <h4>Review 
-      {% if not user_authenticated() %} 
-       (anonymously) 
-      {% endif %}
-
-    </h4>
     <textarea id="REVIEW_marked-mathjax-input"
               onkeyup="REVIEW_Preview.Update()"
               name="review"
