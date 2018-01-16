@@ -125,7 +125,22 @@ REVIEW_Preview.callback.autoReset = true;  // make sure it can run more than onc
        style="display:none;
               position:absolute; 
               top:0; left: 0"></div>
+  <div class="cfooter">
+        <span >
+          updated by
+          {% if review.userid == 1 %}
+          Stranger
+          {% else %}
+          <a href="/{{review.username|e}}">
+            {{ review.username|e }}:</a>
+          {% endif %}
+          <a name="review-{{review.reviewid}}"></a>
+        </span>
+        <span class="datetime"> at {{ review.createtime|e }} </span>
+      </div>
+
   {% include "remark.html" %}
+
 
   <div class="send">
     <input class="btn" type="submit" value="Submit"/>
