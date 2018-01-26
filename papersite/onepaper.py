@@ -97,9 +97,9 @@ def add_review(paperid, title):
         con.execute('update papers set lastcommentat=datetime() \
                        where paperid = ?', [paperid])
         if user_authenticated(): 
-            flash('You successfully updated the review of the paper')
+            flash('You successfully updated the collaborative discussion of the paper')
         else: 
-            flash('You anonymously updated the review of the paper')
+            flash('You anonymously updated the collaborative discussion of the paper')
 
     return redirect(url_for('onepaper',paperid=paperid,
                                     title=title, error=error)
