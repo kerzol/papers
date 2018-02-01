@@ -182,7 +182,7 @@ def add_paper():
               ## Bootstrap collaborative review
               con.execute('insert into reviews                \
                             (paperid, userid, review)         \
-                            values(?, ?, "Feel free to start a marvelous review by editing this.")',
+                            values(?, ?, "Feel free to start an awesome discussion.")',
                           [paperid, get_user_id()])
               
               ## this is just a hack.
