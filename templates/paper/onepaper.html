@@ -32,22 +32,39 @@
 
         <div class="paper">
 
-          <a class="preview" 
+          {% if entry.getlink | is_internal_pdf %}
+          <a class="preview"
              href="{{ entry.getlink|e }}"
              title="Click to read the entire paper">
-
+          {% else %}
+          <a class="preview"
+             href="{{ entry.getlink|e }}"
+             onclick="return confirm('You really want to visit {{ entry.getlink|e }}?')"
+             title="Click to read the entire paper">
+          {% endif %}
             <img src="/static/memory/previews/{{ entry.paperid}}.png" 
                  alt="{{entry.title | e}}"/>
           </a>
 
-           
           <div class="paper-info">
             <div class="downloadbut">
-            <a class="btn" 
-               target="_new"
-               title="Click to read the entiry paper"
-               href="{{ entry.getlink|e }}"> 
-              Download</a>
+
+              {% if entry.getlink | is_internal_pdf %}
+              <a class="btn"
+                 target="_new"
+                 title="Click to read the entiry paper"
+                 href="{{ entry.getlink|e }}">
+                Download</a>
+              {% else %}
+              Link:
+              <a
+                 target="_new"
+                 title="Click to read the entiry paper"
+                 href="{{ entry.getlink|e }}">
+                {{ entry.getlink|e }}
+              </a>
+              {% endif %}
+
             </div>
 
             <div class="paper-info-right">

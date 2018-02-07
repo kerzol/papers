@@ -657,3 +657,11 @@ hr {
 /*    content: '★'; */
 /*    margin: 0 1em;   */
 }
+
+.url {
+    text-align: left;
+    background-color: #FBFBFF;
+    padding: 1em;
+    border-radius: 1ex;
+    border: 0px solid #DDDDDD;
+}

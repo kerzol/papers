@@ -2,7 +2,7 @@
 ###############################
                   ##################
             ############
-import os
+import os, re
 from papersite import app
 from papersite.db import (query_db, get_db, get_authors, get_domains,
                           get_keywords, get_comments, get_review,
@@ -11,6 +11,24 @@ from papersite.db import (query_db, get_db, get_authors, get_domains,
 from papersite.user import get_user_id,  user_authenticated
 from werkzeug import secure_filename
 from flask import render_template, request, flash, redirect, url_for
+
+
+### Frontend stuff
+###############################
+
+@app.template_filter('is_internal_pdf')
+def is_internal_pdf(link):
+    return re.match('^/static/memory/pdfs/(.*)\.pdf$',link)
+
+
+
+
+### Show paper, etc
+###############################
+                  ##################
+            ############
+
+
 
 @app.route('/paper/<int:paperid>/<string:title>', methods=['GET'])
 def onepaper(paperid, title):
@@ -171,27 +189,35 @@ def add_paper():
                             values(?,?)',[paperid, keywordid])
               
 
-              filename = str(paperid) + "-" +                       \
-                       secure_filename(paper_file.filename)
-              ppdf = os.path.join(app.config['UPLOAD_FOLDER'],filename)
+              filename_pdf = str(paperid) + "-" +                       \
+                             secure_filename(paper_file.filename)
+              ppdf = os.path.join(app.config['UPLOAD_FOLDER'],filename_pdf)
               paper_file.save(ppdf)
-              con.execute("update papers set getlink = ?             \
-                           where paperid=?",
-                          ['/static/memory/pdfs/'+filename, paperid])
+              
+              ## this is just a hack.
+              ## In order to generate first page
+              filename_png = str(paperid) + ".png"
+              ppng = os.path.join(app.config['PREVIEW_FOLDER'],filename_png)
+              os.system('papersite/gen.sh ' + ppdf +  ' ' + ppng)
+              # end of hack
+
+              ## Sometimes authors provide a url to their paper
+              ## in this case we don't store a full paper, we use the url instead
+              if request.form['url'] != "":
+                  os.remove(ppdf)
+                  con.execute("update papers set getlink = ?             \
+                               where paperid=?",
+                              [request.form['url'], paperid])
+              else:
+                  con.execute("update papers set getlink = ?             \
+                               where paperid=?",
+                              ['/static/memory/pdfs/'+filename_pdf, paperid])
 
               ## Bootstrap collaborative review
               con.execute('insert into reviews                \
                             (paperid, userid, review)         \
                             values(?, ?, "Feel free to start an awesome discussion.")',
                           [paperid, get_user_id()])
-              
-              ## this is just a hack.
-              filename = str(paperid) + ".png"
-              ppng = os.path.join(app.config['PREVIEW_FOLDER'],
-                                  filename)
-
-              os.system('papersite/gen.sh ' + ppdf +  ' ' + ppng)
-              # end of hack
               flash('You successfully upload the paper')
             return redirect(url_for('onepaper',
                                     paperid=paperid,

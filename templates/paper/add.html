@@ -148,8 +148,20 @@ $(function() {
       <label for=pdf> PDF: </label>
       <input id=pdf type=file name=pdf accept="application/pdf">
 
-
       {% include "remark.html" %}
+
+      <div class="url">
+        In some cases, you might want to specify an optional URL
+        associated with the paper. If the following field is not empty
+        we'll save only the first page of the document, and the paper
+        hyperlink will lead to the URL, specified here:
+        <input id=url
+               type=text name=url placeholder="http://example.com/paper.pdf"
+               value="{{ request.form.url|e
+        }}">
+      </div>
+
+
     </div>
 
 
