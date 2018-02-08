@@ -217,7 +217,7 @@ def add_paper():
                             values(?, ?, "Feel free to start an awesome discussion.")',
                           [paperid, get_user_id()])
               flash('You successfully upload the paper')
- 	      return redirect(url_for('onepaper',
+              return redirect(url_for('onepaper',
                                     paperid=paperid,
                                     title=request.form['title']))
     return render_template('paper/add.html', 
