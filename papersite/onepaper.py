@@ -187,13 +187,11 @@ def add_paper():
                   con.execute('insert into papers_keywords            \
                             (paperid, keywordid)                      \
                             values(?,?)',[paperid, keywordid])
-              
 
               filename_pdf = str(paperid) + "-" +                       \
                              secure_filename(paper_file.filename)
               ppdf = os.path.join(app.config['UPLOAD_FOLDER'],filename_pdf)
               paper_file.save(ppdf)
-              
               ## this is just a hack.
               ## In order to generate first page
               filename_png = str(paperid) + ".png"
@@ -219,7 +217,7 @@ def add_paper():
                             values(?, ?, "Feel free to start an awesome discussion.")',
                           [paperid, get_user_id()])
               flash('You successfully upload the paper')
-            return redirect(url_for('onepaper',
+ 	      return redirect(url_for('onepaper',
                                     paperid=paperid,
                                     title=request.form['title']))
     return render_template('paper/add.html', 
