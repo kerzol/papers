@@ -563,21 +563,13 @@ hr {
     display: block;
 }
 
-.catalog-left {
-    float: left;
-    overflow: hidden;
+.catalog-search {
     padding: 2em;
-    width: 66%;
 }
 
-.catalog-right {
-    float: right;
-    margin-right: 0;
-    margin-top: 0;
-    padding-left: 1em;
-    padding-right: 1em;
-    padding-bottom: 1em;
-    width: 25%;
+.catalog-lists {
+    padding-left: 2em;
+    padding-right: 2em;
     background-color: #FBFBFF;
     border-color: #DDDDDD #F0F0F0 #DDDDDD #DDDDDD ;
     border-style: solid;
