@@ -1,4 +1,5 @@
-★ notifications
+★ notifications by email
+★ internal notifications
 ★ modify papers/comments
 ★ follow, unfollow buttons
 
@@ -12,7 +13,6 @@
 ▽ auto first page, recommendations (Machine learning?)
 ▽ arxiv/hal/google scholar integration
 
-✦ post a link to paper instead of uploading
 ✦ write a new paper directly using wiki-like editor.
 
 > twitter, facebook, linkedin, openid, oauth integrations
