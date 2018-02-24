@@ -5,7 +5,7 @@
 from papersite import app
 from papersite.db import (query_db, get_authors, get_domains,
                           get_keywords, get_comments, liked_by)
-from flask import redirect, url_for, render_template
+from flask import redirect, url_for, render_template, abort
 from math import ceil
 from papersite.user import get_user_id
 

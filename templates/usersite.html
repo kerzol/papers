@@ -27,16 +27,7 @@
     {% if user_authenticated() and
           user['userid'] == session['user']['userid'] %}
       <br>
-      <div style="float:left; padding-bottom:1em">
-        {% if user['notifs_muted'] == 0 %}
-        <a class="reddish-btn"
-           href="/mute-email-notifs">Mute email notifications </a>
-        {% else %}
-        <a class="btn"
-           href="/unmute-email-notifs">UN-mute email notifications </a>
-        {% endif %}
-      </div>
-      <div style="float:right; padding-bottom:1em">
+      <div style="padding-bottom:1em">
         <a href="/editinfo">Edit your personal information</a> /
         <a href="/change-password">Change password</a>
       </div>

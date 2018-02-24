@@ -103,16 +103,28 @@ Preview.callback.autoReset = true;  // make sure it can run more than once
 </script>
 
 <div class="new-comment">
+
   <form action="/editinfo" method="post" class=usualform
         style="max-width: 40em">
+
+    <a style="float:right"
+       href="/change-password">Change password</a>
+
     {% if error %}
     <p class=error><strong>Error:</strong> {{ error }}
       {% endif %}
       <h1>Edit your personal information</h1>
 
-      Name: <input name="username" value="{{session['user']['username']}}"> <br>
-      Email: <input name="email" value="{{session['user']['email']}}">
-
+      Name: <input name="username"
+                   value="{{session['user']['username']}}"> <br>
+      Email: <input name="email"
+                    value="{{session['user']['email']}}"> <br>
+      Email notifications are muted:
+      <input name="notifs_muted" type="checkbox"
+             value="1"
+             {{'checked="checked"'
+                if session['user']['notifs_muted'] == 1 else ""}}
+             >
       <textarea id="marked-mathjax-input"
                 onkeyup="Preview.Update()"
                 id="about"
@@ -136,6 +148,7 @@ Preview.callback.autoReset = true;  // make sure it can run more than once
       </div>
 
   </form>
+
 
   <script>
     Preview.Init();

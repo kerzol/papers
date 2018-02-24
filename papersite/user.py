@@ -165,7 +165,7 @@ def login():
     error = None
     if request.method == 'POST':
         u = query_db('select userid,username,email,                     \
-                             createtime,valid,about                     \
+                             createtime,valid,about,notifs_muted        \
                       from users                                        \
                       where password = ? and email = ?',
                      [hash (request.
@@ -190,6 +190,8 @@ def editinfo():
     if not user_authenticated():
         return "<h1>Forbidden (maybe you forgot to login)</h1>", 403
 
+    print ('avant')
+    print (session)
     error = None
     if request.method == 'POST':
         if request.form['email'] == "":
@@ -205,17 +207,39 @@ def editinfo():
                     '", please choose another.'
         else:
             con = get_db()
+            if 'notifs_muted' in request.form:
+                notifs_muted = request.form['notifs_muted']
+            else:
+                notifs_muted = 0
+
+            print ('REQUEST')
+            print ([request.form['about'],
+                                 request.form['email'],
+                                 request.form['username'],
+                                 notifs_muted,
+                                 session['user']['userid']])
+            print (hasattr(request.form,'notifs_muted'))
+            print (notifs_muted)
             try:
                 with con:
-                    con.execute('update users set about = ?, email = ?, username = ? \
+                    con.execute('update users set about = ?, \
+                                 email = ?, username = ?,    \
+                                 notifs_muted = ?            \
                                  where userid = ?',
-                                [request.form['about'], request.form['email'], request.form['username'],
-                                session['user']['userid']])
+                                [request.form['about'],
+                                 request.form['email'],
+                                 request.form['username'],
+                                 notifs_muted,
+                                 session['user']['userid']])
                 session['user']['email'] = request.form['email']
                 session['user']['about'] = request.form['about']
                 session['user']['username'] = request.form['username']
-                return redirect(url_for('usersite',
-                                        username=session['user']['username']))
+                session['user']['notifs_muted'] = notifs_muted
+                print ('session apres')
+                print (session)
+                print ('request')
+                print (request)
+                return redirect(url_for('editinfo'))
             except sqlite3.IntegrityError as err:
                 error = handle_sqlite_exception(err)
     return render_template('users/editinfo.html', error=error)
