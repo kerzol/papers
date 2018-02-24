@@ -198,6 +198,31 @@ def editinfo():
                                 username=session['user']['username']))
     return render_template('users/editinfo.html', error=error)
 
+@app.route("/mute-email-notifs", methods=['GET'])
+def mute_email_notifs():
+    if not user_authenticated():
+        return "<h1>Forbidden (maybe you forgot to login)</h1>", 403
+    con = get_db()
+    with con:
+        con.execute('update users set notifs_muted = 1 \
+                     where userid = ?',
+                     [session['user']['userid']])
+        flash('Email notifications are muted')
+        return redirect(url_for('usersite',username=session['user']['username']))
+    return redirect(url_for('usersite'))
+
+@app.route("/unmute-email-notifs", methods=['GET'])
+def unmute_email_notifs():
+    if not user_authenticated():
+        return "<h1>Forbidden (maybe you forgot to login)</h1>", 403
+    con = get_db()
+    with con:
+        con.execute('update users set notifs_muted = 0 \
+                     where userid = ?',
+                     [session['user']['userid']])
+        flash('Email notifications are UN-muted')
+        return redirect(url_for('usersite',username=session['user']['username']))
+    return redirect(url_for('usersite'))
 
 
 @app.route("/logout")

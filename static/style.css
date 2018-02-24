@@ -408,10 +408,28 @@ hr {
     cursor:pointer;
     border-radius: 0.5ex;    
 }
-
 .btn:hover {
    background-color: #73A0FF;
 }
+.reddish-btn {
+    border: solid 1px #CF685E;
+    background-color: #CF685E;
+    padding-top: 0.4ex;
+    padding-bottom: 0.4ex;
+    padding-left: 1ex;
+    padding-right: 1ex;
+    text-decoration: none;
+    text-align:center;
+    font-size: large;
+    font-family: serif;
+    color:white;
+    cursor:pointer;
+    border-radius: 0.5ex;
+}
+.reddish-btn:hover {
+   background-color: #DE5139;
+}
+
 
 .new-comment .send input:hover {
     background-color: #73A0FF;
@@ -603,7 +621,7 @@ hr {
 }
 
 .userinfo {
-    padding: 1em;
+    padding: 1em 1em 2em 1em;
 /*    background-color: #FBFBFF;*/
     background-color: #FFFCFA;
     border-radius: 1ex;
