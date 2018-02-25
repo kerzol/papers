@@ -29,9 +29,10 @@ def is_internal_pdf(link):
             ############
 
 
-
+@app.route('/paper/<int:paperid>', methods=['GET'])
+@app.route('/paper/<int:paperid>/', methods=['GET'])
 @app.route('/paper/<int:paperid>/<string:title>', methods=['GET'])
-def onepaper(paperid, title):
+def onepaper(paperid, title = None):
     paper=query_db("select p.paperid, p.getlink,                 \
                                  p.title,                        \
                                  p.userid, p.createtime,         \
