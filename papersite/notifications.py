@@ -26,8 +26,9 @@ def users_to_notify(paperid):
 def users_to_notify_about_new_paper(paperid):
   return query_db(
     "select u.*                             \
-    from likes as likes,                    \
-         users as users,                    \
+    from users as users,                    \
+         likes as likes,                    \
+
          papers as likedpapers,             \
          papers as newpapers,               \
          users as uploaders                 \
