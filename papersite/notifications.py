@@ -4,12 +4,14 @@
             ############
 
 from papersite.email import send_mail
-from papersite.db import (query_db)
+from papersite.db import (query_db, get_paper_w_uploader,
+                          get_authors)
+from flask import url_for
 
 ## TODO: store notifs in db
 
 ## We notify users liked this paper
-## It's different from papersite.db.liked_by because here we want
+## It's different from papersite.db.liked_by, caz here we want
 ## all user props, not only their names
 def users_to_notify(paperid):
   return query_db(
@@ -19,27 +21,25 @@ def users_to_notify(paperid):
     l.paperid = ?",
     [paperid])
 
-## Currently, we notify users liked at laest one paper
+## Currently, we notify users that liked at least one paper
 ## from the same uploader
 ## This behavior will change in the near future:
 ## user will follow other user, author, etc.
 def users_to_notify_about_new_paper(paperid):
   return query_db(
-    "select u.*                             \
+    "select users.*                         \
     from users as users,                    \
          likes as likes,                    \
-
          papers as likedpapers,             \
          papers as newpapers,               \
          users as uploaders                 \
     where                                   \
          likes.userid = users.userid and    \
          likes.paperid = likedpapers.paperid and \
-         likedpapers.userid = uploaders.userid   \
-         uploasders.userid = newpapers.userid
+         likedpapers.userid = uploaders.userid and  \
+         uploaders.userid = newpapers.userid   and  \
          newpapers.paperid = ?",
     [paperid])
-
 
 def review_was_changed(paperid, reviewid):
   message = 'wdiff of old dicsussion and new one'
@@ -54,7 +54,29 @@ def comment_was_added(paperid, commentid):
       send_mail(usermail, message)
 
 def new_paper_was_added(paperid):
-  message = 'paper was added'
-  users = users_to_notify_about_new_paper(paperid):
+  url = url_for('onepaper', paperid=paperid, _external=True)
+  paper = get_paper_w_uploader(paperid)
+  authors = ", ".join([a['fullname'] for a in get_authors(paperid)])
+  template = "Hello %s, \n\n\
+A new paper was added to Papersˠ.\n\
+It may interest you.\n\
+Title:    %s\n\
+Authors:  %s\n\
+Uploader: %s\n\
+Url: %s\n\n\
+Have a good day,\n\
+Papers' team"
+  users = users_to_notify_about_new_paper(paperid)
+  print ('INTERESTED USERS:')
+  print (users)
   for u in users:
-    send_mail(usermail, message)
+    msg = template % (u.username,
+                      paper['title'],
+                      authors,
+                      paper['username'],
+                      url)
+    print ('TO:')
+    print (usermail)
+    print ('MSG:')
+    print (msg)
+    send_mail(usermail, )
