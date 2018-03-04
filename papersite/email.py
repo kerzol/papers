@@ -16,7 +16,7 @@ def send_mail(usermail, message, subject):
                   from users   \
                   where email = ?',
                  [usermail], one=True)
-    if (not u['notifs_muted']):
+    if (not u['notifs_muted'] and u['userid'] != 1):
         # Create a text/plain message
         msg = MIMEText(message)
         msg['Subject'] = subject

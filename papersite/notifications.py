@@ -8,7 +8,9 @@ from papersite.email import send_mail
 from papersite.db import (query_db, get_paper_w_uploader,
                           get_authors, get_comment,
                           get_review, get_review_before_last)
+from papersite.user import get_user_id,  user_authenticated
 from flask import url_for
+from flask import session, flash, redirect, url_for
 
 ## TODO: store notifs in db
 
@@ -16,12 +18,27 @@ from flask import url_for
 ## It's different from papersite.db.liked_by, caz here we want
 ## all user props, not only their names
 def users_to_notify(paperid):
-  return query_db(
+  ## get liked users
+  ## avoiding self-notifications
+  users = query_db(
     "select u.*                             \
     from likes as l, users as u             \
     where l.userid = u.userid and           \
-    l.paperid = ?",
-    [paperid])
+    l.paperid = ? and u.userid <> ?         ",
+    [paperid, get_user_id() ])
+  ## then add the author of the paper, but not 
+  ## the user with userid=1. He is an anonymous stranger.
+  ## He cannot into notifications.
+  author = query_db(
+    "select u.*                     \
+     from users as u, papers as p   \
+     where u.userid = p.userid      \
+     and p.paperid = ? and u.userid <> ? and u.userid <> 1",
+    [paperid, get_user_id() ], one=True)
+
+  if author is not None:
+    users.append(author)
+  return users
 
 ## Currently, we notify users that liked at least one paper
 ## from the same uploader
@@ -48,7 +65,7 @@ def review_was_changed(paperid):
   url = url_for('onepaper', paperid=paperid, _external=True)
   url = url + '#review'
   template = "Hello %s,\n\n\
-User %s just changed the collaborative discussion about a paper you liked\n\n\
+User '%s' just changed the collaborative discussion about a paper you liked or uploaded.\n\n\
 Paper title: %s\n\
 Changes:\n\n\
 %s\n\n\
@@ -78,7 +95,7 @@ def comment_was_added(paperid, commentid):
   url = url_for('onepaper', paperid=paperid, _external=True)
   url = url + '#comment-' + str(commentid)
   template = "Aloha %s,\n\n\
-User %s just commented a paper you liked.\n\
+User '%s' just commented a paper you liked or uploaded.\n\
 Paper title: %s\n\
 Comment:\n\n\
 %s\n\n\
