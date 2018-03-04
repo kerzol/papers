@@ -12,11 +12,11 @@ import papersite.user
 
 ## send notifs, if notifs are not muted
 def send_mail(usermail, message):
-    u = query_db('select userid,username,email,createtime,valid     \
-                  from users                                        \
+    u = query_db('select *     \
+                  from users   \
                   where email = ?',
                  [usermail], one=True)
-    if (not u.notifs_muted):
+    if (not u['notifs_muted']):
         # Create a text/plain message
         msg = MIMEText(message)
         msg['Subject'] = 'Change password'

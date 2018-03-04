@@ -30,13 +30,13 @@ def users_to_notify_about_new_paper(paperid):
     "select users.*                         \
     from users as users,                    \
          likes as likes,                    \
-         papers as likedpapers,             \
+         papers as papers_by_uploader,      \
          papers as newpapers,               \
          users as uploaders                 \
     where                                   \
          likes.userid = users.userid and    \
-         likes.paperid = likedpapers.paperid and \
-         likedpapers.userid = uploaders.userid and  \
+         likes.paperid = papers_by_uploader.paperid and \
+         papers_by_uploader.userid = uploaders.userid and  \
          uploaders.userid = newpapers.userid   and  \
          newpapers.paperid = ?",
     [paperid])
@@ -58,8 +58,7 @@ def new_paper_was_added(paperid):
   paper = get_paper_w_uploader(paperid)
   authors = ", ".join([a['fullname'] for a in get_authors(paperid)])
   template = "Hello %s, \n\n\
-A new paper was added to Papersˠ.\n\
-It may interest you.\n\
+A new paper was added to Papersˠ. The paper may interest you.\n\
 Title:    %s\n\
 Authors:  %s\n\
 Uploader: %s\n\
@@ -70,13 +69,14 @@ Papers' team"
   print ('INTERESTED USERS:')
   print (users)
   for u in users:
-    msg = template % (u.username,
+    msg = template % (u['username'],
                       paper['title'],
                       authors,
                       paper['username'],
                       url)
+    # todo save message to notifs table
     print ('TO:')
-    print (usermail)
+    print (u['email'])
     print ('MSG:')
     print (msg)
-    send_mail(usermail, )
+    send_mail(u['email'], msg)
