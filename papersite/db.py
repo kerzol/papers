@@ -105,6 +105,20 @@ def get_review(paperid):
                           ",
                      [paperid], one=True)
 
+def get_review_before_last(paperid):
+    return query_db("select                                      \
+                          r.reviewid, r.review, r.userid,        \
+                                           r.createtime,         \
+                          u.username                             \
+                          from                                   \
+                               reviews as r,                     \
+                               users as u                        \
+                          where r.userid = u.userid and          \
+                                r.paperid = ?                    \
+                          order by r.createtime desc             \
+                          limit 1 offset 1                       \
+                          ",
+                     [paperid], one=True)
 
 # If there is no such keyword/author/domain in db, 
 # we will insert in into db

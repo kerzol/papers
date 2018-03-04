@@ -14,7 +14,8 @@ from papersite.user import get_user_id,  user_authenticated
 from werkzeug import secure_filename
 from flask import render_template, request, flash, redirect, url_for
 from papersite.notifications import (new_paper_was_added,
-                                     comment_was_added)
+                                     comment_was_added,
+                                     review_was_changed)
 
 ### Frontend stuff
 ###############################
@@ -116,7 +117,7 @@ def add_review(paperid, title):
             flash('You successfully updated the collaborative discussion of the paper')
         else: 
             flash('You anonymously updated the collaborative discussion of the paper')
-
+    review_was_changed(paperid)
     return redirect(url_for('onepaper',paperid=paperid,
                                     title=title, error=error)
                     + "#review")
