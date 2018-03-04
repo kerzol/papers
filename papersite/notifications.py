@@ -20,12 +20,13 @@ from flask import session, flash, redirect, url_for
 def users_to_notify(paperid):
   ## get liked users
   ## avoiding self-notifications
+  current_user = get_user_id()
   users = query_db(
     "select u.*                             \
     from likes as l, users as u             \
     where l.userid = u.userid and           \
     l.paperid = ? and u.userid <> ?         ",
-    [paperid, get_user_id() ])
+    [paperid, current_user ])
   ## then add the author of the paper, but not 
   ## the user with userid=1. He is an anonymous stranger.
   ## He cannot into notifications.
@@ -34,7 +35,7 @@ def users_to_notify(paperid):
      from users as u, papers as p   \
      where u.userid = p.userid      \
      and p.paperid = ? and u.userid <> ? and u.userid <> 1",
-    [paperid, get_user_id() ], one=True)
+    [paperid, current_user ], one=True)
 
   if author is not None:
     users.append(author)
