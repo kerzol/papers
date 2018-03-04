@@ -66,6 +66,16 @@ def get_keywords(paperid):
                          pk.paperid = ?",
                       [paperid])
 
+def get_comment(commentid):
+    return query_db("select c.commentid, c.comment, c.createtime, \
+                            u.username                            \
+                          from                                    \
+                               comments as c,                     \
+                               users as u                         \
+                          where c.userid = u.userid and           \
+                                c.commentid = ?                   \
+    ", [commentid], one=True)
+
 def get_comments(paperid):
     return query_db("select                                      \
                           c.commentid, c.comment, c.userid,      \

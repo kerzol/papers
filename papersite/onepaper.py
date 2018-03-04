@@ -13,7 +13,8 @@ from papersite.db import (query_db, get_db, get_authors, get_domains,
 from papersite.user import get_user_id,  user_authenticated
 from werkzeug import secure_filename
 from flask import render_template, request, flash, redirect, url_for
-from papersite.notifications import (new_paper_was_added)
+from papersite.notifications import (new_paper_was_added,
+                                     comment_was_added)
 
 ### Frontend stuff
 ###############################
@@ -83,6 +84,9 @@ def add_comment(paperid, title):
 
     last_c_id=query_db("SELECT last_insert_rowid() as lid",
                        one=True)['lid']
+    
+    # notify user about new comment
+    comment_was_added(paperid, last_c_id)
     return redirect(url_for('onepaper',paperid=paperid,
                                     title=title, error=error)
                     + "#comment-"

@@ -11,7 +11,7 @@ from flask import url_for
 import papersite.user
 
 ## send notifs, if notifs are not muted
-def send_mail(usermail, message):
+def send_mail(usermail, message, subject):
     u = query_db('select *     \
                   from users   \
                   where email = ?',
@@ -19,7 +19,7 @@ def send_mail(usermail, message):
     if (not u['notifs_muted']):
         # Create a text/plain message
         msg = MIMEText(message)
-        msg['Subject'] = 'Change password'
+        msg['Subject'] = subject
         msg['From'] = MAIL_USER
         msg['To'] = usermail
 
