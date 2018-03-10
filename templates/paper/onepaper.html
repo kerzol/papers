@@ -80,7 +80,7 @@
              {% set comma = joiner(",") %}
              {% for l in liked_by %}{{
              comma()}}
-             <a href="/domain/{{l.username | e}}">{{l.username}}</a>{% 
+             <a href="/{{l.username | e}}">{{l.username}}</a>{% 
              endfor %}
 
 
