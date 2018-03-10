@@ -48,7 +48,12 @@ body {
    color: grey;
 }
 
+.paypal-button {
+    float: left;
+}
+
 #banner-bottom {
+    float: right;
     color: grey;
     margin:0;
     padding-top: 0.5em;
