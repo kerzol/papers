@@ -9,7 +9,27 @@ from papersite.config import MAIL_SERVER, MAIL_USER, MAIL_PASS
 from papersite.db import query_db, get_db
 from flask import url_for
 import papersite.user
-               
+
+## send notifs, if notifs are not muted
+def send_mail(usermail, message, subject):
+    u = query_db('select *     \
+                  from users   \
+                  where email = ?',
+                 [usermail], one=True)
+    if (not u['notifs_muted'] and u['userid'] != 1):
+        # Create a text/plain message
+        msg = MIMEText(message)
+        msg['Subject'] = subject
+        msg['From'] = MAIL_USER
+        msg['To'] = usermail
+
+        # Send the message via our own SMTP server.
+        s = smtplib.SMTP_SSL(MAIL_SERVER)
+        s.login(MAIL_USER, MAIL_PASS)
+        s.send_message(msg)
+        s.quit()
+
+
 def send_confirmation_mail(username, usermail):
     key = ''.join(map( lambda x : random.choice(string.ascii_letters),
                        range(100)))

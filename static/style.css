@@ -48,7 +48,12 @@ body {
    color: grey;
 }
 
+.paypal-button {
+    float: left;
+}
+
 #banner-bottom {
+    float: right;
     color: grey;
     margin:0;
     padding-top: 0.5em;
@@ -408,10 +413,28 @@ hr {
     cursor:pointer;
     border-radius: 0.5ex;    
 }
-
 .btn:hover {
    background-color: #73A0FF;
 }
+.reddish-btn {
+    border: solid 1px #CF685E;
+    background-color: #CF685E;
+    padding-top: 0.4ex;
+    padding-bottom: 0.4ex;
+    padding-left: 1ex;
+    padding-right: 1ex;
+    text-decoration: none;
+    text-align:center;
+    font-size: large;
+    font-family: serif;
+    color:white;
+    cursor:pointer;
+    border-radius: 0.5ex;
+}
+.reddish-btn:hover {
+   background-color: #DE5139;
+}
+
 
 .new-comment .send input:hover {
     background-color: #73A0FF;
@@ -563,21 +586,13 @@ hr {
     display: block;
 }
 
-.catalog-left {
-    float: left;
-    overflow: hidden;
+.catalog-search {
     padding: 2em;
-    width: 66%;
 }
 
-.catalog-right {
-    float: right;
-    margin-right: 0;
-    margin-top: 0;
-    padding-left: 1em;
-    padding-right: 1em;
-    padding-bottom: 1em;
-    width: 25%;
+.catalog-lists {
+    padding-left: 2em;
+    padding-right: 2em;
     background-color: #FBFBFF;
     border-color: #DDDDDD #F0F0F0 #DDDDDD #DDDDDD ;
     border-style: solid;
@@ -611,7 +626,7 @@ hr {
 }
 
 .userinfo {
-    padding: 1em;
+    padding: 1em 1em 2em 1em;
 /*    background-color: #FBFBFF;*/
     background-color: #FFFCFA;
     border-radius: 1ex;

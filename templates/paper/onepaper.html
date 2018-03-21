@@ -20,7 +20,7 @@
               {% endif %}
             {% else %} {# anonymous #}
                <a class="anon"
-                  href="#you should login to like the paper" 
+                  href="javascript:alert('Please, login to like the paper.')"
                   title="You should login to like the paper">☆</a>
             {% endif%}
                <div class="likes"
@@ -80,7 +80,7 @@
              {% set comma = joiner(",") %}
              {% for l in liked_by %}{{
              comma()}}
-             <a href="/domain/{{l.username | e}}">{{l.username}}</a>{% 
+             <a href="/{{l.username | e}}">{{l.username}}</a>{% 
              endfor %}
 
 
@@ -110,6 +110,7 @@
         <hr style="max-width:60em"/>
 
         <div class="comment-block">
+          <a name="review"></a>
           <h3> Open collaborative discussion: </h3>
 
           {% include "review/editreview.html" %}

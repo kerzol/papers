@@ -129,15 +129,27 @@ create index friends_index2 on friends (friendid);
 create unique index friends_index3 on friends (userid, friendid);
 
 
-
--- insert
-
-
 -- Anonyomous is a user with id = 1.
 -- Anonymous is a stranger.
 INSERT INTO users(userid, username, valid) VALUES(1,'Stranger', 0);
 
+-- add mute params for notifs
+ALTER TABLE users
+  ADD notifs_muted BOOLEAN default 0;
 
+
+-- notifs
+create table notifs (
+  userid      INTEGER,
+  text        TEXT,
+  createtime  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  seenat      TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  FOREIGN KEY(userid) REFERENCES users(userid)
+);
+
+create index n_user on notifs(userid);
+create index n_index1 on notifs(createtime);
+create index n_index2 on notifs(seenat);
 
 -- todo authors_papers, fulltexts ?
 

@@ -27,8 +27,10 @@
     {% if user_authenticated() and
           user['userid'] == session['user']['userid'] %}
       <br>
-      <div style="text-align:right">
-        <a href="/editinfo">Edit your personal information</a> </div>
+      <div style="padding-bottom:1em">
+        <a href="/editinfo">Edit your personal information</a> /
+        <a href="/change-password">Change password</a>
+      </div>
     {% endif %}
 
 

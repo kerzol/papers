@@ -7,11 +7,15 @@ from papersite import app
 from papersite.db import (query_db, get_db, get_authors, get_domains,
                           get_keywords, get_comments, get_review,
                           get_insert_keyword, get_insert_author,
-                          get_insert_domain, liked_by, likes)
+                          get_insert_domain, liked_by, likes,
+                          get_paper_w_uploader
+)
 from papersite.user import get_user_id,  user_authenticated
 from werkzeug import secure_filename
 from flask import render_template, request, flash, redirect, url_for
-
+from papersite.notifications import (new_paper_was_added,
+                                     comment_was_added,
+                                     review_was_changed)
 
 ### Frontend stuff
 ###############################
@@ -29,19 +33,11 @@ def is_internal_pdf(link):
             ############
 
 
-
+@app.route('/paper/<int:paperid>', methods=['GET'])
+@app.route('/paper/<int:paperid>/', methods=['GET'])
 @app.route('/paper/<int:paperid>/<string:title>', methods=['GET'])
-def onepaper(paperid, title):
-    paper=query_db("select p.paperid, p.getlink,                 \
-                                 p.title,                        \
-                                 p.userid, p.createtime,         \
-                                 u.username                      \
-                           from papers as p,                     \
-                                users as u                       \
-                          where                                  \
-                                p.userid   = u.userid   and      \
-                                p.paperid = ?",
-                   [paperid], one=True)
+def onepaper(paperid, title = None):
+    paper = get_paper_w_uploader(paperid)
     liked = query_db(
         "select count(*) as c            \
         from likes                       \
@@ -89,6 +85,9 @@ def add_comment(paperid, title):
 
     last_c_id=query_db("SELECT last_insert_rowid() as lid",
                        one=True)['lid']
+    
+    # notify user about new comment
+    comment_was_added(paperid, last_c_id)
     return redirect(url_for('onepaper',paperid=paperid,
                                     title=title, error=error)
                     + "#comment-"
@@ -118,7 +117,7 @@ def add_review(paperid, title):
             flash('You successfully updated the collaborative discussion of the paper')
         else: 
             flash('You anonymously updated the collaborative discussion of the paper')
-
+    review_was_changed(paperid)
     return redirect(url_for('onepaper',paperid=paperid,
                                     title=title, error=error)
                     + "#review")
@@ -216,6 +215,10 @@ def add_paper():
                             (paperid, userid, review)         \
                             values(?, ?, "Feel free to start an awesome discussion.")',
                           [paperid, get_user_id()])
+
+              ## notify some users by email about this paper
+              new_paper_was_added(paperid)
+              
               flash('You successfully upload the paper')
               return redirect(url_for('onepaper',
                                     paperid=paperid,

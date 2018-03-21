@@ -140,7 +140,7 @@
          <b><a 
                      href="/{{session['user']['username'] | e}}"
                      title="Your home page">
-           {{session['user']['username'] | e}}</a> | </b> 
+            Aloha, {{session['user']['username'] | e}}</a> ⇝ </b> 
          {% endif %}
           <a href="/paper/add" title="add a new paper">Add paper</a> /
           <a href="/catalog" 
@@ -180,6 +180,11 @@
     </div> <!-- /big-container -->
 
     <div id="banner-bottom">
+      <div class="paypal-button">
+        {% include "donate.html" %}
+      </div>
+
+
       Papersᵞ — Discussing board for scientific
       papers <br>
       <a href="http://github.com/kerzol/papers">Source code</a> / 
@@ -188,6 +193,7 @@
     </div> <!-- /banner-bottom -->
 
     
+
     
       
 

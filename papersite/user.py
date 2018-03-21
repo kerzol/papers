@@ -26,7 +26,13 @@ def get_user_id():
         return session['user']['userid']
     else:
         # Anoynomous
-        return 1 
+        return 1
+
+def handle_sqlite_exception(err):
+    if ("users.username" in str(err)):
+        return "Sorry, the user name '%s' has already been taken"  % request.form['username']
+    if ("users.email" in str(err)):
+        return "Sorry, the email addreser '%s' has already been taken"  % request.form['email']
 
 # populate user_authenticated() into jinja2 templates
 @app.context_processor
@@ -38,7 +44,7 @@ def register():
     error = None
     if request.method == 'POST':
         if request.form['email'] == "":
-            error = 'Please use a valid email adress'
+            error = 'Please use a valid email address'
         elif request.form['username'] == "":
             error = 'Do not forget about your name'
         elif request.form['password1'] != request.form['password2']:
@@ -72,9 +78,8 @@ def register():
                 flash('A confirmation link has been sent to you. \n\
 Please, check your mailbox (%s)' % request.form['email'])
                 return redirect(url_for('index'))
-            except sqlite3.IntegrityError:
-                error="Sorry, that user name has already been taken \
-                (or the e-mail has already been used by someone)"
+            except sqlite3.IntegrityError as err:
+                error = handle_sqlite_exception(err)
     return render_template('users/register.html', error=error)
 
 @app.route('/change-password/<string:key>', methods=['GET','POST'])
@@ -151,7 +156,7 @@ def register_confirmation(key):
         session.permanent = True
         session['user'] = u
         flash('Hello ' + u['username'] +  \
-              '. You have successfully confirmed your email adress')
+              '. You have successfully confirmed your email address')
     return redirect(url_for('index'))
 
 
@@ -160,7 +165,7 @@ def login():
     error = None
     if request.method == 'POST':
         u = query_db('select userid,username,email,                     \
-                             createtime,valid,about                     \
+                             createtime,valid,about,notifs_muted        \
                       from users                                        \
                       where password = ? and email = ?',
                      [hash (request.
@@ -185,19 +190,85 @@ def editinfo():
     if not user_authenticated():
         return "<h1>Forbidden (maybe you forgot to login)</h1>", 403
 
+    print ('avant')
+    print (session)
     error = None
     if request.method == 'POST':
-        con = get_db()
-        with con:
-            con.execute('update users set about = ? \
-                         where userid = ?',
-                         [request.form['about'],
-                          session['user']['userid']])
-        session['user']['about'] = request.form['about']
-        return redirect(url_for('usersite',
-                                username=session['user']['username']))
+        if request.form['email'] == "":
+            error = 'Please use a valid email address'
+        elif request.form['username'] == "":
+            error = 'Do not forget about your name'
+        elif "/" in request.form['username']:
+            error = 'Username cannot contain symbol "/"'
+        elif request.form['username'] in \
+             [r.rule.split('/', maxsplit=2)[1] for r in app.url_map.iter_rules()]:
+            error = 'You cannot use username "' + \
+                    request.form['username']     + \
+                    '", please choose another.'
+        else:
+            con = get_db()
+            if 'notifs_muted' in request.form:
+                notifs_muted = request.form['notifs_muted']
+            else:
+                notifs_muted = 0
+
+            print ('REQUEST')
+            print ([request.form['about'],
+                                 request.form['email'],
+                                 request.form['username'],
+                                 notifs_muted,
+                                 session['user']['userid']])
+            print (hasattr(request.form,'notifs_muted'))
+            print (notifs_muted)
+            try:
+                with con:
+                    con.execute('update users set about = ?, \
+                                 email = ?, username = ?,    \
+                                 notifs_muted = ?            \
+                                 where userid = ?',
+                                [request.form['about'],
+                                 request.form['email'],
+                                 request.form['username'],
+                                 notifs_muted,
+                                 session['user']['userid']])
+                session['user']['email'] = request.form['email']
+                session['user']['about'] = request.form['about']
+                session['user']['username'] = request.form['username']
+                session['user']['notifs_muted'] = notifs_muted
+                print ('session apres')
+                print (session)
+                print ('request')
+                print (request)
+                return redirect(url_for('editinfo'))
+            except sqlite3.IntegrityError as err:
+                error = handle_sqlite_exception(err)
     return render_template('users/editinfo.html', error=error)
 
+@app.route("/mute-email-notifs", methods=['GET'])
+def mute_email_notifs():
+    if not user_authenticated():
+        return "<h1>Forbidden (maybe you forgot to login)</h1>", 403
+    con = get_db()
+    with con:
+        con.execute('update users set notifs_muted = 1 \
+                     where userid = ?',
+                     [session['user']['userid']])
+        flash('Email notifications are muted')
+        return redirect(url_for('usersite',username=session['user']['username']))
+    return redirect(url_for('usersite'))
+
+@app.route("/unmute-email-notifs", methods=['GET'])
+def unmute_email_notifs():
+    if not user_authenticated():
+        return "<h1>Forbidden (maybe you forgot to login)</h1>", 403
+    con = get_db()
+    with con:
+        con.execute('update users set notifs_muted = 0 \
+                     where userid = ?',
+                     [session['user']['userid']])
+        flash('Email notifications are UN-muted')
+        return redirect(url_for('usersite',username=session['user']['username']))
+    return redirect(url_for('usersite'))
 
 
 @app.route("/logout")

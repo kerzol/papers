@@ -1,6 +1,12 @@
-★ notifications
-★ modify papers/comments
+Print T-shirts !
+Boys: 2M, 2L, 1XL
+Girls: 1XS, 1S, 2M, 1L
+
+★ modify/soft-delete papers/comments
+◯ admin panel
+
 ★ follow, unfollow buttons
+★ internal notifications
 
 ▪ captcha or smth againsth spam
 
@@ -12,7 +18,6 @@
 ▽ auto first page, recommendations (Machine learning?)
 ▽ arxiv/hal/google scholar integration
 
-✦ post a link to paper instead of uploading
 ✦ write a new paper directly using wiki-like editor.
 
 > twitter, facebook, linkedin, openid, oauth integrations

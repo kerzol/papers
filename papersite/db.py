@@ -66,6 +66,16 @@ def get_keywords(paperid):
                          pk.paperid = ?",
                       [paperid])
 
+def get_comment(commentid):
+    return query_db("select c.commentid, c.comment, c.createtime, \
+                            u.username                            \
+                          from                                    \
+                               comments as c,                     \
+                               users as u                         \
+                          where c.userid = u.userid and           \
+                                c.commentid = ?                   \
+    ", [commentid], one=True)
+
 def get_comments(paperid):
     return query_db("select                                      \
                           c.commentid, c.comment, c.userid,      \
@@ -95,6 +105,20 @@ def get_review(paperid):
                           ",
                      [paperid], one=True)
 
+def get_review_before_last(paperid):
+    return query_db("select                                      \
+                          r.reviewid, r.review, r.userid,        \
+                                           r.createtime,         \
+                          u.username                             \
+                          from                                   \
+                               reviews as r,                     \
+                               users as u                        \
+                          where r.userid = u.userid and          \
+                                r.paperid = ?                    \
+                          order by r.createtime desc             \
+                          limit 1 offset 1                       \
+                          ",
+                     [paperid], one=True)
 
 # If there is no such keyword/author/domain in db, 
 # we will insert in into db
@@ -146,3 +170,15 @@ def liked_by(paperid):
         where l.userid = u.userid and           \
         l.paperid=?",
         [paperid])
+
+def get_paper_w_uploader(paperid):
+    return query_db("select p.paperid, p.getlink,                \
+                                 p.title,                        \
+                                 p.userid, p.createtime,         \
+                                 u.username                      \
+                           from papers as p,                     \
+                                users as u                       \
+                          where                                  \
+                                p.userid   = u.userid   and      \
+                                p.paperid = ?",
+                   [paperid], one=True)
