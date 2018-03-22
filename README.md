@@ -1,4 +1,4 @@
-Papersᵞ — Discussing board for scientific papers 
+Papersᵞ — Discussion board for scientific papers 
 ================================================
 http://papers-gamma.link
 

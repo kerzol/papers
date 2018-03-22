@@ -1,6 +1,7 @@
-Print T-shirts !
-Boys: 2M, 2L, 1XL
-Girls: 1XS, 1S, 2M, 1L
+Notifs: use cookie to store readed notifs
+in the case there is >0 nonreaded notifs, make antenna red with a
+   circle badge depicting the number of nonreaded messages
+
 
 ★ modify/soft-delete papers/comments
 ◯ admin panel
