@@ -1,4 +1,6 @@
-Users should be able to edit/delete papers
+Users should be able to
+ 1) edit/delete papers
+ 2) edit/delete comments
 
 Let users with super_admins=1 do anything !
 
