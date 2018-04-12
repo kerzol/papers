@@ -140,7 +140,7 @@
          <b><a 
                      href="/{{session['user']['username'] | e}}"
                      title="Your home page">
-            Aloha, {{session['user']['username'] | e}}</a> ⇝ </b> 
+            {{session['user']['username'] | e}}</a> </b> can
          {% endif %}
           <a href="/paper/add" title="add a new paper">Add paper</a> /
           <a href="/catalog" 
