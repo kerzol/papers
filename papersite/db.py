@@ -35,7 +35,6 @@ def dict_factory(cursor, row):
         d[col[0]] = row[idx]
     return d
 
-
 def get_authors(paperid):
     return query_db("select                                      \
                         a.authorid, a.fullname                   \
@@ -73,6 +72,7 @@ def get_comment(commentid):
                                comments as c,                     \
                                users as u                         \
                           where c.userid = u.userid and           \
+                                c.deleted_at is null and          \
                                 c.commentid = ?                   \
     ", [commentid], one=True)
 
@@ -85,10 +85,19 @@ def get_comments(paperid):
                                comments as c,                    \
                                users as u                        \
                           where c.userid = u.userid and          \
+                                c.deleted_at is null and         \
                                 c.paperid = ?                    \
                           order by c.commentid                   \
                           ",
                      [paperid])
+
+def delete_comment(commentid):
+    con = get_db()
+    with con:
+        con.execute('update comments set deleted_at = datetime() \
+                     where commentid = ?', [commentid])
+    return id
+
 
 def get_review(paperid):
     return query_db("select                                      \

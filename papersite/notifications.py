@@ -8,7 +8,7 @@ from papersite.email import send_mail
 from papersite.db import (query_db, get_paper_w_uploader,
                           get_authors, get_comment,
                           get_review, get_review_before_last)
-from papersite.user import get_user_id,  user_authenticated
+from papersite.user import get_user_id,  user_authenticated, ANONYMOUS
 from flask import url_for
 from flask import session, flash, redirect, url_for
 
@@ -34,8 +34,8 @@ def users_to_notify(paperid):
     "select u.*                     \
      from users as u, papers as p   \
      where u.userid = p.userid      \
-     and p.paperid = ? and u.userid <> ? and u.userid <> 1",
-    [paperid, current_user ], one=True)
+     and p.paperid = ? and u.userid <> ? and u.userid <> ?",
+    [paperid, current_user, ANONYMOUS], one=True)
 
   if author is not None:
     users.append(author)

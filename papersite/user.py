@@ -21,12 +21,30 @@ def hash(password):
 def user_authenticated():
     return ('user' in session)
 
+## Anonymous is the first one
+ANONYMOUS = 1
+
 def get_user_id():
     if user_authenticated(): 
         return session['user']['userid']
     else:
         # Anoynomous
-        return 1
+        return ANONYMOUS
+
+def is_super_admin(userid):
+    return query_db("select super_admin  \
+                          from users          \
+                          where userid = ?", [userid], one=True)['super_admin']
+
+def get_user(userid):
+    return query_db("select * from users where userid = ?",
+                    [userid], one=True)
+
+def is_author_of_comment(userid, commentid):
+    return 1 == query_db("select count(*) as count \
+                          from comments \
+                          where userid = ? and commentid = ?",
+                     [userid, commentid], one=True)['count']
 
 def handle_sqlite_exception(err):
     if ("users.username" in str(err)):

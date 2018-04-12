@@ -1,13 +1,11 @@
-Users should be able to
- 1) edit/delete papers
- 2) edit/delete comments
-
-Let users with super_admins=1 do anything !
 
 Identify Anonymouses ?!
-Let people who have a password for object do also anything.
-Store the password hash for every object created by anonymous.
-Add hashes for every for every post (papers and comments).
+  Allow pepole to delete their comments even in the anonymous case
+  Store the password hash for every object created by anonymous.
+  Store smth in the cookie.
+
+Only admins should be able to delete papers, because a paper can contain a
+usefull discussion.
 
 Notifs: use cookie to store readed notifs
 in the case there is >0 nonreaded notifs, make antenna red with a
@@ -15,17 +13,14 @@ in the case there is >0 nonreaded notifs, make antenna red with a
 
 ---------------------------------------------------------------------------
 
-★ modify/soft-delete papers/comments
-◯ admin panel
-
-★ follow, unfollow buttons
+★ modify/soft-delete papers
 ★ internal notifications
 
+▽ mobile version
+
+★ follow, unfollow buttons
 ▪ captcha or smth againsth spam
 
-◯ admin panel
-
-▽ mobile version
 ▽ search improvements
 ▽ private flows
 ▽ auto first page, recommendations (Machine learning?)

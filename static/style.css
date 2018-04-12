@@ -418,6 +418,7 @@ hr {
 }
 .reddish-btn {
     border: solid 1px #CF685E;
+    color: white;
     background-color: #CF685E;
     padding-top: 0.4ex;
     padding-bottom: 0.4ex;
@@ -679,4 +680,12 @@ hr {
     padding: 1em;
     border-radius: 1ex;
     border: 0px solid #DDDDDD;
+}
+
+.delete-comment {
+    font-size: x-small;
+    font-weight: bold;
+    font-family: sans;
+    float:left;
+    margin-right: 1em;
 }

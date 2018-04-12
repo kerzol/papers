@@ -8,9 +8,11 @@ from papersite.db import (query_db, get_db, get_authors, get_domains,
                           get_keywords, get_comments, get_review,
                           get_insert_keyword, get_insert_author,
                           get_insert_domain, liked_by, likes,
+                          delete_comment,
                           get_paper_w_uploader
 )
-from papersite.user import get_user_id,  user_authenticated
+from papersite.user import (get_user_id, is_super_admin,
+                            is_author_of_comment, user_authenticated, ANONYMOUS)
 from werkzeug import secure_filename
 from flask import render_template, request, flash, redirect, url_for
 from papersite.notifications import (new_paper_was_added,
@@ -24,7 +26,34 @@ from papersite.notifications import (new_paper_was_added,
 def is_internal_pdf(link):
     return re.match('^/static/memory/pdfs/(.*)\.pdf$', str(link))
 
+@app.template_filter('can_delete_comment')
+def can_delete_comment(commentid):
+    ## currently anonymous cannot delete any comments
+    userid = get_user_id()
+    print ('USERID')
+    print (userid)
+    if (userid == ANONYMOUS):
+        return False
+    else:
+        return is_super_admin(userid) or is_author_of_comment(userid, commentid)
 
+### Delete comments, papers, est
+###  Well actually we do not delete them from DB, just mark as deleted
+###############################
+                  ##################
+            ############
+@app.route('/delete-comment/<int:commentid>', methods=['GET'])
+def delete_comment_with_check(commentid):
+    if can_delete_comment(commentid):
+        comment = query_db("select * from comments where commentid = ?",
+                      [commentid], one=True)
+        delete_comment(commentid)
+        flash('You successfully removed the comment')
+        return redirect(url_for('onepaper',
+                                paperid=comment['paperid']))
+    else:
+        return "<h1>Forbidden</h1>", 403
+                
 
 
 ### Show paper, etc

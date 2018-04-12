@@ -156,6 +156,9 @@ create index n_index2 on notifs(seenat);
 
 ALTER TABLE users
   ADD super_admin BOOLEAN default 0;
+
+ALTER TABLE comments
+  ADD deleted_at TIMESTAMP DEFAULT NULL;
   
 -- todo authors_papers, fulltexts ?
 
