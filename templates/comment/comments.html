@@ -8,15 +8,14 @@
   <div class="comment">
 
     <h4>
+      {% if c.commentid | can_delete_comment  %}
+      <a title="delete this comment"
+         class="reddish-btn delete-comment" href="/delete-comment/{{c.commentid}}">X</a>
+      {% endif %}
+
       {% if c.userid == 1 %}
           Stranger:
       {% else %}
-
-        {% if c.commentid | can_delete_comment  %}
-        <a title="delete this comment"
-           class="reddish-btn delete-comment" href="/delete-comment/{{c.commentid}}">X</a>
-        {% endif %}
-
         <a href="/{{c.username|e}}">
           {{ c.username|e }}:</a>
       {% endif %}
