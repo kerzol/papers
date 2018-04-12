@@ -1,3 +1,6 @@
+Users should be able to edit/delete papers
+For anonymous comments we can store some haches in their cookies.
+
 Notifs: use cookie to store readed notifs
 in the case there is >0 nonreaded notifs, make antenna red with a
    circle badge depicting the number of nonreaded messages
