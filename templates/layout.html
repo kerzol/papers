@@ -196,6 +196,13 @@
     {% endwith %}
 
     <div id="big-container" class="{% block bigcontainerclass %}{% endblock %}">
+
+      <a href="/news" class="news" title="Click to see the last updates">
+        <img src="/static/img/tower.png">
+        <span class="news-badge">9+</span>
+      </a>
+        
+        
     <div id="banner">
       <h1>
         <a href="/" title="main page">
@@ -249,6 +256,8 @@
     </div> <!-- /big-container -->
 
     <div id="banner-bottom">
+
+      
       <div class="paypal-button">
         {% include "donate.html" %}
       </div>
@@ -260,6 +269,10 @@
         <a href="http://github.com/kerzol/papers">Source code</a> /
         <a href="/about">About</a> / <a href="/faq">F.A.Q</a><br>
       </div>
+
+      <small>
+        Broadcast tower icon comes from <a href="https://icons8.com">icon8 set</a> <br>
+      </small>
 
     </div> <!-- /banner-bottom -->
 

@@ -57,6 +57,11 @@ body {
     margin-left: 1ex;
 }
 
+.leftfloat {
+    float: left;
+    text-align: left;
+}
+
 #banner-bottom {
     float: right;
     color: grey;
@@ -959,3 +964,52 @@ p {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 } 
+
+
+/* red smth like :     background-image: linear-gradient(to bottom, #F86063, #B43538); */
+.news {
+    position: fixed;
+    top: 1.5em;
+    left: 2%;
+    color: white;
+    font-weight: bold;
+    padding-left: 1ex;
+    padding-right: 1ex;
+    padding-top: 1.4ex;
+    padding-bottom: 1.4ex;
+    z-index: 10;
+    border-radius: 1ex;
+    text-decoration: none;
+    background-color: #538fbe;
+    background-image: linear-gradient(to bottom, rgb(73,132,180) 0%, rgb(97,155,203) 100%);
+    box-shadow: 0px 2px 0px #2b638f, 0px 3px 10px rgba(0,0,0,.4);
+    transition: all .2s ease-in-out;
+}
+.news img {
+    width: 2em;
+}
+.news:hover {
+    background-image: linear-gradient(to bottom, rgb(79,142,191) 0%, rgb(102,166,214) 100%);
+}
+.news:active {
+    outline: none;
+    transform: translate(0, 2px);
+    background-image: linear-gradient(bottom, rgb(88,154,204) 0%, rgb(90,150,199) 100%);
+    box-shadow: 0px 2px 0px #2b638f, 0px 1px 6px rgba(0,0,0,.4), inset 0px 1px 0px rgba(255,255,255,.3), inset 0px 0px 3px rgba(255,255,255,.5);
+}
+.news-badge {
+    background: #B8383B;
+    position:absolute;
+    top:-10px;
+    right:40px;
+    font-size:1.5ex;
+    color:white;
+    width:2em;
+    height:2em;
+    line-height:2em;
+    text-align:center;
+    font-weight: bold;
+    border-radius:50%;
+    border: 1px solid #EEE;
+}
+

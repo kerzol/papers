@@ -2,7 +2,8 @@
 ###############################
                   ##################
             ############
-            
+
+from papersite import app            
 import difflib
 from papersite.email import send_mail
 from papersite.db import (query_db, get_paper_w_uploader,
@@ -128,3 +129,10 @@ Papers' team"
                       url)
     # todo save message to notifs table
     send_mail(u['email'], msg, 'New paper: %s' % (paper['title']))
+
+@app.route('/news')
+def last_10_updates():
+  return 'Last 10 updates will eventually appear here. New papers, new comments, recent discussion diffs. <br> \
+ <video controls autoplay> \
+  <source src="https://my.mixtape.moe/jiasdd.webm"> \
+</video>'
