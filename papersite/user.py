@@ -32,7 +32,7 @@ def get_user_id():
         return ANONYMOUS
 
 def is_super_admin(userid):
-    return query_db("select super_admin  \
+    return 1 == query_db("select super_admin  \
                           from users          \
                           where userid = ?", [userid], one=True)['super_admin']
 
