@@ -19,3 +19,4 @@ README.old
 *.out
 *.snm
 *.toc
+*.pyc
