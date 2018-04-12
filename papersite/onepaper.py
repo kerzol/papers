@@ -22,7 +22,7 @@ from papersite.notifications import (new_paper_was_added,
 
 @app.template_filter('is_internal_pdf')
 def is_internal_pdf(link):
-    return re.match('^/static/memory/pdfs/(.*)\.pdf$',link)
+    return re.match('^/static/memory/pdfs/(.*)\.pdf$', str(link))
 
 
 
