@@ -1,5 +1,11 @@
 Users should be able to edit/delete papers
 For anonymous comments we can store some haches in their cookies.
+Let users with super_admins=1 do anything !
+
+Identify Anonymouses ?!
+Let people who have a password for object do also anything.
+Store the password hash for every object created by anonymous.
+Add hashes for every for every post (papers and comments).
 
 Notifs: use cookie to store readed notifs
 in the case there is >0 nonreaded notifs, make antenna red with a

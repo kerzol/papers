@@ -151,6 +151,12 @@ create index n_user on notifs(userid);
 create index n_index1 on notifs(createtime);
 create index n_index2 on notifs(seenat);
 
+
+-- modifications/edits
+
+ALTER TABLE users
+  ADD super_admin BOOLEAN default 0;
+  
 -- todo authors_papers, fulltexts ?
 
 
