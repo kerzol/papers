@@ -51,6 +51,7 @@ def previews(seq):
                           from comments as c, users as u         \
                           where                                  \
                                 c.userid = u.userid and          \
+                                c.deleted_at is null and         \
                                 c.paperid = ?                    \
                           order by c.commentid                   \
                          limit 2                                 \
@@ -76,6 +77,7 @@ def previews(seq):
                    u.username                             \
                   from comments as c, users as u          \
                   where                                          \
+                   c.deleted_at is null and                      \
                    c.userid = u.userid and                       \
                    c.commentid not in " + good_injection + " and \
                    c.paperid = ?                                 \
