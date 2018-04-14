@@ -100,11 +100,9 @@ var Preview = {
     var inside_code = false;
     
     for (var i = 0; i < lines.length; i++) {
-      console.log(i + '|' + lines[i]);
       // a hack to properly rendre the blockquotes
       if (lines[i].startsWith('&gt;')) {
         lines[i] = lines[i].replace(/&gt;/g, '>');
-        console.log(i + '||' + lines[i]);
       }
 
       // rendrer properly stuff like this
