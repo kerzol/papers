@@ -97,34 +97,39 @@ REVIEW_Preview.callback.autoReset = true;  // make sure it can run more than onc
 </script>
 {% endblock %}
 
-<div class="new-comment">
-
-  <form action="/paper/{{entry.paperid}}/{{entry.title}}/add-review"
-        method="post">
-
-    {% if error %}
-    <p class=error><strong>Error:</strong> {{ error }}
-    {% endif %}
-
-
-    <textarea id="REVIEW_marked-mathjax-input"
-              onkeyup="REVIEW_Preview.Update()"
-              name="review"
-              "autofocus">{{review.review}}</textarea>
-
-
-  <div class="hint">Use 
-    <a href="http://en.wikibooks.org/wiki/LaTeX/Mathematics">$\LaTeX$</a>
-    to type formulæ 
-    and <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">markdown</a> to format text.
-  </div>
-
-  <div class="preview" id="REVIEW_marked-mathjax-preview"></div>
-  <div class="preview" id="REVIEW_marked-mathjax-preview-buffer" 
-       style="display:none;
-              position:absolute; 
-              top:0; left: 0"></div>
-  <div class="cfooter">
+{% if error %}
+<p class=error><strong>Error:</strong> {{ error }}</p>
+{% endif %}
+  
+<form action="/paper/{{entry.paperid}}/{{entry.title}}/add-review"
+      method="post"
+      class="discussion">
+  
+  <div class="tab-frame">
+      <input type="radio" checked name="tab" id="tab1">
+      <label for="tab1">Edit</label>
+      
+      <input type="radio" name="tab" id="tab2">
+      <label for="tab2">Preview</label>
+    
+    <div class="tab">
+      <textarea id="REVIEW_marked-mathjax-input"
+                onkeyup="REVIEW_Preview.Update()"
+                name="review"
+                "autofocus">{{review.review}}</textarea>
+      <div class="hint">Use 
+        <a href="http://en.wikibooks.org/wiki/LaTeX/Mathematics">$\LaTeX$</a>
+        to type formulæ 
+        and <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">markdown</a> to format text.
+      </div>
+    </div>
+    <div class="tab">
+      <div class="preview" id="REVIEW_marked-mathjax-preview"></div>
+      <div class="preview" id="REVIEW_marked-mathjax-preview-buffer" 
+           style="display:none;
+                  position:absolute; 
+                  top:0; left: 0"></div>
+      <div class="cfooter">
         <span >
           updated by
           {% if review.userid == 1 %}
@@ -137,19 +142,18 @@ REVIEW_Preview.callback.autoReset = true;  // make sure it can run more than onc
         </span>
         <span class="datetime"> at {{ review.createtime|e }} </span>
       </div>
-
+    </div>
+  </div>
+  
   {% include "remark.html" %}
-
 
   <div class="send">
     <input class="btn" type="submit" value="Update discussion"/>
   </div>
+  
+</form>
 
-  </form>
-
-  <script>
-    REVIEW_Preview.Init();
-    REVIEW_Preview.Update()
-  </script>
-      
-</div>
+<script>
+  REVIEW_Preview.Init();
+  REVIEW_Preview.Update()
+</script>
