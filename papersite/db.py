@@ -180,6 +180,15 @@ def liked_by(paperid):
         l.paperid=?",
         [paperid])
 
+def get_uploader(paperid):
+    return query_db(
+    "select u.*                     \
+     from users as u, papers as p   \
+     where u.userid = p.userid      \
+     and p.paperid = ?",
+    [paperid], one=True)
+
+
 def get_paper_w_uploader(paperid):
     return query_db("select p.paperid, p.getlink,                \
                                  p.title,                        \

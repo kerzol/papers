@@ -6,45 +6,71 @@
 import difflib
 from papersite.email import send_mail
 from papersite.db import (query_db, get_paper_w_uploader,
-                          get_authors, get_comment,
+                          get_authors, get_comment, get_uploader,
                           get_review, get_review_before_last)
-from papersite.user import get_user_id,  user_authenticated, ANONYMOUS
+from papersite.user import (get_user_id,  user_authenticated,
+                            ANONYMOUS)
 from flask import url_for
 from flask import session, flash, redirect, url_for
 
 ## TODO: store notifs in db
 
-## We notify users liked this paper
-## It's different from papersite.db.liked_by, caz here we want
-## all user props, not only their names
+## We notify users who liked, commented this paper
+##   or participated in the colloborative discussion.
 def users_to_notify(paperid):
-  ## get liked users
-  ## avoiding self-notifications
-  current_user = get_user_id()
-  users = query_db(
+  who_like = who_likes(paperid)
+  who_comment = commentators(paperid)
+  who_discuss = discussion_participators(paperid)
+
+  print (who_like)
+  print (who_comment)
+  print (who_discuss)
+  users = who_like + who_comment + who_discuss
+  ## We notify union of all these users
+  ## but not the current_user (who make the action)
+  ## and ANONYMOUS
+  current_user_id = get_user_id()
+  users = list(
+    {v['userid']:v for v in users
+     if v['userid'] != current_user_id and
+        v['userid'] != ANONYMOUS}.values())
+  return users
+
+## select users who likes the paper
+def who_likes(paperid):
+  return query_db(
     "select u.*                             \
     from likes as l, users as u             \
     where l.userid = u.userid and           \
-    l.paperid = ? and u.userid <> ?         ",
-    [paperid, current_user ])
-  ## then add the author of the paper, but not 
-  ## the user with userid=1. He is an anonymous stranger.
-  ## He cannot into notifications.
-  author = query_db(
-    "select u.*                     \
-     from users as u, papers as p   \
-     where u.userid = p.userid      \
-     and p.paperid = ? and u.userid <> ? and u.userid <> ?",
-    [paperid, current_user, ANONYMOUS], one=True)
+    l.paperid = ?                           ",
+    [paperid])
 
-  if author is not None:
-    users.append(author)
-  return users
+## select users that commented the paper
+## TODO: tree of comments
+def commentators(paperid):
+  return query_db(
+    "select u.*                             \
+    from comments as c, users as u          \
+    where c.userid = u.userid and           \
+          c.deleted_at is null and          \
+          c.paperid = ?", [paperid])
+
+## select users that participated in the
+## colloborative discussion of this paper
+def discussion_participators(paperid):
+    return query_db("select u.*             \
+            from reviews as r, users as u   \
+            where r.userid = u.userid and   \
+                  r.paperid = ?",
+            [paperid])
 
 ## Currently, we notify users that liked at least one paper
+##
 ## from the same uploader
 ## This behavior will change in the near future:
 ## user will follow other user, author, etc.
+##
+## TODO add maybe commented, discussed papers?
 def users_to_notify_about_new_paper(paperid):
   return query_db(
     "select users.*                         \
@@ -66,7 +92,7 @@ def review_was_changed(paperid):
   url = url_for('onepaper', paperid=paperid, _external=True)
   url = url + '#review'
   template = "Hello %s,\n\n\
-User '%s' just changed the collaborative discussion about a paper you liked or uploaded.\n\n\
+User '%s' just changed the paper collaborative discussion. It may interests you.\n\n\
 Paper title: %s\n\
 Changes:\n\n\
 %s\n\n\
@@ -96,7 +122,7 @@ def comment_was_added(paperid, commentid):
   url = url_for('onepaper', paperid=paperid, _external=True)
   url = url + '#comment-' + str(commentid)
   template = "Aloha %s,\n\n\
-User '%s' just commented a paper you liked or uploaded.\n\
+User '%s' just commented a paper you liked, uploaded or commented, or participated in the related discussion. \n\
 Paper title: %s\n\
 Comment:\n\n\
 %s\n\n\
