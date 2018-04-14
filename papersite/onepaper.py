@@ -33,8 +33,6 @@ def can_delete_comment(commentid):
     if (userid == ANONYMOUS):
         return False
     else:
-        print (is_super_admin(userid))
-        print (is_author_of_comment(userid, commentid))
         return is_super_admin(userid) or is_author_of_comment(userid, commentid)
 
 ### Delete comments, papers, est

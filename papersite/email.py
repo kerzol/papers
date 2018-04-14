@@ -9,9 +9,16 @@ from papersite.config import MAIL_SERVER, MAIL_USER, MAIL_PASS
 from papersite.db import query_db, get_db
 from flask import url_for
 import papersite.user
+import threading
 
 ## send notifs, if notifs are not muted
 def send_mail(usermail, message, subject):
+    sending_thread = threading.Thread(
+        target = send_mail_,
+        args = (usermail, message, subject))
+    sending_thread.start()
+
+def send_mail_ (usermail, message, subject):
     u = query_db('select *     \
                   from users   \
                   where email = ?',

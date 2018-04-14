@@ -22,9 +22,6 @@ def users_to_notify(paperid):
   who_comment = commentators(paperid)
   who_discuss = discussion_participators(paperid)
 
-  print (who_like)
-  print (who_comment)
-  print (who_discuss)
   users = who_like + who_comment + who_discuss
   ## We notify union of all these users
   ## but not the current_user (who make the action)

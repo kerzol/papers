@@ -207,9 +207,6 @@ def login():
 def editinfo():
     if not user_authenticated():
         return "<h1>Forbidden (maybe you forgot to login)</h1>", 403
-
-    print ('avant')
-    print (session)
     error = None
     if request.method == 'POST':
         if request.form['email'] == "":
@@ -229,15 +226,6 @@ def editinfo():
                 notifs_muted = request.form['notifs_muted']
             else:
                 notifs_muted = 0
-
-            print ('REQUEST')
-            print ([request.form['about'],
-                                 request.form['email'],
-                                 request.form['username'],
-                                 notifs_muted,
-                                 session['user']['userid']])
-            print (hasattr(request.form,'notifs_muted'))
-            print (notifs_muted)
             try:
                 with con:
                     con.execute('update users set about = ?, \
@@ -253,10 +241,6 @@ def editinfo():
                 session['user']['about'] = request.form['about']
                 session['user']['username'] = request.form['username']
                 session['user']['notifs_muted'] = notifs_muted
-                print ('session apres')
-                print (session)
-                print ('request')
-                print (request)
                 return redirect(url_for('editinfo'))
             except sqlite3.IntegrityError as err:
                 error = handle_sqlite_exception(err)
