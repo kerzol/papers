@@ -79,6 +79,7 @@ var Preview = {
   PreviewDone: function () {
     this.mjRunning = false;
     text = this.buffer.innerHTML;
+    text = this.PartialDescape (text);
     this.buffer.innerHTML = marked (text);
     this.SwapBuffers();
   },
@@ -90,6 +91,42 @@ var Preview = {
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
      .replace(/'/g, '&#39;');
+  }, 
+
+  PartialDescape: function (html) {
+    var lines = html.split('\n');
+    var out = '';
+
+    // is true when we are 
+    // ```
+    //  inside a code block
+    // ```
+    var inside_code = false;
+    
+    for (var i = 0; i < lines.length; i++) {
+      // a hack to properly rendre the blockquotes
+      if (lines[i].startsWith('&gt;')) {
+        lines[i] = lines[i].replace(/&gt;/g, '>');
+      }
+
+      // rendrer properly stuff like this
+      // ```c
+      //  if (a > b)
+      // ```
+      if (inside_code) {
+        // inside the code we descape stuff
+        lines[i] = lines[i]
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&quot;/g, '"')
+          .replace(/&#39;/g, '\'');
+      }
+      if (lines[i].startsWith('```')) {
+        inside_code = ! inside_code;
+      }
+      out += lines[i] + '\n';
+    }
+    return out;    
   }
 
 };
@@ -111,8 +148,9 @@ Preview.callback.autoReset = true;  // make sure it can run more than once
        href="/change-password">Change password</a>
 
     {% if error %}
-    <p class=error><strong>Error:</strong> {{ error }}
-      {% endif %}
+    <p class=error><strong>Error:</strong> {{ error }}</p>
+    {% endif %}
+    
       <h1>Edit your personal information</h1>
 
       Name: <input name="username"
@@ -125,23 +163,34 @@ Preview.callback.autoReset = true;  // make sure it can run more than once
              {{'checked="checked"'
                 if session['user']['notifs_muted'] == 1 else ""}}
              >
-      <textarea id="marked-mathjax-input"
-                onkeyup="Preview.Update()"
-                id="about"
-                name="about"
-                "autofocus">{% if request.form.about is defined %}{{request.form.about|e }}{% else %}{{session['user']['about']}}{% endif %}</textarea>
 
-      <div class="hint">Use 
-        <a href="http://en.wikibooks.org/wiki/LaTeX/Mathematics">$\LaTeX$</a>
-        to type formulæ 
-        and <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">markdown</a> to format text.
+      <div class="tab-frame tab-frame2" style="margin-top:1ex">
+        <input type="radio" checked name="tab_" id="tab_1">
+        <label for="tab_1">Edit</label>
+
+        <input type="radio" name="tab_" id="tab_2">
+        <label for="tab_2">Preview</label>
+
+        <div class="tab">
+          <textarea id="marked-mathjax-input"
+                    onkeyup="Preview.Update()"
+                    id="about"
+                    name="about"
+                    "autofocus">{% if request.form.about is defined %}{{request.form.about|e }}{% else %}{{session['user']['about']}}{% endif %}</textarea>
+          <div class="hint">Use
+            <a href="http://en.wikibooks.org/wiki/LaTeX/Mathematics">$\LaTeX$</a>
+            to type formulæ
+            and <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">markdown</a> to format text.
+          </div>
+        </div>
+        <div class="tab tp0">
+          <div class="preview" id="marked-mathjax-preview"></div>
+          <div class="preview" id="marked-mathjax-preview-buffer"
+               style="display:none;
+                      position:absolute;
+                      top:0; left: 0"></div>
+        </div>
       </div>
-      
-      <div class="preview" id="marked-mathjax-preview"></div>
-      <div class="preview" id="marked-mathjax-preview-buffer" 
-           style="display:none;
-                  position:absolute; 
-                  top:0; left: 0"></div>
 
       <div class="send">
         <input class=btn type=submit value="Save"/>
