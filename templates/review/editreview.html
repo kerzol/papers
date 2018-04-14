@@ -143,7 +143,7 @@ REVIEW_Preview.callback.autoReset = true;  // make sure it can run more than onc
       method="post"
       class="discussion">
   
-  <div class="tab-frame">
+  <div class="tab-frame tab-frame1">
       <input type="radio" checked name="tab" id="tab1">
       <label for="tab1">Edit</label>
       
@@ -161,25 +161,12 @@ REVIEW_Preview.callback.autoReset = true;  // make sure it can run more than onc
         and <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">markdown</a> to format text.
       </div>
     </div>
-    <div class="tab">
+    <div class="tab tp0">
       <div class="preview" id="REVIEW_marked-mathjax-preview"></div>
       <div class="preview" id="REVIEW_marked-mathjax-preview-buffer" 
            style="display:none;
                   position:absolute; 
                   top:0; left: 0"></div>
-      <div class="cfooter">
-        <span >
-          updated by
-          {% if review.userid == 1 %}
-          Stranger
-          {% else %}
-          <a href="/{{review.username|e}}">
-            {{ review.username|e }}:</a>
-          {% endif %}
-          <a name="review-{{review.reviewid}}"></a>
-        </span>
-        <span class="datetime"> at {{ review.createtime|e }} </span>
-      </div>
     </div>
   </div>
   
@@ -190,6 +177,21 @@ REVIEW_Preview.callback.autoReset = true;  // make sure it can run more than onc
   </div>
   
 </form>
+
+<div class="cfooter">
+  <span>
+    Last updated by
+    {% if review.userid == 1 %}
+    Stranger
+    {% else %}
+    <a href="/{{review.username|e}}">
+      {{ review.username|e }}:</a>
+    {% endif %}
+    <a name="review-{{review.reviewid}}"></a>
+  </span>
+  <span class="datetime"> at {{ review.createtime|e }} </span>
+</div>
+
 
 <script>
   REVIEW_Preview.Init();
