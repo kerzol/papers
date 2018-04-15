@@ -53,7 +53,7 @@ var REVIEW_Preview = {
   //    typesetting.  After it is done, call PreviewDone.
   //  
   CreatePreview: function () {
-    Preview.timeout = null;
+    REVIEW_Preview.timeout = null;
     if (this.mjRunning) return;
     var text = document.getElementById("REVIEW_marked-mathjax-input").value;
     if (text === this.oldtext) return;
@@ -174,23 +174,25 @@ REVIEW_Preview.callback.autoReset = true;  // make sure it can run more than onc
 
   <div class="send">
     <input class="btn" type="submit" value="Update discussion"/>
+    
+    <div class="last-updated">
+      <span>
+        Last updated by
+        {% if review.userid == 1 %}
+        Stranger
+        {% else %}
+        <a href="/{{review.username|e}}">
+          {{ review.username|e }}:</a>
+        {% endif %}
+        <a name="review-{{review.reviewid}}"></a>
+      </span>
+      <span class="datetime"> at {{ review.createtime|e }} </span>
+    </div>
+
   </div>
   
 </form>
 
-<div class="cfooter">
-  <span>
-    Last updated by
-    {% if review.userid == 1 %}
-    Stranger
-    {% else %}
-    <a href="/{{review.username|e}}">
-      {{ review.username|e }}:</a>
-    {% endif %}
-    <a name="review-{{review.reviewid}}"></a>
-  </span>
-  <span class="datetime"> at {{ review.createtime|e }} </span>
-</div>
 
 
 <script>

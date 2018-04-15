@@ -1,15 +1,11 @@
 {% macro build_list(comments) %}
 <div class="comments">
-  {% set hrrr = joiner('<hr style="width: 95%;"/>') %}
   {% for c in comments %}
-
-  {{ hrrr()|safe }}
-
   <div class="comment">
 
     <h4>
       {% if c.commentid | can_delete_comment  %}
-      <a title="delete this comment"
+      <a title="Delete this comment"
          class="reddish-btn delete-comment" href="/delete-comment/{{c.commentid}}">X</a>
       {% endif %}
 
@@ -23,13 +19,19 @@
     </h4>
 
     <div class="cbody">{{c.comment|e}}</div>
+
+    <div id="comment-source-{{c.commentid}}"
+         style="display:none">{{c.comment|e}}</div>
     
-    <div class="cfooter">
+    <div class="cfooter clearfix">
       <span class="datetime"> {{ c.createtime|e }} </span>
+      <a title="Quote and reply to this comment"
+         source-id="comment-source-{{c.commentid}}"
+         class="reply-btn"
+         href="#reply">Reply</a>
     </div>
-
+    <hr class="comment-end"/>
   </div>
-
 
   {% endfor %}
 </div> <!-- /comments -->

@@ -8,33 +8,37 @@ from email.mime.text import MIMEText
 from papersite.config import MAIL_SERVER, MAIL_USER, MAIL_PASS
 from papersite.db import query_db, get_db
 from flask import url_for
+from papersite import app
 import papersite.user
 import threading
 
-## send notifs, if notifs are not muted
+## FIXME: should use thread pool
+##        or even cron tasks
 def send_mail(usermail, message, subject):
     sending_thread = threading.Thread(
         target = send_mail_,
         args = (usermail, message, subject))
     sending_thread.start()
 
+## send notifs, if notifs are not muted
 def send_mail_ (usermail, message, subject):
-    u = query_db('select *     \
-                  from users   \
-                  where email = ?',
-                 [usermail], one=True)
-    if (not u['notifs_muted'] and u['userid'] != 1):
-        # Create a text/plain message
-        msg = MIMEText(message)
-        msg['Subject'] = subject
-        msg['From'] = MAIL_USER
-        msg['To'] = usermail
+    with app.app_context():
+        u = query_db('select *     \
+                      from users   \
+                      where email = ?',
+                     [usermail], one=True)
+        if (not u['notifs_muted'] and u['userid'] != 1):
+            # Create a text/plain message
+            msg = MIMEText(message)
+            msg['Subject'] = subject
+            msg['From'] = MAIL_USER
+            msg['To'] = usermail
 
-        # Send the message via our own SMTP server.
-        s = smtplib.SMTP_SSL(MAIL_SERVER)
-        s.login(MAIL_USER, MAIL_PASS)
-        s.send_message(msg)
-        s.quit()
+            # Send the message via our own SMTP server.
+            s = smtplib.SMTP_SSL(MAIL_SERVER)
+            s.login(MAIL_USER, MAIL_PASS)
+            s.send_message(msg)
+            s.quit()
 
 
 def send_confirmation_mail(username, usermail):

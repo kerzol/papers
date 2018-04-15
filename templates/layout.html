@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <link rel="icon" type="image/png" href="/static/img/favicon.png" />
-    <link rel="stylesheet" href="/static/style.css">    
+    <link rel="stylesheet" href="/static/style.css">
 
     <!-- wtf? from MathJax sample.html -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <script type="text/javascript" src="/static/lib/marked/lib/marked.js"></script>
     <script type="text/javascript"
         src="/static/lib/jquery-1.10.2.min.js"></script>
@@ -25,7 +25,43 @@
       smartypants: false
       });
 
-    </script>  
+      var PartialDescape = function (html) {
+        var lines = html.split('\n');
+        var out = '';
+
+        // is true when we are
+        // ```
+        //  inside a code block
+        // ```
+        var inside_code = false;
+
+        for (var i = 0; i < lines.length; i++) {
+          // a hack to properly rendre the blockquotes
+          if (lines[i].startsWith('&gt;')) {
+            lines[i] = lines[i].replace(/&gt;/g, '>');
+          }
+
+          // rendrer properly stuff like this
+          // ```c
+          //  if (a > b)
+          // ```
+          if (inside_code) {
+            // inside the code we descape stuff
+            lines[i] = lines[i]
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+              .replace(/&quot;/g, '"')
+              .replace(/&#39;/g, '\'');
+          }
+          if (lines[i].startsWith('```')) {
+            inside_code = ! inside_code;
+          }
+          out += lines[i] + '\n';
+        }
+
+        return out;
+      }
+    </script>
     <script type="text/x-mathjax-config">
       MathJax.Hub.Config({
         showProcessingMessages: false,
@@ -33,8 +69,8 @@
       });
       MathJax.Hub.Queue(function () {
         $(".cbody").each(function(){
-           o=$(this).html();
-           $(this).html(marked(o));
+          o=$(this).html();
+          $(this).html(marked(PartialDescape(o)));
         });
       });
     </script>
@@ -45,33 +81,65 @@
     <script>
 
        $(document).ready(function(){
+
+         // quote message into the comment
+         $(".reply-btn").each(function(){
+
+           $(this).click(function() {
+             var a = $(this);
+             var source_id = a.attr('source-id');
+             var comment = $('#' + source_id).text();
+             var quote = comment.replace(/^>/mg, '>>')
+                 .replace(/^[^>]/mg, '> ');
+
+             // take a a quote to the new_comment
+             var new_comment = $('#marked-mathjax-input').val();
+             $('#marked-mathjax-input').val(new_comment +
+                                            '\n' +
+                                            quote + '\n\n'
+                                           );
+
+             // Activate comment tab, useful if preview tab
+             // was previously activated
+             $('#tab_1').click();
+             CommentPreview.Update();
+
+             // scroll to the new comment
+             $('html, body').animate({
+               scrollTop: $("#marked-mathjax-input").offset().top
+             }, 1000);
+             return (false); //do not follow the link!
+            });
+
+          });
+
           $(".vote-block a").not('.anon').each(function(){
             $(this).mouseenter(function() {
                if ($(this).text() == '★') {
-                  $(this).text('☆') 
+                  $(this).text('☆')
                } else {
-                  $(this).text('★') 
+                  $(this).text('★')
                }
             });
 
             $(this).mouseleave(function() {
                if ($(this).hasClass("liked")) {
-                  $(this).text('★') 
+                  $(this).text('★')
                } else {
-                  $(this).text('☆') 
+                  $(this).text('☆')
                }
-            }); 
+            });
 
 
             $(this).click(function() {
-               a = $(this);
-               target = $(this).attr("href");
+               var a = $(this);
+               var target = $(this).attr("href");
                $.get(target, function( data ) {
                  a.siblings("div").text(data);
 
-                 a.siblings("div").attr("title", 
+                 a.siblings("div").attr("title",
        data + " people like this paper")
-        
+
                  if (a.hasClass("liked")) {
                     // paper is liked we unlike
                     a.removeClass("liked");
@@ -125,7 +193,7 @@
     </ul>
     {% endif %}
     {% endwith %}
-    
+
     <div id="big-container" class="{% block bigcontainerclass %}{% endblock %}">
     <div id="banner">
       <h1>
@@ -137,18 +205,18 @@
 
       <div class="menuitem">
          {% if user_authenticated() %}
-         <b><a 
+         <b><a
                      href="/{{session['user']['username'] | e}}"
                      title="Your home page">
             {{session['user']['username'] | e}}</a> </b> can
          {% endif %}
           <a href="/paper/add" title="add a new paper">Add paper</a> /
-          <a href="/catalog" 
+          <a href="/catalog"
              title="lists of domains, authors, keywords and users">See catalog</a> /
 
           {% if not user_authenticated() %}
-           <a href="/login" title="Login">Login</a> / 
-           <a href="/register" title="or register">Register</a> 
+           <a href="/login" title="Login">Login</a> /
+           <a href="/register" title="or register">Register</a>
          {% else %}
             <a href="/logout" title="Logout">Logout</a>
           {% endif %}
@@ -159,14 +227,14 @@
         <form action="/catalog" method="get">
           <input type="search" value=""
                  placeholder="Search"
-                 name="q" 
+                 name="q"
                  size="20"/><input type="submit" value="Go!" >
         </form>
       </div>
       {% endif %}
 
-      </div> 
-       
+      </div>
+
 
 
     </div> <!-- /banner -->
@@ -176,7 +244,7 @@
   {% endblock %}
 
 
-    
+
     </div> <!-- /big-container -->
 
     <div id="banner-bottom">
@@ -187,16 +255,15 @@
 
       Papersᵞ — Discussion board for scientific
       papers <br>
-      <a href="http://github.com/kerzol/papers">Source code</a> / 
+      <a href="http://github.com/kerzol/papers">Source code</a> /
       <a href="/about">About</a> / <a href="/faq">F.A.Q</a><br>
 
     </div> <!-- /banner-bottom -->
 
-    
 
-    
-      
+
+
+
 
   </body>
 </html>
-

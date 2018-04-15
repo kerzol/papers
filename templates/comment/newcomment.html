@@ -1,6 +1,6 @@
 {% block scrpits %}
 <script>
-var Preview = {
+var CommentPreview = {
   delay: 50,        // delay after keystroke before updating
 
   preview: null,     // filled in by Init below
@@ -55,7 +55,7 @@ var Preview = {
   //    typesetting.  After it is done, call PreviewDone.
   //  
   CreatePreview: function () {
-    Preview.timeout = null;
+    CommentPreview.timeout = null;
     if (this.mjRunning) return;
     var text = document.getElementById("marked-mathjax-input").value;
     if (text === this.oldtext) return;
@@ -130,8 +130,9 @@ var Preview = {
 //
 //  Cache a callback to the CreatePreview action
 //
-Preview.callback = MathJax.Callback(["CreatePreview",Preview]);
-Preview.callback.autoReset = true;  // make sure it can run more than once
+CommentPreview.callback = MathJax.Callback(["CreatePreview",
+    CommentPreview]);
+CommentPreview.callback.autoReset = true;  // make sure it can run more than once
 
 </script>
 {% endblock %}
@@ -144,6 +145,7 @@ Preview.callback.autoReset = true;  // make sure it can run more than once
 <form action="/paper/{{entry.paperid}}/{{entry.title}}/add-comment"
       method="post"
       class="new-comment"
+      id="reply"
       >
 
     <h4>Your comment 
@@ -160,7 +162,7 @@ Preview.callback.autoReset = true;  // make sure it can run more than once
 
       <div class="tab">
         <textarea id="marked-mathjax-input"
-                  onkeyup="Preview.Update()"
+                  onkeyup="CommentPreview.Update()"
                   name="comment"
                   "autofocus"></textarea>
         <div class="hint">Use
@@ -187,6 +189,6 @@ Preview.callback.autoReset = true;  // make sure it can run more than once
 </form>
 
 <script>
-  Preview.Init();
-  Preview.Update()
+  CommentPreview.Init();
+  CommentPreview.Update();
 </script>

@@ -34,7 +34,7 @@ body {
 }
 
 #banner h1 a {
-    text-decoration: none;        
+    text-decoration: none;
 }
 
 #banner .menuitem {
@@ -61,7 +61,7 @@ body {
     padding-bottom: 0.5em;
     text-align: right;
     margin-left: 7%;
-    margin-right: 7%;   
+    margin-right: 7%;
 /*    background-color: #73A0C5;*/
 }
 
@@ -131,7 +131,6 @@ body {
     background: inherit;
     color: #73A0C5;
     text-align: center;
-/*    background: #EEEEEE;*/
 }
 
 .entry-preview .vote-block {
@@ -162,9 +161,14 @@ hr {
     border-top: 1px solid #dddddd;
 }
 
+hr.comment-end {
+    width: calc(100% + 4em);
+    left: -4em;
+    position: relative;
+    margin: 0;
+}
 .paper-preview {
     float: left;
-/*    border-right: solid 1px #73A0C5; */
     border-right: 3px double #ddd;
     height: 45em;
     overflow: hidden;
@@ -226,7 +230,6 @@ hr {
     background: #73A0C5;
     height: 1em;
     border-radius: 1ex 1ex 0 0;
-/*    background: linear-gradient(to top,  #FFFFFF 0%,#73A0C5 30%); */
 }
 
 
@@ -269,8 +272,12 @@ hr {
 .comment-block-preview .comments .comment:nth-child(odd) {
 }
 .comment-block-preview .comments .comment:nth-child(even) {
-    background:rgba(20,20,20,1);
 }
+.comment-block .comments .comment:nth-child(odd) {
+}
+.comment-block .comments .comment:nth-child(even) {
+}
+
 
 .comment-block-preview h3 {
     margin-left: 1em;
@@ -285,19 +292,10 @@ hr {
     margin-right: auto;
 }
 
-.comment-block .comments .comment:nth-child(odd) {
-}
-.comment-block .comments .comment:nth-child(even) {
-    background:rgba(20,20,20,1);
-}
-
 .comment {
-    padding-top: 1ex;
-    padding-bottom: 1ex;
     padding-left: 2em;
     padding-right: 2em;
 }
-
 
 .comment .cbody {
 
@@ -305,7 +303,6 @@ hr {
 
 .cfooter {
     margin-top: 1ex;
-    text-align: right;
 }
 
 .comment .author {
@@ -315,6 +312,7 @@ hr {
 .comment .datetime {
     font-style: italic;
     font-size: small;
+    float: left;
 }
 
 .new-comment {
@@ -409,10 +407,36 @@ hr {
     font-family: serif;
     color: white;
     cursor: pointer;
-    border-radius: 0.5ex;    
+    border-radius: 0.5ex;
 }
 .btn:hover {
    background-color: #73A0FF;
+}
+.reply-btn {
+    float: right;
+    font-size: small;
+    width: 10em;
+    border-radius: 0;
+
+    border: solid 1px #73A0C5;
+    background-color: white;
+    color: black;
+
+    padding-top: 0.4ex;
+    padding-bottom: 0.4ex;
+    padding-left: 1ex;
+    padding-right: 1ex;
+    text-decoration: none;
+    text-align:center;
+    cursor: pointer;
+
+    position: relative;
+    top: 2ex;
+    z-index:20;
+}
+.reply-btn:hover {
+    background-color: #73A0FF;
+    color: white;
 }
 .reddish-btn {
     border: solid 1px #CF685E;
@@ -431,7 +455,8 @@ hr {
     border-radius: 0.5ex;
 }
 .reddish-btn:hover {
-   background-color: #DE5139;
+    background-color: #DE5139;
+    color: white;
 }
 
 
@@ -497,8 +522,6 @@ hr {
 .pages span {
     color: #999999;
 }
-
-
 
 #banner .search {
     text-align: right;
@@ -690,8 +713,8 @@ hr {
 
 
 
-/* css tabs 
-   Originalle written by llgruff 
+/* css tabs
+   Originalle written by llgruff
    From https://codepen.io/llgruff/pen/ZGBxOa
 */
 
@@ -757,10 +780,53 @@ div.tab-frame2 input:nth-of-type(3):checked ~ .tab:nth-of-type(3){
 
 blockquote {
     color: #6a737d;
-    padding-left: 1em;
-    padding-top: 0.5ex;
-    padding-bottom: 0.5ex;
-    background-color: #eee;
-    border: 1px solid #73A0C5;
-    border-left: 0.5ex solid #73A0C5;
+    padding-left: 3px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    margin: 0;
+    border-left: 3px solid #73A0C5;
+}
+blockquote > blockquote {
+    border-color: #CF908D;
+}
+blockquote > blockquote > blockquote {
+    border-color: #57C59C;
+}
+blockquote > blockquote > blockquote > blockquote {
+    border-color: #C957F8;
+}
+blockquote > blockquote > blockquote > blockquote > blockquote {
+    border-color: #F8B829;
+}
+blockquote > blockquote > blockquote > blockquote > blockquote > blockquote {
+    border-color: #8DA1C5;
+}
+blockquote > blockquote > blockquote > blockquote > blockquote > blockquote > blockquote {
+    border-color: #888;
+}
+
+blockquote p:first-of-type {
+    margin-top: 0;
+}
+blockquote p:last-of-type {
+    margin-bottom: 0;
+}
+
+p {
+    margin-bottom: 0.3ex;
+    margin-top: 0.3ex;
+}
+
+.clearfix::after {
+   content: " ";
+   display: block;
+   height: 0;
+   clear: both;
+}
+
+.last-updated {
+    float: right;
+    font-size: small;
+    position: relative;
+    top: 2ex;
 }
