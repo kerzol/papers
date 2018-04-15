@@ -6,7 +6,7 @@
 
     <div class="comment">
       <div class="cbody">{{review.review|e}}</div>
-      <div class="last-updated">
+      <div class="last-updated" style="top:0">
         <span>
           updated by
           {% if review.userid == 1 %}
@@ -16,8 +16,8 @@
             {{ review.username|e }}:</a>
           {% endif %}
           <a name="review"></a>
+          at {{ review.createtime|e }}
         </span>
-        <span class="datetime"> at {{ review.createtime|e }} </span>
       </div>
 
     </div>

@@ -279,9 +279,8 @@ hr.comment-end {
 }
 
 
-.comment-block-preview h3 {
+.comment-block-preview > h3 {
     margin-left: 1em;
-    margin-bottom: 1em;
 }
 
 .comment-block {
