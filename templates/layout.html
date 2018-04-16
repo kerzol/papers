@@ -13,19 +13,19 @@
 
     <script src="/static/lib/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
 
-    <script>
+  <script>
       marked.setOptions({
-      renderer: new marked.Renderer(),
-      gfm: true,
-      tables: true,
-      breaks: false,
-      pedantic: false,
-      sanitize: false, //because of mathjax
-      smartLists: true,
-      smartypants: false
+        renderer: new marked.Renderer(),
+        gfm: true,
+        tables: true,
+        breaks: false,
+        pedantic: false,
+        sanitize: false, //because of mathjax
+        smartLists: true,
+        smartypants: false
       });
 
-      var PartialDescape = function (html) {
+      function PartialDescape (html) {
         var lines = html.split('\n');
         var out = '';
 
@@ -71,6 +71,7 @@
         $(".cbody").each(function(){
           o=$(this).html();
           $(this).html(marked(PartialDescape(o)));
+          $(this).removeClass("loading");
         });
       });
     </script>

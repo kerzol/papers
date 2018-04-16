@@ -22,7 +22,7 @@
 
   <h3> More info about <em>{{user['username'] | e}}:</em></h3>
 
-  <div class="cbody">{{user['about']|e}}</div>
+  <div class="cbody loading">{{user['about']|e}}</div>
   
     {% if user_authenticated() and
           user['userid'] == session['user']['userid'] %}
