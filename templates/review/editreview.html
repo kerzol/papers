@@ -152,6 +152,13 @@ REVIEW_Preview.callback.autoReset = true;  // make sure it can run more than onc
       <label for="tab1">Edit</label>
 
     
+    <div class="tab tp0">
+      <div class="preview" id="REVIEW_marked-mathjax-preview"></div>
+      <div class="preview" id="REVIEW_marked-mathjax-preview-buffer" 
+           style="display:none;
+                  position:absolute; 
+                  top:0; left: 0"></div>
+    </div>
     <div class="tab">
       <textarea id="REVIEW_marked-mathjax-input"
                 onkeyup="REVIEW_Preview.Update()"
@@ -163,13 +170,7 @@ REVIEW_Preview.callback.autoReset = true;  // make sure it can run more than onc
         and <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">markdown</a> to format text.
       </div>
     </div>
-    <div class="tab tp0">
-      <div class="preview" id="REVIEW_marked-mathjax-preview"></div>
-      <div class="preview" id="REVIEW_marked-mathjax-preview-buffer" 
-           style="display:none;
-                  position:absolute; 
-                  top:0; left: 0"></div>
-    </div>
+
   </div>
   
   {% include "remark.html" %}
