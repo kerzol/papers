@@ -430,7 +430,7 @@ hr.comment-end {
     cursor: pointer;
 
     position: relative;
-    top: 2ex;
+    top: 1.5ex;
     z-index:20;
 }
 .reply-btn:hover {
