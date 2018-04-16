@@ -833,14 +833,18 @@ p {
 
 .loading {
     content: "";
-    border: 0px solid #f3f3f3; /* Light grey */
-    border-left: 16px solid #73A0C5; /* Blue */
-    width: 100%;
-    height: 100%;
+    border: 0.8ex solid #f3f3f3; /* Light grey */
+    border-left: 0.8ex solid #CF908D; /* Blue */
+    border-right: 0.8ex solid #73A0C5; /* Blue */
+    border-radius: 50%;
+    width: 1.4em;
+    height: 1.4em;
     color: white;
     display: block;
+    margin-left: 35%;
     color: rgba(0, 0, 0, 0) !important;
-    animation: slidein 7s linear 1s infinite running;
+/*    animation: slidein 7s linear 1s infinite running; */
+    animation: spin 7s linear 1s infinite running;
 }
 .loading > * {
     opacity: 0 !important;
