@@ -52,6 +52,11 @@ body {
     float: left;
 }
 
+.about-info {
+    float: left;
+    margin-left: 1ex;
+}
+
 #banner-bottom {
     float: right;
     color: grey;
@@ -674,25 +679,44 @@ hr.comment-end {
     font-size: large;
     margin: 2em;
 }
-
 .about li {
     margin: 1.3em;
 }
-
 .about p {
     margin-top: 1ex;
     margin-left: 1ex;
     font-size: 80%;
 }
-
 .about ul {
     list-style: none;
 }
-
 .about ul li:before{
 /*    content: '★'; */
 /*    margin: 0 1em;   */
 }
+
+.partners {
+    font-size: large;
+    margin: 2em;
+}
+.partners h4 {
+    margin-bottom: 0.3ex;
+}
+.partners ul li:before{
+    content: '★'; 
+    margin: 0 1ex;
+}
+.partners li {
+    margin: 1ex;
+}
+.partners ul {
+    padding-left: 0;
+    list-style: none;
+}
+.partners .individuals {
+    margin-left: 1.3ex;
+}
+
 
 .url {
     text-align: left;

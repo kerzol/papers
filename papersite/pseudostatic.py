@@ -18,6 +18,16 @@ def about():
 def faq():
     return render_template('faq.html')
 
+
+### Partners & Donors
+###############################
+                  ##################
+            ############
+@app.route("/partners-and-donors")
+def partners():
+    return render_template('partners.html')
+
+
 @app.route('/stranger', methods=['GET'])
 def stranger():
     return render_template('users/stranger.html')
