@@ -1,0 +1,18 @@
+
+10 May 18.
+
+Big Changes:
+  no more colloborative wiki-like discussion, just comments.
+  In the feature versions we may add "colloborative wiki" option,
+  to make any post accessible to multi-user edit.
+
+Features added:
+  edit papers info
+  edit comments
+
+Bugs fixed:
+  a. You can upload a .PDF paper now, not only .pdf.
+  b. Fix [Reply] button behavior.
+
+ 
+Henceforth, Max is a moderator
