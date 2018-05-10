@@ -19,9 +19,8 @@ from flask import session, flash, redirect, url_for
 def users_to_notify(paperid):
   who_like = who_likes(paperid)
   who_comment = commentators(paperid)
-  who_discuss = discussion_participators(paperid)
 
-  users = who_like + who_comment + who_discuss
+  users = who_like + who_comment
   ## We notify union of all these users
   ## but not the current_user (who make the action)
   ## and ANONYMOUS

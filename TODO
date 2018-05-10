@@ -4,22 +4,20 @@ Identify Anonymouses ?!
   Store the password hash for every object created by anonymous.
   Store smth in the cookie.
 
-Only admins should be able to delete papers, because a paper can
-contain a usefull discussion.
-
 Notifs: use cookie to store readed notifs
 in the case there is >0 nonreaded notifs, make antenna red with a
    circle badge depicting the number of nonreaded messages
 
 ---------------------------------------------------------------------------
 
-★ modify/soft-delete papers
+★ edit comments
+★ edit paper info
 ★ internal notifications
+★ follow, unfollow buttons
 
 ▽ mark posts as community wiki, when more than one user can edit
 ▽ mobile version
 
-★ follow, unfollow buttons
 ▪ captcha or smth againsth spam
 
 ▽ search improvements

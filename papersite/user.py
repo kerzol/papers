@@ -46,6 +46,12 @@ def is_author_of_comment(userid, commentid):
                           where userid = ? and commentid = ?",
                      [userid, commentid], one=True)['count']
 
+def is_author_of_paper(userid, paperid):
+    return 1 == query_db("select count(*) as count \
+                          from papers \
+                          where userid = ? and paperid = ?",
+                     [userid, paperid], one=True)['count']
+
 def handle_sqlite_exception(err):
     if ("users.username" in str(err)):
         return "Sorry, the user name '%s' has already been taken"  % request.form['username']

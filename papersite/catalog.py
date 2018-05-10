@@ -37,7 +37,9 @@ def userinfo(name):
                                         name + " is not found",
                               username=name)
     papers=query_db("select p.* from papers as p, likes as l   \
-                     where p.paperid = l.paperid and           \
+                     where                                     \
+                      p.deleted_at is null and                 \
+                      p.paperid = l.paperid and                \
                            l.userid = ?                        \
                      order by l.liketime desc",[u['userid']])    
     return render_catalog('catalog/oneuser.html',
@@ -58,7 +60,8 @@ def domain(domainname):
     papers=query_db("select p.*                                \
                      from papers as p,                         \
                           papers_domains as pd                 \
-                     where p.paperid=pd.paperid                \
+                     where p.deleted_at is null and            \
+                           p.paperid=pd.paperid                \
                            and pd.domainid = ?                 \
                      order by p.lastcommentat desc",[domainid])
     return render_catalog('catalog/papers-in-domain.html',
@@ -79,8 +82,10 @@ def keyword(keyword):
     papers=query_db("select p.*                                \
                      from papers as p,                         \
                           papers_keywords as pk                \
-                     where p.paperid=pk.paperid                \
-                           and pk.keywordid = ?                \
+                     where                                     \
+                           p.deleted_at is null and            \
+                           p.paperid=pk.paperid and            \
+                           pk.keywordid = ?                    \
                      order by p.lastcommentat desc",[keywordid])
     return render_catalog('catalog/papers-with-keyword.html',
                            papers=with_description(papers),
@@ -99,9 +104,11 @@ def author(fullname):
     authorid=a['authorid']
     papers=query_db("select p.*                                \
                      from papers as p,                         \
-                          papers_authors as pa                \
-                     where p.paperid=pa.paperid                \
-                           and pa.authorid = ?                \
+                          papers_authors as pa                 \
+                     where                                     \
+                           p.deleted_at is null and            \
+                           p.paperid=pa.paperid and            \
+                           pa.authorid = ?                     \
                      order by p.lastcommentat desc",[authorid])
     return render_catalog('catalog/papers-of-author.html',
                            papers=with_description(papers),
@@ -113,7 +120,9 @@ def catalog():
     if request.args.get('q'):
         q = '%' + request.args.get('q') + '%'
         papers=query_db("select * from papers                      \
-                         where lower(title) like  lower(?)         \
+                         where                                     \
+                               p.deleted_at is null and            \
+                               lower(title) like  lower(?)         \
                          order by title",[q])
     else: 
         papers = []

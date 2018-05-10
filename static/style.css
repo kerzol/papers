@@ -734,6 +734,18 @@ hr.comment-end {
     margin-right: 1em;
 }
 
+.delete-paper {
+    font-size: x-small;
+    font-weight: bold;
+    font-family: sans;
+    text-align: right;
+    margin-right: 1em;
+    color: black;
+}
+.delete-paper a {
+    color: black;
+}
+
 
 
 /* css tabs

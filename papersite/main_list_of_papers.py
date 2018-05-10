@@ -88,6 +88,7 @@ def all(page=1):
 
     seq=query_db("select *                                       \
                     from papers as p                             \
+                  where p.deleted_at is null                     \
                   order by p.lastcommentat DESC                  \
                   limit ?, ?", [(page-1)*onpage,onpage])
 
@@ -130,23 +131,28 @@ def usersite(username,page=1):
     count = query_db("select count(distinct p.paperid) as c        \
                       from papers as p, likes as l                 \
                       where                                        \
-                         p.userid = ? or                           \
-                         (p.paperid = l.paperid and l.userid = ?)  \
+                         p.deleted_at is null and                  \
+                         (p.userid = ? or                           \
+                          (p.paperid = l.paperid and l.userid = ?)  \
+                         )                                          \
                      ", [u['userid'],u['userid']], one=True)['c']
     # how many papers on page?
     onpage = 3
     maxpage = int(ceil(float(count)/onpage))
     # todo. some papers ... are bad
+    #       in which sense bad ?
     seq=query_db("select *, lastcommentat as sorttime             \
                     from papers                                   \
-                    where userid = ?                              \
+                    where deleted_at is null and                  \
+                          userid = ?                              \
                   union                                           \
                   select p.*, CASE                                \
                               WHEN l.liketime > p.lastcommentat   \
                               THEN l.liketime                     \
                               ELSE p.lastcommentat END as sorttime\
                     from papers as p, likes as l                  \
-                    where p.paperid = l.paperid and l.userid = ?  \
+                    where p.deleted_at is null and                \
+                          p.paperid = l.paperid and l.userid = ?  \
                   order by sorttime DESC                          \
                   limit ?, ?", [u['userid'],u['userid'],
                                 (page-1)*onpage,onpage])

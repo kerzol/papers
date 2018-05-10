@@ -159,7 +159,9 @@ ALTER TABLE users
 
 ALTER TABLE comments
   ADD deleted_at TIMESTAMP DEFAULT NULL;
-  
+
+ALTER TABLE papers
+  ADD deleted_at TIMESTAMP DEFAULT NULL;
 -- todo authors_papers, fulltexts ?
 
 

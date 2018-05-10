@@ -98,6 +98,12 @@ def delete_comment(commentid):
                      where commentid = ?', [commentid])
     return id
 
+def delete_paper(paperid):
+    con = get_db()
+    with con:
+        con.execute('update papers set deleted_at = datetime() \
+                     where paperid = ?', [paperid])
+    return id
 
 def get_review(paperid):
     return query_db("select                                      \

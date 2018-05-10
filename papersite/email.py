@@ -31,7 +31,7 @@ def send_mail_ (usermail, message, subject):
             # Create a text/plain message
             msg = MIMEText(message)
             msg['Subject'] = subject
-            msg['From'] = MAIL_USER
+            msg['From'] = 'Papers-gamma Team' + '<' + MAIL_USER + '>'
             msg['To'] = usermail
 
             # Send the message via our own SMTP server.
@@ -61,7 +61,7 @@ Good luck,\n\
 Papers' team" % (username, url_for('register_confirmation',
                          key=key, _external=True)))
     msg['Subject'] = 'Email confirmation'
-    msg['From'] = MAIL_USER
+    msg['From'] = 'Papers-gamma Team' + '<' + MAIL_USER + '>'
     msg['To'] = usermail
     
     # Send the message via our own SMTP server.
@@ -99,7 +99,7 @@ Good luck,\n\
 Papers' team" % (u['username'], url_for('set_new_password',
                                         key=key, _external=True)))
     msg['Subject'] = 'Change password'
-    msg['From'] = MAIL_USER
+    msg['From'] = 'Papers-gamma Team' + '<' + MAIL_USER + '>'
     msg['To'] = usermail
 
     # Send the message via our own SMTP server.

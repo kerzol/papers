@@ -102,6 +102,15 @@
              <a href="/{{entry.username | e}}">{{entry.username}}</a>
              
              <br/> Upload date: {{entry.createtime | e}}
+
+             {% if entry.paperid | can_delete_paper  %}
+             <div class="delete-paper">
+                  <a title="Delete this paper"
+                     href="/delete-paper/{{entry.paperid}}">
+                    remove this paper </a>
+             </div>
+             {% endif %}
+
              </div>
           </div>
 
