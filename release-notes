@@ -4,14 +4,13 @@
 Big Changes:
   No more colloborative wiki-like discussion, just comments.
   In the feature versions we may add "colloborative wiki" option,
-  To make any post accessible to multi-user edit.
+  to make any post accessible in multi-user edit mode.
 
 Features added:
   It is possible now to delete a paper.
 
 Bugs fixed:
   a. You can upload a .PDF paper now, not only .pdf.
-  b. Fix [Reply] button behavior.
-
+  b. Fix [Reply] button behavior
  
-Henceforth, Max is a moderator
+Henceforth, Max is a moderator.

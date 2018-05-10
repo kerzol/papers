@@ -87,7 +87,7 @@ def get_comments(paperid):
                           where c.userid = u.userid and          \
                                 c.deleted_at is null and         \
                                 c.paperid = ?                    \
-                          order by c.commentid                   \
+                          order by c.createtime                  \
                           ",
                      [paperid])
 

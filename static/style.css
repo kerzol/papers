@@ -734,6 +734,10 @@ hr.comment-end {
     margin-right: 1em;
 }
 
+.comment-block-preview .delete-comment {
+    display: none;
+}
+
 .delete-paper {
     font-size: x-small;
     font-weight: bold;

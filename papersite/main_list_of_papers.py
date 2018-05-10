@@ -41,7 +41,7 @@ def previews(seq):
                                 c.userid = u.userid and          \
                                 c.deleted_at is null and         \
                                 c.paperid = ?                    \
-                          order by c.commentid                   \
+                          order by c.createtime                  \
                          limit 2                                 \
                        ",
             [paper['paperid']]);
@@ -69,9 +69,9 @@ def previews(seq):
                    c.userid = u.userid and                       \
                    c.commentid not in " + good_injection + " and \
                    c.paperid = ?                                 \
-                  order by c.commentid desc                      \
+                  order by c.createtime desc                     \
                   limit 2)                                       \
-                 order by commentid                              \
+                 order by createtime                             \
                        ",
             [paper['paperid']]);
 

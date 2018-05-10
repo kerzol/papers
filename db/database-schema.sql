@@ -162,7 +162,8 @@ ALTER TABLE comments
 
 ALTER TABLE papers
   ADD deleted_at TIMESTAMP DEFAULT NULL;
--- todo authors_papers, fulltexts ?
+
+create index c_index_createtime on comments (createtime);
 
 
 .quit
