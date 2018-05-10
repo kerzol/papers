@@ -163,7 +163,20 @@ ALTER TABLE comments
 ALTER TABLE papers
   ADD deleted_at TIMESTAMP DEFAULT NULL;
 
-create index c_index_createtime on comments (createtime);
+CREATE INDEX c_index_createtime on comments (createtime);
+
+ALTER TABLE papers
+  ADD edited_at TIMESTAMP DEFAULT NULL;
+ALTER TABLE papers
+  ADD edited_by INTEGER REFERENCES user(userid);
+CREATE INDEX p_edited_by ON papers(edited_by);
+
+ALTER TABLE comments
+  ADD edited_at TIMESTAMP DEFAULT NULL;
+ALTER TABLE comments
+  ADD edited_by INTEGER REFERENCES user(userid);
+ CREATE INDEX c_edited_by ON comments(edited_by);
+
 
 
 .quit

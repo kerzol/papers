@@ -1,17 +1,20 @@
-
-Identify Anonymouses ?!
-  Allow pepole to delete their comments even in the anonymous case
-  Store the password hash for every object created by anonymous.
-  Store smth in the cookie.
-
-Notifs: use cookie to store readed notifs
-in the case there is >0 nonreaded notifs, make antenna red with a
-   circle badge depicting the number of nonreaded messages
-
----------------------------------------------------------------------------
+ ________________________________________________________________________________
+ \ \                                                                          / /
+  \ \  Identify Anonymouses ?!                                               / /
+   \ \  Allow people to delete their comments even in the anonymous case    / /
+    \ \  Store the password hash for every object created by anonymous.    / /
+     \ \  Store smth in the cookie.                                       / /
+      \ \                                                                / /
+       > >--------------------------------------------------------------< <
+      / /                                                                \ \
+     / /  Notifs: use cookie to store readed notifs in the case there     \ \
+    / /  are >0 nonreaded notifs, make antenna red with a circle badge     \ \
+   / /  depicting the number of nonreaded messages                          \ \
+  / /                                                                        \ \
+ --------------------------------------------------------------------------------
 
 ★ edit comments
-★ edit paper info
+★ history of papers/comments edit revisions
 ★ internal notifications
 ★ follow, unfollow buttons
 

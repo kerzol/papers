@@ -11,12 +11,12 @@
              {% if liked %}
               <a 
                 href="/paper/{{ entry.paperid|e }}/{{ entry.title|e}}/unlike"
-                title="Unlike this paper"
+                title="Unlike the paper"
                 class="liked"
                 >★</a>
               {% else %}
                <a href="/paper/{{ entry.paperid|e }}/{{ entry.title|e}}/like"
-                  title="Click if you like this paper">☆</a>
+                  title="Click if you like the paper">☆</a>
               {% endif %}
             {% else %} {# anonymous #}
                <a class="anon"
@@ -24,7 +24,7 @@
                   title="You should login to like the paper">☆</a>
             {% endif%}
                <div class="likes"
-                    title="{{liked_by|length}} people like this paper">
+                    title="{{liked_by|length}} people like the paper">
              {{liked_by|length}}
            </div>
           </div> <!-- /vote-block -->
@@ -67,51 +67,66 @@
 
             </div>
 
-            <div class="paper-info-right">
+            <div class="float-right">
+              <div class="paper-primary-info">
+                Authors:
+                {% set comma = joiner(",") %}
+                {% for a in authors %}{{
+                comma()}}
+                <a href="/author/{{a.fullname | e}}">{{a.fullname}}</a>{%
+                endfor %}
+                
+                <br/> Liked by:
+                {% set comma = joiner(",") %}
+                {% for l in liked_by %}{{
+                comma()}}
+                <a href="/{{l.username | e}}">{{l.username}}</a>{% 
+                endfor %}
 
-              Authors:
-             {% set comma = joiner(",") %}
-             {% for a in authors %}{{
-             comma()}}
-             <a href="/author/{{a.fullname | e}}">{{a.fullname}}</a>{%
-             endfor %}
-             
-             <br/> Liked by:
-             {% set comma = joiner(",") %}
-             {% for l in liked_by %}{{
-             comma()}}
-             <a href="/{{l.username | e}}">{{l.username}}</a>{% 
-             endfor %}
 
+                <br/>Domains:
+                {% set comma = joiner(",") %}
+                {% for d in domains %}{{
+                comma()}}
+                <a href="/domain/{{d.domainname | e}}">{{d.domainname}}</a>{% 
+                endfor %}
 
-             <br/>Domains:
-             {% set comma = joiner(",") %}
-             {% for d in domains %}{{
-             comma()}}
-             <a href="/domain/{{d.domainname | e}}">{{d.domainname}}</a>{% 
-             endfor %}
+                <br/> Tags:
+                {% set comma = joiner(",") %}
+                {% for k in keywords %}{{
+                comma()}}
+                <a href="/tag/{{k.keyword | e}}">{{k.keyword}}</a>{%
+                endfor %}
+              </div>
 
-             <br/> Tags:
-             {% set comma = joiner(",") %}
-             {% for k in keywords %}{{
-             comma()}}
-             <a href="/tag/{{k.keyword | e}}">{{k.keyword}}</a>{%
-             endfor %}
-            
-             <br/> Uploaded by:
-             <a href="/{{entry.username | e}}">{{entry.username}}</a>
-             
-             <br/> Upload date: {{entry.createtime | e}}
-
-             {% if entry.paperid | can_delete_paper  %}
-             <div class="delete-paper">
-                  <a title="Delete this paper"
-                     href="/delete-paper/{{entry.paperid}}">
-                    remove this paper </a>
-             </div>
-             {% endif %}
-
-             </div>
+              <div class="paper-secondary-info">
+                Uploaded by:
+                <a href="/{{entry.username | e}}">{{entry.username}}</a>
+                <br> Upload date: {{entry.createtime | e}}
+                {% if entry.edited_at  %}
+                <br>  Edited at: {{entry.edited_at | e}}
+                <br> Edited by: <a href="/{{entry.edituser | e}}">{{entry.edituser}}</a>
+                {% endif %}
+                <div>
+                  <br>
+                  {% if entry.paperid | can_edit_paper  %}
+                  <div class="edit-paper">
+                    <a title="Edit the paper"
+                       href="/paper/edit/{{entry.paperid}}">
+                      edit the paper </a>
+                  </div>
+                  {% endif %}
+                  {% if entry.paperid | can_delete_paper  %}
+                  <div class="delete-paper">
+                    <a title="Delete the paper"
+                       onclick="return confirm('You really want to delete the paper ?')"
+                       href="/paper/delete/{{entry.paperid}}">
+                      remove the paper </a>
+                  </div>
+                  {% endif %}
+                </div>
+              </div> <!-- /secondary-info -->
+            </div>
           </div>
 
         </div> <!-- /paper -->

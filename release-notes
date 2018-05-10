@@ -7,7 +7,8 @@ Big Changes:
   to make any post accessible in multi-user edit mode.
 
 Features added:
-  It is possible now to delete a paper.
+  Edit paper info is now possible!
+  It is also possible to delete the paper.
 
 Bugs fixed:
   a. You can upload a .PDF paper now, not only .pdf.

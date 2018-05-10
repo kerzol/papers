@@ -216,11 +216,27 @@ hr.comment-end {
     float: left;
 }
 
-.paper-info-right {
+.float-right {
+    float: right;
+}
+.paper-primary-info {
+    font-size: small;
     line-height: 1.5em;
     max-width: 40em;
-    float: right;
-    background-color: #FBFBFF;
+    float: left;
+    background-color: #FFFAFA;
+    padding: 1em;
+    border-radius: 1ex;
+    border: 0px solid #DDDDDD;
+
+}
+.paper-secondary-info {
+    margin-left: 1em;
+    font-size: x-small;
+    line-height: 1.5em;
+    max-width: 40em;
+    float: left;
+    background-color: #FAFAFF;
     padding: 1em;
     border-radius: 1ex;
     border: 0px solid #DDDDDD;
