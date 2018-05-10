@@ -5,7 +5,7 @@
 import os, re
 from papersite import app
 from papersite.db import (query_db, get_db, get_authors, get_domains,
-                          get_keywords, get_comments, get_review,
+                          get_keywords, get_comments,
                           get_insert_keyword, get_insert_author,
                           get_insert_domain, liked_by, likes,
                           delete_comment,
@@ -16,8 +16,7 @@ from papersite.user import (get_user_id, is_super_admin,
 from werkzeug import secure_filename
 from flask import render_template, request, flash, redirect, url_for
 from papersite.notifications import (new_paper_was_added,
-                                     comment_was_added,
-                                     review_was_changed)
+                                     comment_was_added)
 
 ### Frontend stuff
 ###############################
@@ -75,7 +74,6 @@ def onepaper(paperid, title = None):
     domains=get_domains(paperid)                       
     keywords=get_keywords(paperid)
     comments=get_comments(paperid)
-    review=get_review(paperid)
     return render_template('paper/onepaper.html', 
                            entry=paper,
                            comments=comments,
@@ -83,7 +81,6 @@ def onepaper(paperid, title = None):
                            domains=domains,
                            keywords=keywords,
                            liked=liked,
-                           review=review,
                            liked_by=liked_by(paperid))
 
 
@@ -119,36 +116,6 @@ def add_comment(paperid, title):
                                     title=title, error=error)
                     + "#comment-"
                     + str(last_c_id))
-
-
-
-@app.route('/paper/<int:paperid>/<string:title>/add-review',
-           methods=['POST'])
-def add_review(paperid, title):
-    con = get_db()
-    error = None
-    with con:
-        con.execute('insert into reviews \
-        (review,userid,paperid) \
-        values (?,?,?)',
-                        [
-                            # here we do not escape, because we will
-                            # do it in jinja
-                            request.form['review'],
-                            get_user_id(),
-                            paperid
-                        ])
-        con.execute('update papers set lastcommentat=datetime() \
-                       where paperid = ?', [paperid])
-        if user_authenticated(): 
-            flash('You successfully updated the collaborative discussion of the paper')
-        else: 
-            flash('You anonymously updated the collaborative discussion of the paper')
-    review_was_changed(paperid)
-    return redirect(url_for('onepaper',paperid=paperid,
-                                    title=title, error=error)
-                    + "#review")
-
 
 
 ### Add paper
@@ -236,12 +203,6 @@ def add_paper():
                   con.execute("update papers set getlink = ?             \
                                where paperid=?",
                               ['/static/memory/pdfs/'+filename_pdf, paperid])
-
-              ## Bootstrap collaborative review
-              con.execute('insert into reviews                \
-                            (paperid, userid, review)         \
-                            values(?, ?, "Feel free to start an awesome discussion.")',
-                          [paperid, get_user_id()])
 
               ## notify some users by email about this paper
               new_paper_was_added(paperid)

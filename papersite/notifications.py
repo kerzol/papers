@@ -6,8 +6,7 @@
 import difflib
 from papersite.email import send_mail
 from papersite.db import (query_db, get_paper_w_uploader,
-                          get_authors, get_comment, get_uploader,
-                          get_review, get_review_before_last)
+                          get_authors, get_comment, get_uploader)
 from papersite.user import (get_user_id,  user_authenticated,
                             ANONYMOUS)
 from flask import url_for
@@ -52,15 +51,6 @@ def commentators(paperid):
           c.deleted_at is null and          \
           c.paperid = ?", [paperid])
 
-## select users that participated in the
-## colloborative discussion of this paper
-def discussion_participators(paperid):
-    return query_db("select u.*             \
-            from reviews as r, users as u   \
-            where r.userid = u.userid and   \
-                  r.paperid = ?",
-            [paperid])
-
 ## Currently, we notify users that liked at least one paper
 ##
 ## from the same uploader
@@ -83,36 +73,6 @@ def users_to_notify_about_new_paper(paperid):
          uploaders.userid = newpapers.userid   and  \
          newpapers.paperid = ?",
     [paperid])
-
-def review_was_changed(paperid):
-  # TODO: transform latex to smth more human readable
-  url = url_for('onepaper', paperid=paperid, _external=True)
-  url = url + '#review'
-  template = "Hello %s,\n\n\
-User '%s' just changed the paper collaborative discussion. It may interests you.\n\n\
-Paper title: %s\n\
-Changes:\n\n\
-%s\n\n\
-Url: %s\n\
-Papers' team"
-  # word diff
-  users = users_to_notify(paperid)
-  last_review = get_review(paperid)
-  before_last_review = get_review_before_last(paperid)
-  paper = get_paper_w_uploader(paperid)
-  a = (before_last_review['review'] + '\n').splitlines(keepends=True)
-  b = (last_review['review'] + '\n').splitlines(keepends=True)
-  diff = difflib.ndiff(a, b)
-  word_diff = ''.join(diff)
-  for u in users:
-    msg = template % (u['username'],
-                      last_review['username'],
-                      paper['title'],
-                      word_diff,
-                      url)
-    # todo save message to notifs table
-    send_mail(u['email'], msg, 'News about paper: %s' % (paper['title']))
-
 
 def comment_was_added(paperid, commentid):
   # TODO: transform latex to smth more human readable

@@ -1,5 +1,4 @@
 {% import 'comment/preview_comments.html' as c %}
-{% import 'review/review.html' as r %}
 
       <div class="entry-preview">
         <div class="vote-block">
@@ -39,12 +38,7 @@
         
         <div class="comment-block-preview">
 
-          {% if review[entry.paperid] != None %}
-          <h3> Open collaborative discussion: </h3>
-             {{ r.show_review(review[entry.paperid]) }}
-          {% endif %}
-
-          <h3 style="margin-top: 3ex"> Personal comments: </h3>
+          <h3 style="margin-top: 3ex"> Comments: </h3>
 
           {{ c.build_list(commentsHead[entry.paperid]) }}
 

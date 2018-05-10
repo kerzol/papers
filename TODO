@@ -4,8 +4,8 @@ Identify Anonymouses ?!
   Store the password hash for every object created by anonymous.
   Store smth in the cookie.
 
-Only admins should be able to delete papers, because a paper can contain a
-usefull discussion.
+Only admins should be able to delete papers, because a paper can
+contain a usefull discussion.
 
 Notifs: use cookie to store readed notifs
 in the case there is >0 nonreaded notifs, make antenna red with a
@@ -16,6 +16,7 @@ in the case there is >0 nonreaded notifs, make antenna red with a
 ★ modify/soft-delete papers
 ★ internal notifications
 
+▽ mark posts as community wiki, when more than one user can edit
 ▽ mobile version
 
 ★ follow, unfollow buttons
@@ -31,4 +32,3 @@ in the case there is >0 nonreaded notifs, make antenna red with a
 > twitter, facebook, linkedin, openid, oauth integrations
 > userpics
 > cache, captcha, anonyomous posting/comments
-> Should one be able to like his own papers ?

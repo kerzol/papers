@@ -3,9 +3,11 @@
                   ##################
             ############
 from papersite import app
-from papersite.db import (query_db, get_authors, get_domains,
+from papersite.db import (query_db, get_authors, get_domains, 
+                          get_review,
                           get_keywords, get_comments, liked_by)
-from flask import redirect, url_for, render_template, abort
+from flask import (redirect, url_for, render_template, abort,
+                   stream_with_context, request, Response)
 from math import ceil
 from papersite.user import get_user_id
 
@@ -20,7 +22,6 @@ def previews(seq):
     liked = {}
     commentsHead = {}
     commentsTail = {}
-    review = {}
     for paper in seq:
         liked_by_l[paper['paperid']] = liked_by (paper['paperid'])
         liked[paper['paperid']] = query_db(
@@ -29,19 +30,6 @@ def previews(seq):
             where paperid=? and userid=?",
             [paper['paperid'],get_user_id()],
             one=True)
-
-        
-        review[paper['paperid']] = query_db(
-            " select r.reviewid, r.review, r.userid,         \
-                     r.createtime, u.username                \
-              from reviews as r, users as u                  \
-              where r.userid = u.userid and                  \
-                    r.paperid = ?                            \
-              order by r.createtime desc                     \
-              limit 1                                        \
-            ",
-            [paper['paperid']], one=True);
-
         commentsHead[paper['paperid']] = query_db(
                        "                                         \
                           select                                 \
@@ -87,7 +75,7 @@ def previews(seq):
                        ",
             [paper['paperid']]);
 
-    return (commentsTail, commentsHead, liked_by_l, liked, review)
+    return (commentsTail, commentsHead, liked_by_l, liked)
 
 @app.route('/all/')
 @app.route('/all/page/<int:page>')
@@ -103,14 +91,12 @@ def all(page=1):
                   order by p.lastcommentat DESC                  \
                   limit ?, ?", [(page-1)*onpage,onpage])
 
-    (commentsTail, commentsHead,
-     liked_by, liked, review) = previews(seq)
+    (commentsTail, commentsHead, liked_by, liked) = previews(seq)
 
     return render_template('main-list.html', seq=seq,
                            commentsTail=commentsTail,
                            commentsHead=commentsHead,
                            liked_by=liked_by, liked=liked,
-                           review=review,
                            maxpage=maxpage, curpage=page,
                            headurl='/all')
 
@@ -165,14 +151,13 @@ def usersite(username,page=1):
                   limit ?, ?", [u['userid'],u['userid'],
                                 (page-1)*onpage,onpage])
 
-    (commentsTail, commentsHead,
-     liked_by, liked, review) = previews(seq)
+    (commentsTail, commentsHead, liked_by, liked) = previews(seq)
 
     return render_template('usersite.html', seq=seq,
                            user=u,
                            commentsTail=commentsTail,
                            commentsHead=commentsHead,
                            liked_by=liked_by,liked=liked,
-                           review=review,
                            maxpage=maxpage, curpage=page,
                            headurl='/'+username)
+
