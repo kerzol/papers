@@ -420,7 +420,7 @@ hr.comment-end {
     float: right;
     font-size: small;
     width: 10em;
-    border-radius: 0;
+    border-radius: 0.5ex;
 
     border: solid 1px #73A0C5;
     background-color: white;
@@ -742,12 +742,31 @@ hr.comment-end {
     font-size: x-small;
     font-weight: bold;
     font-family: sans;
+    float: right;
     text-align: right;
     margin-right: 1em;
-    color: black;
 }
 .delete-paper a {
     color: black;
+}
+.delete-paper a:hover {
+    color: red;
+}
+
+.edit-paper {
+    font-size: x-small;
+    font-weight: bold;
+    font-family: sans;
+    float: left;
+    text-align: left;
+    margin-right: 1em;
+    color: black;
+}
+.edit-paper a {
+    color: black;
+}
+.edit-paper a:hover {
+    color: blue;
 }
 
 
