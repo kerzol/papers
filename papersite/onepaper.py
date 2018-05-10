@@ -157,7 +157,7 @@ def add_review(paperid, title):
             ############
 
 
-ALLOWED_EXTENSIONS = set(['pdf'])
+ALLOWED_EXTENSIONS = set(['pdf','PDF'])
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
