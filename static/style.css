@@ -836,8 +836,8 @@ blockquote p:last-of-type {
 }
 
 p {
-    margin-bottom: 0.3ex;
-    margin-top: 0.3ex;
+    margin-bottom: 1em;
+    margin-top: 1ex;
 }
 
 .clearfix::after {
