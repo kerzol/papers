@@ -91,7 +91,7 @@
              var source_id = a.attr('source-id');
              var comment = $('#' + source_id).text();
              var quote = comment.replace(/^>/mg, '>>')
-                 .replace(/^[^>]/mg, '> ');
+                 .replace(/^([^>])/mg, '> $1');
 
              // take a a quote to the new_comment
              var new_comment = $('#marked-mathjax-input').val();
