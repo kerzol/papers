@@ -159,9 +159,9 @@ def edit_comment(commentid):
                         + str(last_c_id))
 
 
-@app.route('/paper/<int:paperid>/<string:title>/add-comment',
+@app.route('/paper/<int:paperid>/add-comment',
            methods=['POST'])
-def add_comment(paperid, title):
+def add_comment(paperid):
     con = get_db()
     error = None
     with con:
@@ -187,8 +187,7 @@ def add_comment(paperid, title):
     
     # notify user about new comment
     comment_was_added(paperid, last_c_id)
-    return redirect(url_for('onepaper',paperid=paperid,
-                                    title=title, error=error)
+    return redirect(url_for('onepaper',paperid=paperid, title = None, error=error)
                     + "#comment-"
                     + str(last_c_id))
 
