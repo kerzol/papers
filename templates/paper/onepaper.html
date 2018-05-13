@@ -47,25 +47,40 @@
           </a>
 
           <div class="paper-info">
-            <div class="downloadbut">
+            <div class="paper-action download">
 
               {% if entry.getlink | is_internal_pdf %}
-              <a class="btn"
-                 target="_new"
+              <a target="_new"
                  title="Click to read the entiry paper"
                  href="{{ entry.getlink|e }}">
                 Download</a>
               {% else %}
-              Link:
               <a
                  target="_new"
-                 title="Click to read the entiry paper"
+                 title="Click to access the entiry paper"
                  href="{{ entry.getlink|e }}">
                 {{ entry.getlink|e }}
               </a>
               {% endif %}
-
             </div>
+            
+            {% if entry.paperid | can_edit_paper  %}
+            <div class="paper-action edit">
+              <a title="Edit the paper"
+                 href="/paper/edit/{{entry.paperid}}">
+                Edit paper </a>
+            </div>
+            {% endif %}
+            {% if entry.paperid | can_delete_paper  %}
+            <div class="paper-action delete">
+              <a title="Delete the paper"
+                 onclick="return confirm('You really want to delete the paper ?')"
+                 href="/paper/delete/{{entry.paperid}}">
+                Remove paper</a>
+            </div>
+            {% endif %}
+
+
 
             <div class="float-right">
               <div class="paper-primary-info">
@@ -107,24 +122,6 @@
                 <br> Edited at: {{entry.edited_at | e}}
                 <br> Edited by: <a href="/{{entry.edituser | e}}">{{entry.edituser}}</a>
                 {% endif %}
-                <div>
-                  <br>
-                  {% if entry.paperid | can_edit_paper  %}
-                  <div class="edit-paper">
-                    <a title="Edit the paper"
-                       href="/paper/edit/{{entry.paperid}}">
-                      Edit paper </a>
-                  </div>
-                  {% endif %}
-                  {% if entry.paperid | can_delete_paper  %}
-                  <div class="delete-paper">
-                    <a title="Delete the paper"
-                       onclick="return confirm('You really want to delete the paper ?')"
-                       href="/paper/delete/{{entry.paperid}}">
-                      Remove paper</a>
-                  </div>
-                  {% endif %}
-                </div>
               </div> <!-- /secondary-info -->
             </div>
           </div>
@@ -138,8 +135,6 @@
 
           {% include "comment/newcomment.html" %}
         </div>  <!-- /comment-block -->
-
-
 
       </div> <!-- /entry -->
 

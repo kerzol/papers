@@ -1,10 +1,8 @@
 {% macro build_list(comments) %}
 <div class="comments">
   {% for c in comments %}
+  <a name="comment-{{c.commentid}}"></a>
   <div class="comment">
-
-    <a name="comment-{{c.commentid}}"></a>
-
     <div class="cbody loading">{{c.comment|e}}</div>
 
     <div id="comment-source-{{c.commentid}}"
@@ -12,31 +10,37 @@
     
     <div class="cfooter clearfix">
 
-      <div class="reply">
+      <div class="comment-action reply">
         <a title="Quote and reply to this comment"
            source-id="comment-source-{{c.commentid}}"
-           class="reply-btn"
            href="#reply">Reply</a>
       </div>
+
+      {% if c.commentid | can_delete_comment  %}
+      <div class="comment-action edit">
+        <a title="Edit this comment"
+           href="/comment/edit/{{c.commentid}}">Edit comment</a>
+      </div>
+      {% endif %}
+      {% if c.commentid | can_delete_comment  %}
+      <div class="comment-action delete">
+        <a title="Delete this comment"
+           onclick="return confirm('Delete this comment ?')"
+           href="/delete-comment/{{c.commentid}}">Delete</a>
+      </div>
+      {% endif %}
+
       <div class="comment-info">
-        By:
         {% if c.userid == 1 %}
-          Stranger:
+          Stranger
         {% else %}
           <a href="/{{c.username|e}}">{{c.username}}</a>
         {% endif %}
-        <br> Date: <a href="#comment-{{c.commentid}}"> {{c.createtime | e}} </a>
+          at <a href="#comment-{{c.commentid}}"> {{c.createtime | e}} </a>
         {% if c.edited_at  %}
-        <br> Edited at: {{c.edited_at | e}}
-        <br> Edited by: <a href="/{{c.edituser | e}}">{{c.edituser}}</a>
-        {% endif %}
-
-        {% if c.commentid | can_delete_comment  %}
-        <div class="delete-comment">
-          <a title="Delete this comment"
-             onclick="return confirm('Delete this comment ?')"
-             href="/delete-comment/{{c.commentid}}">Delete</a>
-        </div>
+        <br> Edited 
+        by <a href="/{{c.edituser | e}}">{{c.edituser}}</a>
+        at {{c.edited_at | e}}
         {% endif %}
       </div>
 

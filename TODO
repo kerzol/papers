@@ -13,11 +13,11 @@
   / /                                                                        \ \
  --------------------------------------------------------------------------------
 
-★ notify users when paper info was changed
-★ edit comments
-★ history of papers/comments edit revisions
 ★ internal notifications
 ★ follow, unfollow buttons
+★ history of papers/comments edit revisions
+★ notify users when comments was changed
+★ notify users when paper info was changed
 
 ▽ mark posts as community wiki, when more than one user can edit
 ▽ mobile version
@@ -34,3 +34,4 @@
 > twitter, facebook, linkedin, openid, oauth integrations
 > userpics
 > cache, captcha, anonyomous posting/comments
+> add deleted_by 

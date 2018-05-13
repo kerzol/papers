@@ -67,24 +67,25 @@ def get_keywords(paperid):
 
 def get_comment(commentid):
     return query_db("select c.commentid, c.comment, c.createtime, \
-                            u.username                            \
+                            u.username,  c.userid, c.paperid      \
                           from                                    \
                                comments as c,                     \
                                users as u                         \
                           where c.userid = u.userid and           \
-                                c.deleted_at is null and          \
                                 c.commentid = ?                   \
     ", [commentid], one=True)
 
 def get_comments(paperid):
     return query_db("select                                      \
                           c.commentid, c.comment, c.userid,      \
-                                           c.createtime,         \
+                          c.createtime, c.edited_at,             \
+                          e.username as edituser,                \
                           u.username                             \
                           from                                   \
-                               comments as c,                    \
-                               users as u                        \
-                          where c.userid = u.userid and          \
+                               comments as c                     \
+                               left join users as u on c.userid = u.userid  \
+                               left join users as e on c.edited_by = e.userid \
+                          where                                  \
                                 c.deleted_at is null and         \
                                 c.paperid = ?                    \
                           order by c.createtime                  \

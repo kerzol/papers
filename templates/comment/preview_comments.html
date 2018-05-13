@@ -11,13 +11,12 @@
     <div class="cfooter clearfix">
 
       <div class="comment-info preview">
-        By:
         {% if c.userid == 1 %}
-        Stranger:
+        Stranger
         {% else %}
         <a href="/{{c.username|e}}">{{c.username}}</a>
         {% endif %}
-        <br> Date: <a href="#comment-{{c.commentid}}"> {{c.createtime | e}} </a>
+        at <a href="#comment-{{c.commentid}}"> {{c.createtime | e}} </a>
       </div>
 
     </div> <!-- /cfooter -->

@@ -5,7 +5,7 @@
 import os, re
 from papersite import app
 from papersite.db import (query_db, get_db, get_authors, get_domains,
-                          get_keywords, get_comments,
+                          get_keywords, get_comment, get_comments,
                           get_insert_keyword, get_insert_author,
                           get_insert_domain, liked_by, likes,
                           delete_comment, delete_paper,
@@ -25,6 +25,10 @@ from papersite.notifications import (new_paper_was_added,
 def is_internal_pdf(link):
     return re.match('^/static/memory/pdfs/(.*)\.[Pp][Dd][Ff]$', str(link))
 
+@app.template_filter('can_edit_comment')
+def can_edit_comment(commentid):
+    return can_delete_comment(commentid)
+
 @app.template_filter('can_delete_comment')
 def can_delete_comment(commentid):
     ## currently anonymous cannot delete any comments
@@ -34,6 +38,10 @@ def can_delete_comment(commentid):
     else:
         return is_super_admin(userid) or is_author_of_comment(userid, commentid)
 
+@app.template_filter('can_edit_paper')
+def can_edit_paper(paperid):
+    return can_delete_paper(paperid)
+   
 @app.template_filter('can_delete_paper')
 def can_delete_paper(paperid):
     ## currently anonymous cannot delete any comments
@@ -42,10 +50,6 @@ def can_delete_paper(paperid):
         return False
     else:
         return is_super_admin(userid) or is_author_of_paper(userid, paperid)
-
-@app.template_filter('can_edit_paper')
-def can_edit_paper(paperid):
-    return can_delete_paper(paperid)
 
 
 ### Delete comments, papers, etc
@@ -113,6 +117,46 @@ def onepaper(paperid, title = None):
                            keywords=keywords,
                            liked=liked,
                            liked_by=liked_by(paperid))
+
+@app.route('/comment/edit/<int:commentid>', methods=['GET','POST'])
+def edit_comment(commentid):
+    if not can_edit_comment(commentid):
+        return "<h1>It's forbidden, my dear</h1>", 403
+    error = None
+    oldcomment = get_comment(commentid)
+    if request.method == 'GET':
+        return render_template('comment/editcomment.html', 
+                               error=error,
+                               comment=oldcomment,
+        )
+    if request.method == 'POST':
+        con = get_db()
+        # soft delete old comment
+        delete_comment(oldcomment['commentid'])
+        # create a new comment with same creation date
+        # but add edited_by and edited_at info
+        with con:
+            con.execute('insert into comments \
+                         (comment, userid, paperid, createtime, edited_at, edited_by) \
+                         values (?, ?, ?, ?, datetime(), ?)',
+                        [
+                            request.form['comment'],
+                            oldcomment['userid'],
+                            oldcomment['paperid'],
+                            oldcomment['createtime'],
+                            get_user_id(),
+                        ])
+        # TODO: should we notify someone about comment edition ?
+        if user_authenticated(): 
+            flash('You successfully updated the comment')
+        # TODO: allows anonymous to update comments
+        last_c_id=query_db("SELECT last_insert_rowid() as lid",
+                           one=True)['lid']
+        return redirect(url_for('onepaper',
+                                paperid=oldcomment['paperid'],
+                                error=error)
+                        + "#comment-"
+                        + str(last_c_id))
 
 
 @app.route('/paper/<int:paperid>/<string:title>/add-comment',
@@ -249,11 +293,11 @@ def add_paper():
 
 
 ### Edit papers, comments etc
-###  TODO: we should store old revisions somewhere
 ###############################
                   ##################
             ############
 
+###  TODO: we should store old revisions somewhere            
 @app.route('/paper/edit/<int:paperid>', methods=['GET','POST'])
 def edit_paper(paperid):
     if not can_edit_paper(paperid):

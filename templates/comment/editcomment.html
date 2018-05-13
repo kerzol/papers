@@ -1,0 +1,208 @@
+<!-- TODO: currently it is a separate page. 
+     Better to to inside the main page, that contains comment.
+     But for this we should change our system for Edit/Preview rendreing.
+     Because now it uses a global js varaibles, and global html ids.
+-->
+{% extends "layout.html" %}
+{% block title %}Edit comment{% endblock %}
+{% block bigcontainerclass %}white{% endblock %}
+
+{% block body %}
+
+{% block scrpits %}
+<script>
+var CommentPreview = {
+  delay: 50,        // delay after keystroke before updating
+
+  preview: null,     // filled in by Init below
+  buffer: null,      // filled in by Init below
+
+  timeout: null,     // store setTimout id
+  mjRunning: false,  // true when MathJax is processing
+  oldText: null,     // used to check if an update is needed
+
+  //
+  //  Get the preview and buffer DIV's
+  //
+  Init: function () {
+//    this.preview = document.getElementById("MathPreview");
+//    this.buffer = document.getElementById("MathBuffer");
+    this.preview = document.getElementById("marked-mathjax-preview");
+    this.buffer = document.getElementById("marked-mathjax-preview-buffer");
+  },
+
+  //
+  //  Switch the buffer and preview, and display the right one.
+  //  (We use visibility:hidden rather than display:none since
+  //  the results of running MathJax are more accurate that way.)
+  //
+  SwapBuffers: function () {
+    var buffer = this.preview, preview = this.buffer;
+    this.buffer = buffer; this.preview = preview;
+    buffer.style.display = "none";
+    buffer.style.position = "absolute";
+    preview.style.position = ""; 
+    preview.style.display = "";
+  },
+
+  //
+  //  This gets called when a key is pressed in the textarea.
+  //  We check if there is already a pending update and clear it if so.
+  //  Then set up an update to occur after a small delay (so if more keys
+  //    are pressed, the update won't occur until after there has been 
+  //    a pause in the typing).
+  //  The callback function is set up below, after the Preview object is set up.
+  //
+  Update: function () {
+    if (this.timeout) {clearTimeout(this.timeout)}
+    this.timeout = setTimeout(this.callback,this.delay);
+  },
+
+  //
+  //  Creates the preview and runs MathJax on it.
+  //  If MathJax is already trying to render the code, return
+  //  If the text hasn't changed, return
+  //  Otherwise, indicate that MathJax is running, and start the
+  //    typesetting.  After it is done, call PreviewDone.
+  //  
+  CreatePreview: function () {
+    CommentPreview.timeout = null;
+    if (this.mjRunning) return;
+    var text = document.getElementById("marked-mathjax-input").value;
+    if (text === this.oldtext) return;
+    text = this.Escape(text);      //Escape tags before doing stuff
+    this.buffer.innerHTML = this.oldtext = text;
+    this.mjRunning = true;
+    MathJax.Hub.Queue(
+      ["Typeset",MathJax.Hub,this.buffer],
+      ["PreviewDone",this]
+    );
+  },
+
+  //
+  //  Indicate that MathJax is no longer running,
+  //  and swap the buffers to show the results.
+  //
+  PreviewDone: function () {
+    this.mjRunning = false;
+    text = this.buffer.innerHTML;
+    text = this.PartialDescape (text);
+    this.buffer.innerHTML = marked (text);
+    this.SwapBuffers();
+  },
+
+  Escape: function (html, encode) {
+    return html
+      .replace(!encode ? /&(?!#?\w+;)/g : /&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+     .replace(/'/g, '&#39;');
+  },
+
+  PartialDescape: function (html) {
+    var lines = html.split('\n');
+    var out = '';
+
+    // is true when we are 
+    // ```
+    //  inside a code block
+    // ```
+    var inside_code = false;
+    
+    for (var i = 0; i < lines.length; i++) {
+      // a hack to properly rendre the blockquotes
+      if (lines[i].startsWith('&gt;')) {
+        lines[i] = lines[i].replace(/&gt;/g, '>');
+      }
+
+      // rendrer properly stuff like this
+      // ```c
+      //  if (a > b)
+      // ```
+      if (inside_code) {
+        // inside the code we descape stuff
+        lines[i] = lines[i]
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&quot;/g, '"')
+          .replace(/&#39;/g, '\'');
+      }
+      if (lines[i].startsWith('```')) {
+        inside_code = ! inside_code;
+      }
+      out += lines[i] + '\n';
+    }
+    return out;    
+  }
+
+};
+
+//
+//  Cache a callback to the CreatePreview action
+//
+CommentPreview.callback = MathJax.Callback(["CreatePreview",
+    CommentPreview]);
+CommentPreview.callback.autoReset = true;  // make sure it can run more than once
+
+</script>
+{% endblock %}
+
+
+{% if error %}
+<p class=error><strong>Error:</strong> {{ error }} </p>
+{% endif %}
+
+<div class="edit-comment-block">
+    <form action="/comment/edit/{{comment.commentid}}"
+          method="post"
+          class="new-comment"
+          id="reply"
+          >
+
+        <h1>Edit the comment
+          {% if not user_authenticated() %} 
+           (anonymously) 
+          {% endif %}
+        </h1>
+      <div class="tab-frame tab-frame2">
+          <input type="radio" checked name="tab_" id="tab_1">
+          <label for="tab_1">Edit</label>
+
+          <input type="radio" name="tab_" id="tab_2">
+          <label for="tab_2">Preview</label>
+
+          <div class="tab">
+            <textarea id="marked-mathjax-input"
+                      onkeyup="CommentPreview.Update()"
+                      name="comment"
+                      "autofocus">{{comment.comment}}</textarea>
+            <div class="hint">Use
+              <a href="http://en.wikibooks.org/wiki/LaTeX/Mathematics">$\LaTeX$</a>
+              to type formulæ
+              and <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">markdown</a> to format text.
+            </div>
+          </div>
+          <div class="tab tp0">
+            <div class="preview" id="marked-mathjax-preview"></div>
+            <div class="preview" id="marked-mathjax-preview-buffer"
+                 style="display:none;
+                        position:absolute;
+                        top:0; left: 0"></div>
+          </div>
+      </div>
+
+      {% include "remark.html" %}
+
+      <div class="send">
+        <input class="btn" type="submit" value="Update comment"/>
+      </div>
+
+    </form>
+
+    <script>
+      CommentPreview.Init();
+      CommentPreview.Update();
+    </script>
+</div>
+{% endblock %}

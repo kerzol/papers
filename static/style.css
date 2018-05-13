@@ -189,25 +189,83 @@ hr {
     margin-right: auto;
     margin-top: 2em;
 }
-
 .paper .preview img {
     max-width: 50em;
 }
-
 .paper-info {
     text-align: left;
-    margin-bottom: 3em;
     overflow: hidden;
 }
-
-.paper-info .downloadbut {
-    margin-top: 1ex;
-    float: left;
+.comment-action {
+    float:left;
+    margin-top: 4em;
+    z-index: 1;
 }
+.paper-action a {
+    float: left;
+    font-size: large;
+    border-radius: 0.5ex;
+    border: solid 1px #73A0C5;
+    background-color: white;
+    color: black;
+
+    padding-top: 0.4ex;
+    padding-bottom: 0.4ex;
+    padding-left: 1ex;
+    padding-right: 1ex;
+    text-decoration: none;
+    text-align:center;
+    cursor: pointer;
+
+    position: relative;
+    top: 1.5ex;
+    z-index:20;
+    margin-right: 1em;
+}
+.paper-action a:hover {
+    background-color: #73A0FF;
+    color: white;
+}
+.paper-action.download a{
+    background-color: #73A0C5;
+    color: white;
+}
+.paper-action.download a:hover {
+    background-color: #73A0FF;
+}
+.paper-action.edit a:hover {
+    background-color: #57C59C;
+}
+.paper-action.delete a:hover {
+    background-color: #DE5139;
+}
+
+
 
 .float-right {
     float: right;
 }
+
+.discussbtn {
+    font-size: large;
+    border: solid 0px #73A0C5;
+    background-color: #73A0C5;
+    padding: 1ex;
+    padding-left: 3em;
+    text-decoration: none;
+    text-align:center;
+    color:white;
+    border-radius: 0 0 1ex 1ex;
+    background: linear-gradient(to bottom,  #FFFFFF 0%,#73A0C5 10%);
+    display: block;
+}
+
+.discussbtn:hover {
+    background-color: #73A0FF;
+    background: linear-gradient(to bottom,  #FFFFFF 0%,#73A0FF 10%);
+}
+
+
 .paper-primary-info {
     font-size: small;
     line-height: 1.5em;
@@ -247,28 +305,6 @@ hr {
 .blueline:nth-child(1) {
     display: none;
 }
-
-.discussbtn {
-    font-size: large;
-    border: solid 0px #73A0C5;
-    background-color: #73A0C5;
-    padding: 1ex;
-    padding-left: 3em;
-    text-decoration: none;
-    text-align:center;
-    color:white;
-    border-radius: 0 0 1ex 1ex;
-    background: linear-gradient(to bottom,  #FFFFFF 0%,#73A0C5 10%);
-    display: block;
-}
-
-.discussbtn:hover {
-    background-color: #73A0FF;
-    background: linear-gradient(to bottom,  #FFFFFF 0%,#73A0FF 10%);
-}
-
-
-
 
 .comment-block-preview {
     width: *;
@@ -321,18 +357,19 @@ hr {
     border-radius: 0.5ex;
     border: solid 1px #DDDDDD;
     position: relative;
-    top: 4.5em;
+    top: 5em;
     z-index: 1;
 }
 .comment-info.preview {
-    top: 2.5em;
+    margin-top: 3em;
+    top: 1.5em;
 }
-.reply {
+.comment-action {
     float:left;
     margin-top: 4em;
     z-index: 1;
 }
-.reply-btn {
+.comment-action a {
     float: right;
     font-size: small;
     width: 9em;
@@ -353,10 +390,17 @@ hr {
     position: relative;
     top: 1.5ex;
     z-index:20;
+    margin-right: 1em;
 }
-.reply-btn:hover {
+.comment-action a:hover {
     background-color: #73A0FF;
     color: white;
+}
+.comment-action.edit a:hover {
+    background-color: #57C59C;
+}
+.comment-action.delete a:hover {
+    background-color: #DE5139;
 }
 
 .cfooter {
@@ -379,7 +423,7 @@ hr {
 
 .new-comment textarea {
     width: 100%;
-    height: 19rem;
+    height: 17.66rem;
     border: none;
 }
 
@@ -468,7 +512,7 @@ hr {
     border-radius: 0.5ex;
 }
 .btn:hover {
-   background-color: #73A0FF;
+    background-color: #73A0FF;
 }
 .reddish-btn {
     border: solid 1px #CF685E;
@@ -485,6 +529,10 @@ hr {
     color:white;
     cursor:pointer;
     border-radius: 0.5ex;
+}
+.reddish-btn:edit {
+    background-color: #DE5139;
+    color: white;
 }
 .reddish-btn:hover {
     background-color: #DE5139;
@@ -753,76 +801,22 @@ hr {
     border-radius: 1ex;
     border: 0px solid #DDDDDD;
 }
-
-.delete-comment {
-    font-size: x-small;
-    font-weight: bold;
-    font-family: sans;
-    margin-right: 1em;
-}
-.delete-comment a {
-    color: black;
-}
-.delete-comment a:hover {
-    color: red;
+.edit-comment-block {
+    margin-top: 2em;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 50em;
 }
 
 .comment-block-preview .delete-comment {
     display: none;
 }
 
-.delete-paper {
-    font-size: x-small;
-    font-weight: bold;
-    font-family: sans;
-    float: right;
-    text-align: right;
-    margin-right: 1em;
-}
-.delete-paper a {
-    color: black;
-}
-.delete-paper a:hover {
-    color: red;
-}
-
-.edit-paper {
-    font-size: x-small;
-    font-weight: bold;
-    font-family: sans;
-    float: left;
-    text-align: left;
-    margin-right: 1em;
-    color: black;
-}
-.edit-paper a {
-    color: black;
-}
-.edit-paper a:hover {
-    color: blue;
-}
-
-
-
 /* css tabs
    Originalle written by llgruff
    From https://codepen.io/llgruff/pen/ZGBxOa
 */
 
-
-.discussion textarea {
-    width: 100%;
-    height: 19rem;
-    border: none;
-}
-
-.discussion .preview {
-    width: 100%;
-    min-height: 20rem;
-}
-.discussion .send {
-    margin-top: 0;
-}
 
 div.tab-frame input{
     display: none;
