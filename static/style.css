@@ -217,10 +217,10 @@ hr {
     text-align:center;
     cursor: pointer;
 
-    position: relative;
-    top: 1.5ex;
-    z-index:20;
     margin-right: 1em;
+    
+    margin-bottom: 0.7em;
+    margin-top: 0.3em;
 }
 .paper-action a:hover {
     background-color: #73A0FF;
