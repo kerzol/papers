@@ -1,32 +1,27 @@
 {% macro build_list(comments) %}
 <div class="comments">
   {% for c in comments %}
-  <div class="comment">
-
-    <h4>
-      {% if c.commentid | can_delete_comment  %}
-      <a title="Delete this comment"
-         class="reddish-btn delete-comment" href="/delete-comment/{{c.commentid}}">X</a>
-      {% endif %}
-
-      {% if c.userid == 1 %}
-          Stranger:
-      {% else %}
-        <a href="/{{c.username|e}}">
-          {{ c.username|e }}:</a>
-      {% endif %}
-        <a name="comment-{{c.commentid}}"></a>
-    </h4>
+  <div class="comment preview">
 
     <div class="cbody loading">{{c.comment|e}}</div>
 
     <div id="comment-source-{{c.commentid}}"
          style="display:none">{{c.comment|e}}</div>
-    
+
     <div class="cfooter clearfix">
-      <span class="datetime" style="float:right">
-        {{ c.createtime|e }} </span>
-    </div>
+
+      <div class="comment-info preview">
+        By:
+        {% if c.userid == 1 %}
+        Stranger:
+        {% else %}
+        <a href="/{{c.username|e}}">{{c.username}}</a>
+        {% endif %}
+        <br> Date: <a href="#comment-{{c.commentid}}"> {{c.createtime | e}} </a>
+      </div>
+
+    </div> <!-- /cfooter -->
+
   </div>
 
   {% endfor %}

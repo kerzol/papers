@@ -3,22 +3,7 @@
   {% for c in comments %}
   <div class="comment">
 
-    <h4>
-      {% if c.commentid | can_delete_comment  %}
-      <a title="Delete this comment"
-         onclick="return confirm('Delete this comment ?')"
-         class="reddish-btn delete-comment"
-         href="/delete-comment/{{c.commentid}}">X</a>
-      {% endif %}
-
-      {% if c.userid == 1 %}
-          Stranger:
-      {% else %}
-        <a href="/{{c.username|e}}">
-          {{ c.username|e }}:</a>
-      {% endif %}
-        <a name="comment-{{c.commentid}}"></a>
-    </h4>
+    <a name="comment-{{c.commentid}}"></a>
 
     <div class="cbody loading">{{c.comment|e}}</div>
 
@@ -26,13 +11,37 @@
          style="display:none">{{c.comment|e}}</div>
     
     <div class="cfooter clearfix">
-      <span class="datetime"> {{ c.createtime|e }} </span>
-      <a title="Quote and reply to this comment"
-         source-id="comment-source-{{c.commentid}}"
-         class="reply-btn"
-         href="#reply">Reply</a>
-    </div>
-    <hr class="comment-end"/>
+
+      <div class="reply">
+        <a title="Quote and reply to this comment"
+           source-id="comment-source-{{c.commentid}}"
+           class="reply-btn"
+           href="#reply">Reply</a>
+      </div>
+      <div class="comment-info">
+        By:
+        {% if c.userid == 1 %}
+          Stranger:
+        {% else %}
+          <a href="/{{c.username|e}}">{{c.username}}</a>
+        {% endif %}
+        <br> Date: <a href="#comment-{{c.commentid}}"> {{c.createtime | e}} </a>
+        {% if c.edited_at  %}
+        <br> Edited at: {{c.edited_at | e}}
+        <br> Edited by: <a href="/{{c.edituser | e}}">{{c.edituser}}</a>
+        {% endif %}
+
+        {% if c.commentid | can_delete_comment  %}
+        <div class="delete-comment">
+          <a title="Delete this comment"
+             onclick="return confirm('Delete this comment ?')"
+             href="/delete-comment/{{c.commentid}}">Delete</a>
+        </div>
+        {% endif %}
+      </div>
+
+    </div> <!-- /cfooter -->
+
   </div>
 
   {% endfor %}

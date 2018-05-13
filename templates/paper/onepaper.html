@@ -104,7 +104,7 @@
                 <a href="/{{entry.username | e}}">{{entry.username}}</a>
                 <br> Upload date: {{entry.createtime | e}}
                 {% if entry.edited_at  %}
-                <br>  Edited at: {{entry.edited_at | e}}
+                <br> Edited at: {{entry.edited_at | e}}
                 <br> Edited by: <a href="/{{entry.edituser | e}}">{{entry.edituser}}</a>
                 {% endif %}
                 <div>
@@ -113,7 +113,7 @@
                   <div class="edit-paper">
                     <a title="Edit the paper"
                        href="/paper/edit/{{entry.paperid}}">
-                      edit the paper </a>
+                      Edit paper </a>
                   </div>
                   {% endif %}
                   {% if entry.paperid | can_delete_paper  %}
@@ -121,7 +121,7 @@
                     <a title="Delete the paper"
                        onclick="return confirm('You really want to delete the paper ?')"
                        href="/paper/delete/{{entry.paperid}}">
-                      remove the paper </a>
+                      Remove paper</a>
                   </div>
                   {% endif %}
                 </div>
@@ -130,8 +130,6 @@
           </div>
 
         </div> <!-- /paper -->
-
-        <hr style="max-width:60em"/>
 
         <div class="comment-block">
           <h3> Comments: </h3>
