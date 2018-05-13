@@ -685,6 +685,8 @@ hr {
     font-size: 3em;
     text-align: center;
     text-decoration: none;
+    margin-top: -4rem;
+    margin-bottom: 1rem;
     display: block;
 }
 
