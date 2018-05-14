@@ -13,6 +13,8 @@
   / /                                                                        \ \
  --------------------------------------------------------------------------------
 
+DEPLOY COMME IL FAUT: automatically change id at the end of style.css
+
 ★ Allow anonymous with a token upgrade to a registered user
 ★ internal notifications
 ★ follow, unfollow buttons
@@ -37,3 +39,5 @@
 > twitter, facebook, linkedin, openid, oauth integrations
 > userpics
 > cache
+
+
