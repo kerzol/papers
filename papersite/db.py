@@ -172,6 +172,16 @@ def liked_by(paperid):
         l.paperid=?",
         [paperid])
 
+def get_notifs(userid = 1, limit = 10):
+    return query_db(
+        "select *                  \
+         from notifs as n          \
+         where n.userid = ?        \
+         order by createtime desc  \
+         limit ?                   \
+        ",
+        [userid, limit]);
+
 def get_uploader(paperid):
     return query_db(
     "select u.*                     \

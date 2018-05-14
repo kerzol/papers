@@ -13,31 +13,28 @@
   / /                                                                        \ \
  --------------------------------------------------------------------------------
 
-DEPLOY COMME IL FAUT: automatically change id at the end of style.css
+DEPLOY COMME IL FAUT: automatically change id at the end of style.css?id
 
 ★ Allow anonymous with a token upgrade to a registered user
-★ internal notifications
-★ follow, unfollow buttons
-★ history of papers/comments edit revisions
-★ notify users when comments was changed
-★ notify users when paper info was changed
+★ Internal notifications
+★ Follow, unfollow buttons
+★ History of papers/comments edit revisions
+★ Notify users when comments was changed
+★ Notify users when paper info was changed
 
-▽ show history of edits
-▽ take info about paper from google scholar
-▽ mark posts as community wiki, when more than one user can edit
-▽ mobile version
+▽ Take info about paper from google scholar
+▽ Mark posts as community wiki, when more than one user can edit
+▽ Mobile version
 
-▪ captcha or smth againsth spam
+▪ Captcha or smth againsth spam
 
-▽ search improvements
-▽ private flows
-▽ auto first page, recommendations (Machine learning?)
-▽ arxiv/hal/google scholar integration
+▽ Search improvements
+▽ Private flows
+▽ Auto first page, recommendations (Machine learning?)
+▽ Arxiv/hal/google scholar integration
 
-✦ write a new paper directly using wiki-like editor.
-
-> twitter, facebook, linkedin, openid, oauth integrations
-> userpics
-> cache
+✦ Twitter, Facebook, Linkedin, Openid, Oauth integrations
+✦ Userpics
+✦ Cache
 
 

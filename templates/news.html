@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block title %}What's new? – {% endblock %}
+{% block bigcontainerclass %}white{% endblock %}
+{% block body %}
+
+
+<h1 class="center">Last 10 days</h1>
+
+<div class="notif-container">
+
+  {% for n in notifs %}
+    {% if n.type == 'paper' %}
+        <div class="right-notif-block notif-block clearfix">
+           <a href="{{n.link}}"
+              class="notif">
+             <div class="info">
+               New Paper — {{ n.createtime | short_datetime }}
+             </div>
+             <div class="text">
+               {{n.text}}
+               <div class="uploaded-by"> Uploaded by : {{n.username}} </div>
+             </div>
+           </a>
+         </div>
+    {% else %}
+         <div class="left-notif-block notif-block clearfix">
+           <a href="{{n.link}}"
+              class="notif">
+             <div class="info">
+               New comment — {{ n.createtime | short_datetime }}
+             </div>
+             <div class="text">
+               <div class="cbody loading">{{n.text}}</div>
+               <div class="uploaded-by"> Uploaded by : {{n.username}} </div>
+                                                                        
+             </div>
+           </a>
+         </div>
+    {% endif %}
+    
+  {% endfor %}
+</div>
+
+<h1 class="center"> ... </h1>
+
+{% endblock %}
+

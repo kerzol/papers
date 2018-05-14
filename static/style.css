@@ -475,7 +475,7 @@ hr {
 }
 
 .addarticleform {
-   max-width: 35em;
+    max-width: 35em;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 1em;
@@ -979,10 +979,11 @@ p {
     padding-bottom: 1.4ex;
     z-index: 10;
     border-radius: 1ex;
+    border: 1px solid #eeeeee;
     text-decoration: none;
     background-color: #538fbe;
     background-image: linear-gradient(to bottom, rgb(73,132,180) 0%, rgb(97,155,203) 100%);
-    box-shadow: 0px 2px 0px #2b638f, 0px 3px 10px rgba(0,0,0,.4);
+    box-shadow: 0px 3px 10px rgba(0,0,0,.4);
     transition: all .2s ease-in-out;
 }
 .news img {
@@ -995,7 +996,7 @@ p {
     outline: none;
     transform: translate(0, 2px);
     background-image: linear-gradient(bottom, rgb(88,154,204) 0%, rgb(90,150,199) 100%);
-    box-shadow: 0px 2px 0px #2b638f, 0px 1px 6px rgba(0,0,0,.4), inset 0px 1px 0px rgba(255,255,255,.3), inset 0px 0px 3px rgba(255,255,255,.5);
+    box-shadow: 0px 1px 6px rgba(0,0,0,.4), inset 0px 1px 0px rgba(255,255,255,.3), inset 0px 0px 3px rgba(255,255,255,.5);
 }
 .news-badge {
     background: #B8383B;
@@ -1013,3 +1014,108 @@ p {
     border: 1px solid #EEE;
 }
 
+/* TODO: make it responsive */
+.notif-container {
+    max-width: 35em;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    background: linear-gradient(to right, 
+	                        transparent 0%, 
+	                        transparent calc(50% - 2px), 
+	                        #73A0C5 calc(50% - 1px),
+                                transparent calc(50% - 0.9px),
+                                transparent calc(50% + 0.9px),
+	                        #73A0C5 calc(50% + 1px), 
+	                        transparent calc(50% + 2px), 
+	                        transparent 100%);
+}
+.notif-block {
+    width:100%;
+}
+.left-notif-block a.notif {
+    float: left;
+}
+.left-notif-block .notif .info {
+
+}
+.right-notif-block a.notif {
+    float: right;
+}
+.right-notif-block .notif .info {
+    text-align: left;
+}
+.notif-block .notif {
+    display: block;
+    width: 55%;
+    margin-top: 2.5em;
+    border-radius: 0.5ex;
+    border: double 3px #A4C6E2;
+    text-decoration: none;
+    color: black;
+    background-color: #FFFCFA;
+    overflow: hidden;
+}
+.notif .info {
+    font-size: 0.7em;
+    font-weight: bold;
+    border: 1px dotted #FFF6EB;
+    background-color: #FFF6EB;
+    padding: 2ex;
+    width: calc(100%-4ex);
+}
+
+.right-notif-block .notif {
+    border-radius: 2ex 2ex 2ex 2ex;
+}
+
+.left-notif-block .notif {
+    border-radius: 2ex 2ex 2ex 2ex;
+}
+.notif-block .notif:visited {
+    color: #aaa;
+    background-color: white;
+    border-color: #bbb;
+}
+.notif-block :visited .info {
+    border-color: white;
+    background-color: white;
+}
+
+.notif-block .notif:hover,
+.notif-block .notif:focus{
+    outline: 0;
+    border-color: #3485c7;
+    background-color: #FFF6EB;
+}
+.notif-block :hover .info,
+.notif-block :focus .info {
+    background-color: #F8E7D3;
+    border-bottom: 1px dotted black;
+}
+.notif .text {
+    float: left;
+    padding: 0.7em;
+    max-height: 4em;
+}
+.notif .text .uploaded-by {
+    font-size: small;
+    
+}
+
+@media screen and (max-width: 768px) {
+   .notif-container {
+      background: none;
+   }
+   .notif-block a.notif {
+       width: 90%;
+   }
+   .right-notif-block a.notif {
+      float: none;
+   }
+   .left-notif-block a.notif {
+       float: none;
+       direction: ltr;
+   }
+}

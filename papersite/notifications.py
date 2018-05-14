@@ -2,16 +2,17 @@
 ###############################
                   ##################
             ############
-
+from datetime import datetime
 from papersite import app            
 import difflib
 from papersite.email import send_mail
 from papersite.db import (query_db, get_paper_w_uploader,
+                          get_notifs,
                           get_authors, get_comment, get_uploader)
 from papersite.user import (get_user_id,  user_authenticated,
                             ANONYMOUS)
 from flask import url_for
-from flask import session, flash, redirect, url_for
+from flask import session, flash, redirect, url_for, render_template
 
 ## TODO: store notifs in db
 
@@ -130,9 +131,52 @@ Papers' team"
     # todo save message to notifs table
     send_mail(u['email'], msg, 'New paper: %s' % (paper['title']))
 
+
+
+
+
+### Frontend stuff
+###############################
+
+@app.template_filter('short_datetime')
+def short_format_datetime(value):
+    datetime_object = datetime.strptime(value, ("%Y-%m-%d %H:%M:%S"))
+    return datetime_object.strftime('%A %d %b - %H:%M')
+
 @app.route('/news')
-def last_10_updates():
-  return 'Last 10 updates will eventually appear here. New papers, new comments, recent discussion diffs. <br> \
- <video controls autoplay> \
-  <source src="https://my.mixtape.moe/jiasdd.webm"> \
-</video>'
+def last_week_updates():
+
+  # example link
+  # https://papers-gamma.link/paper/52/#comment-1055
+
+  ## Every notif is a tuple (link, text, createtime, username, type)
+  ## TODO: use notifs table
+  papers_n_comments = query_db(
+         "select '/paper/' || p.paperid as link,   \
+                  p.title as text,            \
+                  p.createtime as createtime, \
+                  u.username as username,     \
+                  'paper' as type             \
+           from papers as p                                                 \
+                left join users as u on p.userid = u.userid                 \
+           where deleted_at is null                                         \
+                 and p.createtime > date('now','-10 days')                     \
+          UNION \
+          select                                                                 \
+                 '/paper/' || c.paperid || '/#comment-' || c.commentid as link,  \
+                 c.comment as text,                   \
+                 c.createtime as createtime,            \
+                 u.username as username,                \
+                 'comment' as type                      \
+                 from                                   \
+                      comments as c                     \
+                      left join users as u on c.userid = u.userid  \
+                 where                                       \
+                     c.deleted_at is null and                \
+                     c.createtime > date('now','-10 days')    \
+          \
+          order by createtime desc \
+        ")
+
+  return render_template('news.html', 
+                         notifs=papers_n_comments)

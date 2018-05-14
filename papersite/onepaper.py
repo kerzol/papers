@@ -427,7 +427,3 @@ def unlike_paper(paperid,title):
                      paperid = ? and userid=?',
                     [paperid, get_user_id()])
     return str(likes(paperid))
-
-
-
-
