@@ -20,7 +20,8 @@
 ★ notify users when comments was changed
 ★ notify users when paper info was changed
 
-★ take info about paper from google scholar
+▽ show history of edits
+▽ take info about paper from google scholar
 ▽ mark posts as community wiki, when more than one user can edit
 ▽ mobile version
 
@@ -35,5 +36,4 @@
 
 > twitter, facebook, linkedin, openid, oauth integrations
 > userpics
-> cache, captcha, anonyomous posting/comments
-> add deleted_by 
+> cache
