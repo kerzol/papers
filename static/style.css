@@ -348,7 +348,7 @@ hr {
     margin-right: 1em;
 }
 .comment-info {
-    font-size: small;
+    font-size: 0.7em;
     line-height: 1.5em;
     max-width: 30em;
     float: right;
@@ -357,7 +357,7 @@ hr {
     border-radius: 0.5ex;
     border: solid 1px #DDDDDD;
     position: relative;
-    top: 5em;
+    top: 4rem;
     z-index: 1;
 }
 .comment-info.preview {
