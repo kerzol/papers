@@ -13,12 +13,14 @@
   / /                                                                        \ \
  --------------------------------------------------------------------------------
 
+★ Allow anonymous with a token upgrade to a registered user
 ★ internal notifications
 ★ follow, unfollow buttons
 ★ history of papers/comments edit revisions
 ★ notify users when comments was changed
 ★ notify users when paper info was changed
 
+★ take info about paper from google scholar
 ▽ mark posts as community wiki, when more than one user can edit
 ▽ mobile version
 

@@ -357,7 +357,7 @@ hr {
     border-radius: 0.5ex;
     border: solid 1px #DDDDDD;
     position: relative;
-    top: 4rem;
+    top: 4.5rem;
     z-index: 1;
 }
 .comment-info.preview {
