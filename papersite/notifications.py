@@ -103,7 +103,7 @@ def new_paper_was_added(paperid):
   paper = get_paper_w_uploader(paperid)
   authors = ", ".join([a['fullname'] for a in get_authors(paperid)])
   template = "Hello %s,\n\n\
-a new paper was added to Papersˠ. The paper may interests you.\n\
+a new paper was added to Papersˠ. The paper may interest you.\n\
 Title:    %s\n\
 Authors:  %s\n\
 Uploader: %s\n\
