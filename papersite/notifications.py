@@ -56,10 +56,10 @@ def commentators(paperid):
 ## This behavior will change in the near future:
 ## user will follow other user, author, etc.
 ##
-## TODO add maybe commented, discussed papers?
+## TODO add maybe commented papers?
 def users_to_notify_about_new_paper(paperid):
-  return query_db(
-    "select users.*                         \
+  users = query_db(
+    "select distinct users.*                \
     from users as users,                    \
          likes as likes,                    \
          papers as papers_by_uploader,      \
@@ -72,6 +72,15 @@ def users_to_notify_about_new_paper(paperid):
          uploaders.userid = newpapers.userid   and  \
          newpapers.paperid = ?",
     [paperid])
+  ## We notify union of all these users
+  ## but not the current_user (who make the action)
+  ## and ANONYMOUS
+  current_user_id = get_user_id()
+  users = list(
+    {v['userid']:v for v in users
+     if v['userid'] != current_user_id and
+        v['userid'] != ANONYMOUS}.values())
+  return users
 
 def comment_was_added(paperid, commentid):
   # TODO: transform latex to smth more human readable
@@ -104,8 +113,8 @@ def new_paper_was_added(paperid):
   authors = ", ".join([a['fullname'] for a in get_authors(paperid)])
   template = "Hello %s,\n\n\
 a new paper was added to Papersˠ. The paper may interest you.\n\
-Title:    %s\n\
-Authors:  %s\n\
+Title: %s\n\
+Authors: %s\n\
 Uploader: %s\n\
 Url: %s\n\n\
 Have a good day,\n\
