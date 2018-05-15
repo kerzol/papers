@@ -121,7 +121,7 @@ def catalog():
         q = '%' + request.args.get('q') + '%'
         papers=query_db("select * from papers                      \
                          where                                     \
-                               p.deleted_at is null and            \
+                               deleted_at is null and              \
                                lower(title) like  lower(?)         \
                          order by title",[q])
     else: 
