@@ -1112,7 +1112,6 @@ p {
     padding: 0.7em;
     height: 4em;
     position: relative;
-    width: 100%;
 }
 .notif .text:after {
     content: "";
@@ -1123,9 +1122,15 @@ p {
     background: linear-gradient(transparent, #FFFCFA 90%);
     margin-left: -0.7em;
 }
-.notif:visited .text:after,
-.notif:visited .text:after
-{
+
+/* 
+FIXME:?
+When we set linear-gradient to background,
+actually css changes background-image.
+But, changing the background-image is consider to be a security flaw.
+See more here: https://stackoverflow.com/questions/14202856/background-image-for-visited-links
+*/
+.notif:visited .text:after {
     background: linear-gradient(transparent, white 90%);
 }
 .notif:focus:visited .text:after,
