@@ -1038,7 +1038,6 @@ p {
     float: left;
 }
 .left-notif-block .notif .info {
-
 }
 .right-notif-block a.notif {
     float: right;
@@ -1079,8 +1078,8 @@ p {
     border-color: #bbb;
 }
 .notif-block :visited .info {
-    border-color: white;
-    background-color: white;
+    border-color: #f7f7f7;
+    background-color: #f7f7f7;
 }
 
 .notif-block .notif:hover,
@@ -1094,11 +1093,47 @@ p {
     background-color: #F8E7D3;
     border-bottom: 1px dotted black;
 }
+
+.notif-block .notif:hover:visited,
+.notif-block .notif:focus:visited{
+    outline: 0;
+    border-color: #444;
+    background-color: #fefefe;
+    color: black;
+}
+.notif-block :hover:visited .info,
+.notif-block :focus:visited .info {
+    background-color: #f4f4f4;
+    border-bottom: 1px dotted black;
+    color: black;
+}
 .notif .text {
     float: left;
     padding: 0.7em;
-    max-height: 4em;
+    height: 4em;
+    position: relative;
+    width: 100%;
 }
+.notif .text:after {
+    content: "";
+    position:absolute;
+    width:100%;
+    height: 2em;
+    top: 3.5em;
+    background: linear-gradient(transparent, #FFFCFA 90%);
+    margin-left: -0.7em;
+}
+.notif:visited .text:after,
+.notif:visited .text:after
+{
+    background: linear-gradient(transparent, white 90%);
+}
+.notif:focus:visited .text:after,
+.notif:hover:visited .text:after
+{
+    background: linear-gradient(transparent, #fefefe 90%);
+}
+
 .notif .text .uploaded-by {
     font-size: small;
     
