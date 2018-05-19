@@ -1122,6 +1122,12 @@ p {
     background: linear-gradient(transparent, #FFFCFA 90%);
     margin-left: -0.7em;
 }
+.notif:focus .text:after,
+.notif:hover .text:after
+{
+    background: linear-gradient(transparent, #FFF6EB 90%);
+}
+
 
 /* 
 FIXME:?
