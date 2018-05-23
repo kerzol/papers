@@ -939,6 +939,8 @@ p {
     color: rgba(0, 0, 0, 0) !important;
 /*    animation: slidein 7s linear 1s infinite running; */
     animation: spin 7s linear 1s infinite running;
+    margin-top: 0.3em;
+    margin-bottom: 1.3em;
 }
 .loading > * {
     opacity: 0 !important;
