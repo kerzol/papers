@@ -302,12 +302,12 @@ def edit_paper(paperid):
     if not can_edit_paper(paperid):
         return "<h1>It's forbidden, my dear</h1>", 403
     error = None
+    paper = query_db("select *     \
+                     from papers   \
+                     where paperid = ?",
+    [paperid], one=True)
     
     if request.method == 'GET':
-        paper = query_db("select *     \
-                         from papers   \
-                         where paperid = ?",
-            [paperid], one=True)
         request.form.title = paper['title']
         request.form.authors = ", ".join([x['fullname'] for x in get_authors(paperid)])
         request.form.domains = ", ".join([x['domainname'] for x in get_domains(paperid)])
@@ -377,8 +377,19 @@ def edit_paper(paperid):
               ## in this case we don't store a full paper, we use the url instead
               if request.form['url'] != "":
                   if paper_file:
+                      # a file was just uploaded, we already took the first page. It is a fair use.
+                      # We delete the file
                       os.remove(ppdf)
-                  # TODO: remove the existing file ?
+                  else:
+                      # The following magick will happens...
+                      # we test if a link is to un existing papers,
+                      link = paper['getlink']
+                      if (is_internal_pdf(link)):
+                          filename_pdf = link.replace('/static/memory/pdfs/', '')
+                          ppdf = os.path.join(app.config['UPLOAD_FOLDER'],filename_pdf)
+                          os.remove(ppdf)
+                      # here we will delete file that was already uploaded some time ago
+                      # but now was remplaced by un URL.
                   con.execute("update papers set getlink = ?             \
                                where paperid=?",
                               [request.form['url'], paperid])
