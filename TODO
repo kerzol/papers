@@ -15,10 +15,15 @@
 
 DEPLOY COMME IL FAUT: automatically change id at the end of style.css?id
 
-★ Allow anonymous with a token upgrade to a registered user
-★ Internal notifications
-★ Follow, unfollow buttons
-★ History of papers/comments edit revisions
+★ User specific tags
+★ Group accounts (to organize reading groups)
+★ Local view based or reputation-based moderators
+
+| Allow anonymous with a token upgrade to a registered user
+| Internal notifications
+| Follow, unfollow buttons
+| History of papers/comments edit revisions
+
 ★ Notify users when comments was changed
 ★ Notify users when paper info was changed
 
@@ -37,4 +42,4 @@ DEPLOY COMME IL FAUT: automatically change id at the end of style.css?id
 ✦ Userpics
 ✦ Cache
 
-
+★ Large "Terms of use" and "privacy policy"

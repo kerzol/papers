@@ -750,6 +750,7 @@ hr {
 
 .faq {
     margin: 2em;
+    max-width: 40em;
 }
 
 .faq dt {
