@@ -488,6 +488,10 @@ hr {
     width: 30em;
 }
 
+.addarticleform input[type=text][name=url] {
+    width: 100%;
+}
+
 .addarticleform input[type=file] {
     width: 30em;
     margin-bottom: 1ex;

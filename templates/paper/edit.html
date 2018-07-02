@@ -120,28 +120,28 @@ $(function() {
       <input id=title type=text name=title autofocus
              required
              value="{{ request.form.title|e }}">
-      <br/>
-
-      <label for=domains> Domain(s): </label>
-      <input id=domains type=text name=domains
-             required
-             value="{{ request.form.domains|e }}"
-             />
-      <br/>
-
-      <label for=keywords> Tags: </label>
-      <input id=keywords type=text name=keywords
-             required
-             value="{{ request.form.keywords|e }}"
-             list="domains"/>
-      <br/>
+      <br>
 
       <label for=authors> Authors: </label>
       <input id=authors type=text name=authors
              required
              placeholder="author1, author2, etc"
              value="{{ request.form.authors|e }}">
-      <br/>
+      <br>
+
+      <label for=domains> Domains: </label>
+      <input id=domains type=text name=domains
+             required
+             value="{{ request.form.domains|e }}"
+             />
+      <br>
+
+      <label for=keywords> Tags: </label>
+      <input id=keywords type=text name=keywords
+             required
+             value="{{ request.form.keywords|e }}"
+             list="domains"/>
+      <br>
 
       <label for=pdf> PDF: </label>
       <input id=pdf type=file name=pdf accept="application/pdf">

@@ -9,7 +9,7 @@ from papersite.db import (query_db, get_db, get_authors, get_domains,
                           get_insert_keyword, get_insert_author,
                           get_insert_domain, liked_by, likes,
                           delete_comment, delete_paper,
-                          get_paper_w_uploader
+                          get_paper_w_uploader, histore_paper_info
 )
 from papersite.user import (get_user_id, is_super_admin, is_author_of_paper,
                             is_author_of_comment, user_authenticated, ANONYMOUS)
@@ -41,6 +41,19 @@ def can_delete_comment(commentid):
 @app.template_filter('can_edit_paper')
 def can_edit_paper(paperid):
     return can_delete_paper(paperid)
+
+@app.template_filter('can_meta_edit_paper')
+def can_meta_edit_paper(paperid):
+    ## currently any registered user can edit meta information of any paper.
+    ## should we make a moderation system or
+    ## the system for local git-like views of PG? Smth like that:
+    ## 1) User changes meta information. It affects only her own view.
+    ## 2) User submits changes to global view.
+    ## 3) Other members approve it.
+    userid = get_user_id()
+    if (userid == ANONYMOUS):
+        return False
+    return True
    
 @app.template_filter('can_delete_paper')
 def can_delete_paper(paperid):
@@ -297,6 +310,82 @@ def add_paper():
             ############
 
 ###  TODO: we should store old revisions somewhere            
+@app.route('/paper/meta-edit/<int:paperid>', methods=['GET','POST'])
+def edit_paper_meta_information(paperid):
+    ### edit Title, authors, tags and domains lists
+    if not can_meta_edit_paper(paperid):
+        return "<h1>It's forbidden fro you, my sweetie.</h1>", 403
+    error = None
+    paper = query_db("select *     \
+                     from papers   \
+                     where paperid = ?",
+    [paperid], one=True)
+    
+    if request.method == 'GET':
+        request.form.title = paper['title']
+        request.form.authors = ", ".join([x['fullname'] for x in get_authors(paperid)])
+        request.form.domains = ", ".join([x['domainname'] for x in get_domains(paperid)])
+        request.form.keywords= ", ".join([x['keyword'] for x in get_keywords(paperid)])
+    
+    if request.method == 'POST':
+        histore_paper_info(paper)
+        if request.form['title'] == "":
+            error = 'Please add a title'
+        elif request.form['domains'] == "":
+            error = 'Please specify at least one domain'
+        elif request.form['authors'] == "":
+            error = 'Please add some authors'
+        elif request.form['keywords'] == "":
+            error = 'Please add some keywords'
+        else:
+            con = get_db()
+            with con:
+              con.execute('update papers set title = ?, edited_by = ?, \
+                                             edited_at = datetime()    \
+                           where paperid = ?',
+                             [request.form['title'], get_user_id(), paperid])
+              authors_ids = map(get_insert_author,
+                                parse_list(request.form['authors']))
+              con.execute('delete from papers_authors where paperid = ?',
+                          [paperid])
+              for authorid in authors_ids:
+                  con.execute('insert into papers_authors             \
+                              (paperid, authorid)                     \
+                              values(?,?)',[paperid, authorid])
+
+              domains_ids = map(get_insert_domain,
+                               parse_list(request.form['domains']))
+              con.execute('delete from papers_domains where paperid = ?',
+                          [paperid])
+              for domainid in domains_ids:
+                  con.execute('insert into papers_domains             \
+                               (paperid, domainid)                    \
+                               values(?,?)',[paperid, domainid])
+
+              keywords_ids = map(get_insert_keyword,
+                               parse_list(request.form['keywords']))
+              con.execute('delete from papers_keywords where paperid = ?',
+                          [paperid])
+              for keywordid in keywords_ids:
+                  con.execute('insert into papers_keywords            \
+                            (paperid, keywordid)                      \
+                            values(?,?)',[paperid, keywordid])
+
+              ## TODO: notify some users by email about changes
+              
+              flash('You successfully modified the paper')
+              return redirect(url_for('onepaper',
+                                    paperid=paperid,
+                                    title=request.form['title']))
+    return render_template('paper/meta-edit.html', 
+                           error=error,
+                           paperid=paperid,
+                           domains=query_db ("select * from domains"),
+                           keywords=query_db ("select * from keywords"),
+                           authors=query_db ("select * from authors"))
+            
+
+###  TODO: we should store old revisions somewhere            
 @app.route('/paper/edit/<int:paperid>', methods=['GET','POST'])
 def edit_paper(paperid):
     if not can_edit_paper(paperid):
@@ -316,6 +405,7 @@ def edit_paper(paperid):
             request.form.url = paper['getlink']
     
     if request.method == 'POST':
+        histore_paper_info(paper)
         paper_file = request.files['pdf']
         if paper_file and not allowed_file(paper_file.filename):
             error = 'Please choose a pdf file'

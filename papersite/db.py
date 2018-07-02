@@ -199,3 +199,31 @@ def get_paper_w_uploader(paperid):
                                 p.userid   = u.userid   and      \
                                 p.paperid = ?",
                    [paperid], one=True)
+
+def histore_paper_info(paper):
+    con = get_db()
+    with con:
+        paperid = paper['paperid']
+        authors = ', '.join([a['fullname'] for a in get_authors(paperid)])
+        domains = ', '.join([d['domainname'] for d in get_domains(paperid)])
+        tags = ', '.join([k['keyword'] for k in get_keywords(paperid)])
+        con.execute('insert into papers_history (paperid,     \
+                                                 old_getlink, \
+                                                 old_title,   \
+                                                 old_authors, \
+                                                 old_domains, \
+                                                 old_tags,    \
+                                                 old_edited_by, \
+                                                 old_edited_at  \
+                                                )               \
+                                       values   (?, ?, ?, ?, ?, ?, ?, ?)',
+                    [paper['paperid'],
+                     paper['getlink'],
+                     paper['title'],
+                     authors,
+                     domains,
+                     tags,
+                     paper['edited_by'],
+                     paper['edited_at']
+                    ]
+        )

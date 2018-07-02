@@ -87,7 +87,7 @@ $(function() {
 
 {% endblock %}
 
-{% block title %}Add new paper – {% endblock %}
+{% block title %}Edit meta-information — {% endblock %}
 {% block body %}
 
 
@@ -95,27 +95,25 @@ $(function() {
      <div style="margin-left:auto; margin-right:auto; max-width:37em">
       <p>
         Hello stranger, <br><br>
-        if you want to be a recognized user, you should
+        currently only registered users can edit paper meta-information.
+        If you want to be one of them you should
         <a href="/login">login</a> or <a href="/register">register</a>.
-        Otherwise you may upload a paper anonymously.
-        <br>
         <br>
       </p>
      </div>
     {% endif %}
 
-  <form action="/paper/add" 
+  <form action="/paper/meta-edit/{{paperid}}" 
         method="post" 
-        class="addarticleform"
-        enctype="multipart/form-data">
+        class="addarticleform">
     {% if error %}
     <p class=error><strong>Error:</strong> {{ error }}
     {% endif %}
 
-    <h1>Add a paper</h1>
+    <h1>Edit paper meta-information</h1>
     
     <div class=right>
-
+      
       <label for=title> Title: </label>
       <input id=title type=text name=title autofocus
              required
@@ -128,7 +126,6 @@ $(function() {
              placeholder="author1, author2, etc"
              value="{{ request.form.authors|e }}">
       <br>
-
 
       <label for=domains> Domains: </label>
       <input id=domains type=text name=domains
@@ -144,29 +141,11 @@ $(function() {
              list="domains"/>
       <br>
 
-      <label for=pdf> PDF: </label>
-      <input id=pdf type=file name=pdf accept="application/pdf">
-
-      {% include "remark.html" %}
-
-      <div class="url">
-        In some cases, you might want to specify an optional URL
-        associated with the paper. If the following field is not empty
-        we'll save only the first page of the document, and the paper
-        hyperlink will lead to the URL, specified here:
-        <input id=url
-               type=text name=url placeholder="http://example.com/paper.pdf"
-               value="{{ request.form.url|e
-        }}">
-      </div>
-
-
     </div>
-
 
     
     <div class="send">
-      <input class=btn type=submit value="Add the paper"/>
+      <input class=btn type=submit value="Update meta-information"/>
     </div>
 
   </form>

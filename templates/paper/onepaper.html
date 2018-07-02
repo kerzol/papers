@@ -63,14 +63,25 @@
               </a>
               {% endif %}
             </div>
-            
-            {% if entry.paperid | can_edit_paper  %}
-            <div class="paper-action edit">
-              <a title="Edit the paper"
-                 href="/paper/edit/{{entry.paperid}}">
-                Edit paper </a>
-            </div>
+
+
+            {# "Edit Paper" includes "meta_edit_paper" #}
+            {% if entry.paperid | can_meta_edit_paper  %}
+              {% if entry.paperid | can_edit_paper  %}
+                <div class="paper-action edit">
+                  <a title="Edit the paper"
+                     href="/paper/edit/{{entry.paperid}}">
+                    Edit paper </a>
+                </div>
+              {% else %}
+                 <div class="paper-action edit">
+                   <a title="Modify title, tags, domains and authors"
+                      href="/paper/meta-edit/{{entry.paperid}}">
+                     Edit meta-information </a>
+                 </div>
+              {% endif %}
             {% endif %}
+            
             {% if entry.paperid | can_delete_paper  %}
             <div class="paper-action delete">
               <a title="Delete the paper"

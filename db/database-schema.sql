@@ -178,5 +178,20 @@ ALTER TABLE comments
  CREATE INDEX c_edited_by ON comments(edited_by);
 
 
+create table papers_history (
+  paperid INTEGER,
+  old_getlink TEXT,
+  old_title TEXT,
+  old_authors TEXT, -- separated by ,
+  old_domains TEXT, -- separated by ,
+  old_tags TEXT, -- separated by ,
+  old_edited_by INTEGER, -- edited before
+  old_edited_at TIMESTAMP,
+  history_entry_createdat   TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  FOREIGN KEY(paperid) REFERENCES papers(paperid),
+  FOREIGN KEY(old_edited_by) REFERENCES users(userid)
+);
+
+create index ph_index1 on papers_history(paperid);
 
 .quit
