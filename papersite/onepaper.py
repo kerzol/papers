@@ -309,7 +309,6 @@ def add_paper():
                   ##################
             ############
 
-###  TODO: we should store old revisions somewhere            
 @app.route('/paper/meta-edit/<int:paperid>', methods=['GET','POST'])
 def edit_paper_meta_information(paperid):
     ### edit Title, authors, tags and domains lists
@@ -385,7 +384,6 @@ def edit_paper_meta_information(paperid):
                            authors=query_db ("select * from authors"))
             
 
-###  TODO: we should store old revisions somewhere            
 @app.route('/paper/edit/<int:paperid>', methods=['GET','POST'])
 def edit_paper(paperid):
     if not can_edit_paper(paperid):
