@@ -11,6 +11,7 @@ from papersite.config import SALT1
 from papersite.email import send_confirmation_mail, \
     send_password_change_mail
 from math import ceil
+from papersite.spamdetector import is_spam
 
 def hash(password):
     m = hashlib.sha256()
@@ -82,6 +83,8 @@ def register():
             error = 'You cannot use username "' + \
                     request.form['username']     + \
                     '", please choose another.'
+        elif is_spam(request):
+            return "<h1>Posted data looks like a spam, contact us if not</h1>", 403
         else:
             con = get_db()
             try:
