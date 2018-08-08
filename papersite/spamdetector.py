@@ -1,6 +1,6 @@
 ### Stupid, but extensible spam detector
 
-STOP_SPAM_WORDS = ["Loan", "Lender", ".trade", ".bid", ".men"]
+STOP_SPAM_WORDS = ["Loan", "Lender", ".trade", ".bid", ".men", ".win"]
 
 def is_spam(request):
   if 'email' in request.form:
