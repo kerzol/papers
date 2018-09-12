@@ -1,9 +1,9 @@
 {% extends "main-list.html" %}
 
 {% block title %}{{user['username'] | e}} — {% endblock %}
-{% block banner2 %}  
+{% block banner2 %}
 /
-<a href="/{{user['username'] | e}}" 
+<a href="/{{user['username'] | e}}"
    title="Papers liked/uploaded by {{user['username'] | e}}">
  {{user['username'] | e}}
 </a>
@@ -13,20 +13,19 @@
 {% block someinfo %}
 <div class="userinfo">
   <h3>Wellcome to <em>{{user['username'] | e}}'s</em> library,</h3>
-  
-  &nbsp;  You  can  find  here all  papers  liked  or  uploaded  by
-  {{user['username'] | e}}.
 
-  <p>
+  <i> &nbsp; You can find here all papers liked or uploaded by
+  {{user['username'] | e}} together with brief user bio and
+  description of her/his academic activity. </i>
 
+  <br><br>
 
-  <h3> More info about <em>{{user['username'] | e}}:</em></h3>
 
   <div class="cbody loading">{{user['about']|e}}</div>
-  
+
     {% if user_authenticated() and
           user['userid'] == session['user']['userid'] %}
-      <br>
+
       <div style="padding-bottom:1em">
         <a href="/editinfo">Edit your personal information</a> /
         <a href="/change-password">Change password</a>

@@ -98,7 +98,7 @@ def register():
                                        form['password1'].
                                        encode('utf-8')),
                                  0,
-                                 'Some information about this user'
+                                 '...Some information about the user will someday appear here...'
                              ])
                 send_confirmation_mail (request.form['username'],
                                         request.form['email'])
