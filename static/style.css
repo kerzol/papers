@@ -43,6 +43,13 @@ body {
     float: right;
 }
 
+#banner .homepagelink {
+    float: right;
+    margin-right: 3em;
+}
+#banner .homepagelink a {
+    text-decoration: underline;
+}
 
 #banner-bottom a {
    color: grey;
@@ -622,7 +629,6 @@ hr {
     padding-left: 0.4ex;
     border-color: white;
     background-color: #73A0C5;
-/*    width: 85%; */
 }
 
 .search input[type=submit] {
@@ -634,7 +640,6 @@ hr {
     color: white;
     border-color: white;
     background-color: #73A0C5;
-    width: 13%;
 }
 
 

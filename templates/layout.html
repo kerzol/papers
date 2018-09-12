@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <link rel="icon" type="image/png" href="/static/img/favicon.png" />
-    <link rel="stylesheet" href="/static/style.css?3">
+    <link rel="stylesheet" href="/static/style.css?4">
 
     <!-- wtf? from MathJax sample.html -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -205,47 +205,55 @@
             </span>
             -->
       </a>
-        
-        
+
     <div id="banner">
       <h1>
         <a href="/" title="main page">
           Papers<sup>γ</sup></a>
         {% block banner2 %}{% endblock %}
+
       </h1>
 
 
       <div class="menuitem">
-         {% if user_authenticated() %}
-         <b><a
-                     href="/{{session['user']['username'] | e}}"
-                     title="Your home page">
-            {{session['user']['username'] | e}}</a> </b> can
-         {% endif %}
           <a href="/paper/add" title="add a new paper">Add paper</a> /
           <a href="/catalog"
              title="lists of domains, authors, keywords and users">See catalog</a> /
 
-          {% if not user_authenticated() %}
-           <a href="/register" title="or register">Register</a>
+         {% if not user_authenticated() %}
+           <a href="/register" title="or register">Register</a> /
            <a href="/login" title="Login">Login</a>
          {% else %}
             <a href="/logout" title="Logout">Logout</a>
-          {% endif %}
+         {% endif %}
             <br>
 
-      {% if not search_page %}
-      <div class="search">
-        <form action="/catalog" method="get">
-          <input type="search" value=""
-                 placeholder="Search"
-                 name="q"
-                 size="20"/><input type="submit" value="Go!" >
-        </form>
-      </div>
-      {% endif %}
+         {% if not search_page %}
+         <div class="search">
+           <form action="/catalog" method="get">
+             <input type="search" value=""
+                    placeholder="Search"
+                    name="q"
+                    size="20"/><input type="submit" value="Go!" >
+           </form>
+         </div>
+         {% endif %}
 
       </div>
+
+      {% if user_authenticated() %}
+        <div class="homepagelink">
+          <h1>
+            <a
+                href="/{{session['user']['username'] | e}}"
+                title="Your home page">
+              Your home is here
+            </a>
+          </h1>
+        </div>
+      {% endif %}
+
+
 
 
 

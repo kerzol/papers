@@ -184,7 +184,7 @@ def register_confirmation(key):
         session['user'] = u
         flash('Hello ' + u['username'] +  \
               '. You have successfully confirmed your email address')
-    return redirect(url_for('index'))
+    return redirect(url_for('usersite',username=session['user']['username']))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -250,14 +250,12 @@ def editinfo():
                 session['user']['about'] = request.form['about']
                 session['user']['username'] = request.form['username']
                 session['user']['notifs_muted'] = notifs_muted
+                # if all is good
+                return redirect(url_for('usersite',username=session['user']['username']))
             except sqlite3.IntegrityError as err:
                 error = handle_sqlite_exception(err)
-        if error is not None:
-            return render_template('users/editinfo.html', error=error)
-        else:
-            return redirect(url_for('usersite',username=session['user']['username']))
-    if request.method == 'GET':
-        return render_template('users/editinfo.html', error=error)
+    # if any error
+    return render_template('users/editinfo.html', error=error)
 
 @app.route("/mute-email-notifs", methods=['GET'])
 def mute_email_notifs():
