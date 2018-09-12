@@ -3,7 +3,7 @@
                   ##################
             ############
 from datetime import datetime
-from papersite import app            
+from papersite import app
 import difflib
 from papersite.email import send_mail
 from papersite.db import (query_db, get_paper_w_uploader,
@@ -88,23 +88,27 @@ def comment_was_added(paperid, commentid):
   # TODO: transform latex to smth more human readable
   url = url_for('onepaper', paperid=paperid, _external=True)
   url = url + '#comment-' + str(commentid)
-  template = "Aloha %s,\n\n\
+  template = "%s,\n\n\
 User '%s' just commented a paper you liked, uploaded or commented, or participated in the related discussion. \n\
 Paper title: %s\n\
 Comment:\n\n\
 %s\n\n\
 Url: %s\n\n\
 Have a nice day,\n\
-Papers' team"
+Papers' team\n\n\
+P.S. If you wish so you can unsubscribe from notifications using this: %s\
+"
   paper = get_paper_w_uploader(paperid)
   users = users_to_notify(paperid)
   comment = get_comment(commentid)
   for u in users:
+    unsubscribe = url_for('editinfo', _external=True)
     msg = template % (u['username'],
                       comment['username'],
                       paper['title'],
                       comment['comment'],
-                      url)
+                      url,
+                      unsubscribe)
     # todo save message to notifs table
     send_mail(u['email'], msg, 'New comment for paper: %s' % (paper['title']))
 
@@ -120,14 +124,18 @@ Authors: %s\n\
 Uploader: %s\n\
 Url: %s\n\n\
 Have a good day,\n\
-Papers' team"
+Papers' team\n\n\
+P.S. If you wish so you can unsubscribe from notifications using this: %s\
+"
   users = users_to_notify_about_new_paper(paperid)
   for u in users:
+    unsubscribe = url_for('editinfo', _external=True)
     msg = template % (u['username'],
                       paper['title'],
                       authors,
                       paper['username'],
-                      url)
+                      url,
+                      unsubscribe)
     # todo save message to notifs table
     send_mail(u['email'], msg, 'New paper: %s' % (paper['title']))
 

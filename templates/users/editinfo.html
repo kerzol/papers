@@ -150,14 +150,14 @@ Preview.callback.autoReset = true;  // make sure it can run more than once
     {% if error %}
     <p class=error><strong>Error:</strong> {{ error }}</p>
     {% endif %}
-    
+
       <h1>Edit your personal information</h1>
 
       Name: <input name="username"
                    value="{{session['user']['username']}}"> <br>
       Email: <input name="email"
                     value="{{session['user']['email']}}"> <br>
-      Email notifications are muted:
+      Mute email notifications:
       <input name="notifs_muted" type="checkbox"
              value="1"
              {{'checked="checked"'
@@ -205,7 +205,5 @@ Preview.callback.autoReset = true;  // make sure it can run more than once
   </script>
 
 </div>
-
-      
 
 {% endblock %}

@@ -26,7 +26,7 @@ def user_authenticated():
 ANONYMOUS = 1
 
 def get_user_id():
-    if user_authenticated(): 
+    if user_authenticated():
         return session['user']['userid']
     else:
         # Anoynomous
