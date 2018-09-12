@@ -5,13 +5,16 @@
 
 
 
-  <form action="/login" method="post" class=usualform 
+  <form action="/login" method="post" class=usualform
         style="width:21em;">
     {% if error %}
     <p class=error><strong>Error:</strong> {{ error }}
+      </p>
+     Maybe you should consider to
+      <a href="/register"> register </a> a new user ?
     {% endif %}
     <h1>Login</h1>
-    
+
     <div class=right>
       <label for=email> E-mail: </label>
       <input id=email type=email name=email autofocus
@@ -31,7 +34,6 @@
       </div>
     </div>
 
-    
     <div class="send">
       <input class=btn type=submit name=login value=Login>
     </div>
