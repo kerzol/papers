@@ -250,10 +250,14 @@ def editinfo():
                 session['user']['about'] = request.form['about']
                 session['user']['username'] = request.form['username']
                 session['user']['notifs_muted'] = notifs_muted
-                return redirect(url_for('editinfo'))
             except sqlite3.IntegrityError as err:
                 error = handle_sqlite_exception(err)
-    return render_template('users/editinfo.html', error=error)
+        if error is not None:
+            return render_template('users/editinfo.html', error=error)
+        else:
+            return redirect(url_for('usersite',username=session['user']['username']))
+    if request.method == 'GET':
+        return render_template('users/editinfo.html', error=error)
 
 @app.route("/mute-email-notifs", methods=['GET'])
 def mute_email_notifs():
@@ -264,6 +268,7 @@ def mute_email_notifs():
         con.execute('update users set notifs_muted = 1 \
                      where userid = ?',
                      [session['user']['userid']])
+        session['user']['notifs_muted'] = "1"
         flash('Email notifications are muted')
         return redirect(url_for('usersite',username=session['user']['username']))
     return redirect(url_for('usersite'))
@@ -277,6 +282,7 @@ def unmute_email_notifs():
         con.execute('update users set notifs_muted = 0 \
                      where userid = ?',
                      [session['user']['userid']])
+        session['user']['notifs_muted'] = "0"
         flash('Email notifications are UN-muted')
         return redirect(url_for('usersite',username=session['user']['username']))
     return redirect(url_for('usersite'))

@@ -102,7 +102,7 @@ P.S. If you wish so you can unsubscribe from notifications using this: %s\
   users = users_to_notify(paperid)
   comment = get_comment(commentid)
   for u in users:
-    unsubscribe = url_for('editinfo', _external=True)
+    unsubscribe = url_for('mute_email_notifs', _external=True)
     msg = template % (u['username'],
                       comment['username'],
                       paper['title'],
@@ -129,7 +129,7 @@ P.S. If you wish so you can unsubscribe from notifications using this: %s\
 "
   users = users_to_notify_about_new_paper(paperid)
   for u in users:
-    unsubscribe = url_for('editinfo', _external=True)
+    unsubscribe = url_for('mute_email_notifs', _external=True)
     msg = template % (u['username'],
                       paper['title'],
                       authors,

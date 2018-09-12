@@ -161,9 +161,8 @@ Preview.callback.autoReset = true;  // make sure it can run more than once
       <input name="notifs_muted" type="checkbox"
              value="1"
              {{'checked="checked"'
-                if session['user']['notifs_muted'] == 1 else ""}}
+                if session['user']['notifs_muted'] == "1" else ""}}
              >
-
       <div class="tab-frame tab-frame2" style="margin-top:1ex">
         <input type="radio" checked name="tab_" id="tab_1">
         <label for="tab_1">Edit</label>
