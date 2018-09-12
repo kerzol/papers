@@ -12,6 +12,7 @@ MAIL_PASS = 'password'
 # Load default config and override config from an environment variable
 appc = dict(
     DEBUG=True,
+    SERVER_NAME = 'localhost:5000',
     SECRET_KEY=SALT2,
     PERMANENT_SESSION_LIFETIME=timedelta(days=999),
     UPLOAD_FOLDER = 'static/memory/pdfs',

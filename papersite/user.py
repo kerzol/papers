@@ -139,7 +139,7 @@ def set_new_password(key):
                     session['user'] = u
                     flash('Hello ' + u['username'] +  \
                           '. You have successfully changed your password')
-                return redirect(url_for('index'))
+                return redirect(url_for('usersite',username=session['user']['username']))
     else:
         email = 'brrrr. See red error above.'
         error = 'Not valid key'
