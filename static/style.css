@@ -221,9 +221,7 @@ hr {
     text-decoration: none;
     text-align:center;
     cursor: pointer;
-
     margin-right: 1em;
-    
     margin-bottom: 0.7em;
     margin-top: 0.3em;
 }
@@ -791,8 +789,13 @@ hr {
 .partners h4 {
     margin-bottom: 0.3ex;
 }
-.partners ul li:before{
-    content: '★'; 
+.partners .labs > a {
+    display: inline-block;
+    margin: 1em;
+    text-decoration: none;
+}
+.partners .individuals ul li:before{
+    content: '★';
     margin: 0 1ex;
 }
 .partners li {
@@ -805,7 +808,11 @@ hr {
 .partners .individuals {
     margin-left: 1.3ex;
 }
-
+.partners .labs {
+    margin-left: 1.3ex;
+}
+.partners img {
+}
 
 .url {
     text-align: left;
