@@ -786,6 +786,9 @@ hr {
     font-size: large;
     margin: 2em;
 }
+.partners > div {
+    margin-top: 2.5em;
+}
 .partners h4 {
     margin-bottom: 0.3ex;
 }
@@ -1161,7 +1164,6 @@ See more here: https://stackoverflow.com/questions/14202856/background-image-for
 
 .notif .text .uploaded-by {
     font-size: small;
-    
 }
 
 @media screen and (max-width: 768px) {
