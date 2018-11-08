@@ -148,9 +148,15 @@ CommentPreview.callback.autoReset = true;  // make sure it can run more than onc
       id="reply"
       >
 
-    <h4>Your comment 
-      {% if not user_authenticated() %} 
-       (anonymously, you will not be able to edit/delete the comment)
+      {% if user_authenticated() %}
+      <h4>Your comment</h4>
+      {% else %}
+      <h4> You comment anonymously!
+        <br> you will not be able to edit/delete the comment.
+      </h4>
+      <h3> Please consider to <a href="/register">register</a> or
+        <a href="/login">login</a>.
+      </h3>
       {% endif %}
     </h4>
   <div class="tab-frame tab-frame2">
