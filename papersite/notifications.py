@@ -188,3 +188,47 @@ def last_week_updates():
 
   return render_template('news.html', 
                          notifs=papers_n_comments)
+
+
+
+@app.route('/lastmonth')
+def last_month_updates():
+
+  # example link
+  # https://papers-gamma.link/paper/52/#comment-1055
+
+  ## Every notif is a tuple (link, text, createtime, username, type)
+  ## TODO: use notifs table
+  papers = query_db(
+         "select '/paper/' || p.paperid as link,   \
+                  p.title as text,            \
+                  p.createtime as createtime, \
+                  u.username as username,     \
+                  c.comment as comment,       \
+                  'paper' as type             \
+           from papers as p                                                 \
+                left join users as u on p.userid = u.userid                 \
+                left join comments as c on c.paperid = p.paperid             \
+           where p.deleted_at is null                                         \
+                 and p.createtime > date('now','-30 days')                     \
+        ")
+  # comments = query_db(
+  #       "select '/paper/' || c.paperid || '/#comment-' || c.commentid as link,  \
+  #         c.comment as text,                   \
+  #         c.createtime as createtime,            \
+  #         u.username as username,                \
+  #         'comment' as type                      \
+  #         from                                   \
+  #         comments as c                     \
+  #         left join users as u on c.userid = u.userid  \
+  #         where                                       \
+  #           c.deleted_at is null and                \
+  #           c.createtime > date('now','-30 days')    \
+  #         \
+  #         order by createtime desc \
+  #       ")
+
+  print(papers[0])
+
+  return render_template('lastmonth.html', 
+                         notifs=papers)

@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block title %}What's new? – {% endblock %}
+{% block bigcontainerclass %}white{% endblock %}
+
+
+{% block body %}
+
+
+<h1 class="center">Papers added during the last 30 days</h1>
+
+<div class="centered">
+  <table id="customers">
+    <tr> 
+      <th>Title</th> 
+      <th> Added By</th>
+      <th> Date</th>
+      <th> discussion</th>
+    </tr>
+    {% for n in notifs %}
+      <tr>
+        <td>{{n.text}}</td>
+        <td>{{n.username}}</td>
+        <td>{{ n.createtime | short_datetime }}</td>
+        {% if n.comment %}
+          <td>*</td>
+        {%else%}
+          <td></td>
+        {%endif%}
+      </tr>
+  {% endfor %}
+  </table>
+</div>
+
+
+{% endblock %}
+
