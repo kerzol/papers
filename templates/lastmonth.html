@@ -9,25 +9,47 @@
 <h1 class="center">Papers added during the last 30 days</h1>
 
 <div class="centered">
-  <table id="customers">
-    <tr> 
-      <th>Title</th> 
-      <th> Added By</th>
-      <th> Date</th>
-      <th> Discussion</th>
-    </tr>
-    {% for n in notifs %}
+  <table id="lastmonth-papers">
+    <thead>
       <tr>
-        <td width="70%"><a href="{{n.link}}" class="notif">{{n.text}}</a></td>
-        <td width="10%">{{n.username}}</td>
-        <td width="16%">{{ n.createtime | short_datetime }}</td>
-        {% if n.comment %}
-          <td width="2%">*</td>
-        {%else%}
-          <td width="2%"></td>
-        {%endif%}
+        <th> Title </th>
+        <th class="nowrap"> Added By </th>
+        <th> Date </th>
+        <th> Discussion </th>
       </tr>
-  {% endfor %}
+    </thead>
+    <tbody>
+      {% for n in notifs %}
+        <tr>
+          <td width="70%">
+            <a href="{{n.link}}">
+              {{n.text}}
+            </a>
+          </td>
+          <td>
+            <a href="{{n.link}}"
+               class="black-no-underline">
+              {{n.username}}
+            </a>
+          </td>
+          <td class="nowrap">
+            <a href="{{n.link}}"
+               class="black-no-underline">
+              {{
+              n.createtime | short_date }}
+            </a>
+          </td>
+          <td>
+            <a href="{{n.link}}"
+               class="black-no-underline">
+              {% if n.comment %}
+              *
+              {%endif%}
+            </a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
   </table>
 </div>
 

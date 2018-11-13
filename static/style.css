@@ -1187,28 +1187,80 @@ See more here: https://stackoverflow.com/questions/14202856/background-image-for
    }
 }
 
-
-#customers {
-    font-family: serif;
-    border-collapse: collapse;
-    margin-left:15%; 
-    margin-right:15%;
-    width: 70%;
+.nowrap {
+    white-space: nowrap;
 }
 
-#customers td, #customers th {
-    border: 1px solid #ddd;
+.black-no-underlien {
+    color: black;
+    text-decoration: none;
+}
+
+#lastmonth-papers {
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    border: none;
+}
+
+#lastmonth-papers th {
+    border-bottom: 1px solid #ddd;
     padding: 8px;
 }
 
-#customers tr:nth-child(even){background-color: #f2f2f2;}
+#lastmonth-papers td {
+    border-bottom: 1px solid #ddd;
+}
 
-#customers tr:hover {background-color: #73A0C5;}
+#lastmonth-papers tbody td a {
+    display: block;
+    padding: 8px;
+}
+#lastmonth-papers tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
 
-#customers th {
+#lastmonth-papers tbody tr:hover {background-color: #eee;}
+
+#lastmonth-papers th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
-    background-color: #73A0C5;
+}
+
+
+/* red smth like :     background-image: linear-gradient(to bottom, #F86063, #B43538); */
+.lastmonth {
+    position: fixed;
+    top: 1.3em;
+    right: 2%;
     color: white;
+    font-weight: bold;
+    padding-left: 1ex;
+    padding-right: 1ex;
+    padding-top: 1.4ex;
+    padding-bottom: 1.4ex;
+    z-index: 10;
+    border-radius: 1ex;
+    border: 1px solid #eeeeee;
+    text-decoration: none;
+    background-color: #538fbe;
+    background-image: linear-gradient(to bottom, rgb(73,132,180) 0%, rgb(97,155,203) 100%);
+    box-shadow: 0px 3px 10px rgba(0,0,0,.4);
+    transition: all .2s ease-in-out;
+}
+.lastmonth img {
+    width: 2em;
+}
+.lastmonth:hover {
+    background-image: linear-gradient(to bottom, rgb(79,142,191) 0%, rgb(102,166,214) 100%);
+}
+.lastmonth:active {
+    outline: none;
+    transform: translate(0, 2px);
+    background-image: linear-gradient(bottom, rgb(88,154,204) 0%, rgb(90,150,199) 100%);
+    box-shadow: 0px 1px 6px rgba(0,0,0,.4), inset 0px 1px 0px rgba(255,255,255,.3), inset 0px 0px 3px rgba(255,255,255,.5);
 }
