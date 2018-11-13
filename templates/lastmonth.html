@@ -14,17 +14,17 @@
       <th>Title</th> 
       <th> Added By</th>
       <th> Date</th>
-      <th> discussion</th>
+      <th> Discussion</th>
     </tr>
     {% for n in notifs %}
       <tr>
-        <td>{{n.text}}</td>
-        <td>{{n.username}}</td>
-        <td>{{ n.createtime | short_datetime }}</td>
+        <td width="70%"><a href="{{n.link}}" class="notif">{{n.text}}</a></td>
+        <td width="10%">{{n.username}}</td>
+        <td width="16%">{{ n.createtime | short_datetime }}</td>
         {% if n.comment %}
-          <td>*</td>
+          <td width="2%">*</td>
         {%else%}
-          <td></td>
+          <td width="2%"></td>
         {%endif%}
       </tr>
   {% endfor %}

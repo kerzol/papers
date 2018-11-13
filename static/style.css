@@ -1189,9 +1189,11 @@ See more here: https://stackoverflow.com/questions/14202856/background-image-for
 
 
 #customers {
-    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-family: serif;
     border-collapse: collapse;
-    width: 100%;
+    margin-left:15%; 
+    margin-right:15%;
+    width: 70%;
 }
 
 #customers td, #customers th {
@@ -1201,12 +1203,12 @@ See more here: https://stackoverflow.com/questions/14202856/background-image-for
 
 #customers tr:nth-child(even){background-color: #f2f2f2;}
 
-#customers tr:hover {background-color: #5dd;}
+#customers tr:hover {background-color: #73A0C5;}
 
 #customers th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
-    background-color: #4CAF50;
+    background-color: #73A0C5;
     color: white;
 }
