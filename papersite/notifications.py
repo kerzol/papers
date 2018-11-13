@@ -203,15 +203,16 @@ def last_month_updates():
   # https://papers-gamma.link/paper/52/#comment-1055
 
   papers = query_db(
-         "select '/paper/' || p.paperid as link,   \
-                  p.title as text,            \
-                  p.createtime as createtime, \
-                  u.username as username,     \
-                  c.comment as comment,       \
-                  'paper' as type             \
-           from papers as p                    \
+         "select '/paper/' || p.paperid as link,    \
+                  p.title as text,                  \
+                  p.createtime as createtime,       \
+                  u.username as username,           \
+                  (select count(*) from comments c  \
+                     where c.paperid = p.paperid    \
+                       and c.deleted_at is null     \
+                  ) as count_comment                \
+           from papers as p                         \
                 left join users as u on p.userid = u.userid       \
-                left join comments as c on c.paperid = p.paperid  \
            where p.deleted_at is null                             \
                  and p.createtime > date('now','-30 days')        \
         ")

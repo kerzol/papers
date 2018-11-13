@@ -42,9 +42,9 @@
           <td>
             <a href="{{n.link}}"
                class="black-no-underline">
-              {% if n.comment %}
-              *
-              {%endif%}
+              {% for cmnt in range(n.count_comment) %}
+              💬 
+              {% endfor %}
             </a>
           </td>
         </tr>
