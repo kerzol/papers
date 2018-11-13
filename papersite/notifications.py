@@ -215,6 +215,7 @@ def last_month_updates():
                 left join users as u on p.userid = u.userid       \
            where p.deleted_at is null                             \
                  and p.createtime > date('now','-30 days')        \
+           order by createtime desc                               \
         ")
   return render_template('lastmonth.html',
                          notifs=papers)
