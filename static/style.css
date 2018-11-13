@@ -1235,8 +1235,8 @@ See more here: https://stackoverflow.com/questions/14202856/background-image-for
 /* red smth like :     background-image: linear-gradient(to bottom, #F86063, #B43538); */
 .lastmonth {
     position: fixed;
-    top: 1.3em;
-    right: 2%;
+    top: 7em;
+    left: 2%;
     color: white;
     font-weight: bold;
     padding-left: 1ex;
