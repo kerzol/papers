@@ -15,7 +15,7 @@
 
 -- dump data
 .mode insert users
-select userid, username, about from users where valid = 1;
+select userid, username, about from users where valid = 1 or userid = 1;
 
 .mode insert papers
 select * from papers where deleted_at is null;
