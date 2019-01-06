@@ -1,0 +1,45 @@
+-- create tables
+.schema users
+.schema papers
+.schema likes
+.schema domains
+.schema papers_domains
+.schema keywords
+.schema papers_keywords
+.schema authors
+.schema papers_authors
+.schema comments
+
+-- show column names
+.header on
+
+-- dump data
+.mode insert users
+select userid, username, about from users where valid = 1;
+
+.mode insert papers
+select * from papers where deleted_at is null;
+
+.mode insert likes
+select * from likes;
+
+.mode insert domains
+select * from domains;
+
+.mode insert papers_domains
+select * from papers_domains;
+
+.mode insert keywords
+select * from keywords;
+
+.mode insert papers_keywords
+select * from papers_keywords;
+
+.mode insert authors
+select * from authors;
+
+.mode insert papers_authors
+select * from papers_authors;
+
+.mode insert comments
+select * from comments where deleted_at is null;

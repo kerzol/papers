@@ -19,7 +19,7 @@ DEPLOY COMME IL FAUT: automatically change id at the end of style.css?id
 ★ Group accounts (to organize reading groups)
 ★ Local view based or reputation-based moderators
 
-| Allow anonymous with a token upgrade to a registered user
+| Allow "anonymous with a token" upgrade to a registered user
 | Internal notifications
 | Follow, unfollow buttons
 | History of papers/comments edit revisions
@@ -35,6 +35,7 @@ DEPLOY COMME IL FAUT: automatically change id at the end of style.css?id
   Use https://cleantalk.org to check spam emals
   Do not show users with unverified emails in https://papers-gamma.link/catalog
 
+▪ Protect data export "/dump" page from ddos attacks
 
 ▽ Search improvements
 ▽ Private flows

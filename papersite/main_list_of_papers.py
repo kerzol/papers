@@ -81,7 +81,8 @@ def previews(seq):
 @app.route('/all/page/<int:page>')
 def all(page=1):
 
-    count=query_db("select count(*) as c from papers",one=True)['c']
+    count=query_db("select count(*) as c from papers as p \
+                    where p.deleted_at is null ",one=True)['c']
     # how many papers on page?
     onpage = 5
     maxpage = int(ceil(float(count)/onpage))

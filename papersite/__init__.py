@@ -12,4 +12,4 @@ import papersite.main_list_of_papers
 import papersite.onepaper
 import papersite.catalog
 import papersite.pseudostatic
-
+import papersite.dump
