@@ -102,21 +102,6 @@ create table comments (
 create index c_index1 on comments (userid);
 create index c_index2 on comments (paperid);
 
--- A sequence of reviews. Never delete, only add a new one.
-create table reviews (
-  reviewid  INTEGER PRIMARY KEY,
-  review    TEXT,
-  userid     INTEGER,
-  paperid    INTEGER,
-  createtime  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-  FOREIGN KEY(userid) REFERENCES users(userid),
-  FOREIGN KEY(paperid) REFERENCES papers(paperid)
-);
-
-create index r_index1 on reviews (userid);
-create index r_index2 on reviews (paperid);
-
-
 create table friends (
   userid INTEGER NOT NULL,
   friendid INTEGER NOT NULL,
