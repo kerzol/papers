@@ -1,3 +1,6 @@
+★ Mobile version
+★ ActivityPub integration
+
  ________________________________________________________________________________
  \ \                                                                          / /
   \ \  Identify Anonymouses ?!                                               / /
@@ -26,6 +29,7 @@ DEPLOY COMME IL FAUT: automatically change id at the end of style.css?id
 
 ★ Notify users when comments was changed
 ★ Notify users when paper info was changed
+★ ActivityPub integration
 
 ▽ Take info about paper from google scholar
 ▽ Mark posts as community wiki, when more than one user can edit

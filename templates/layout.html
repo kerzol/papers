@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <link rel="icon" type="image/png" href="/static/img/favicon.png" />
-    <link rel="stylesheet" href="/static/style.css?7">
+    <link rel="stylesheet" href="/static/style.css?8">
 
     <!-- wtf? from MathJax sample.html -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -248,19 +248,15 @@
 
       {% if user_authenticated() %}
         <div class="homepagelink">
-          <h1>
+
             <a
                 href="/{{session['user']['username'] | e}}"
                 title="Your home page">
-              Your home is here
+              Your personal library
             </a>
-          </h1>
+
         </div>
       {% endif %}
-
-
-
-
 
     </div> <!-- /banner -->
 
@@ -268,34 +264,33 @@
   {% block body %}
   {% endblock %}
 
-
-
     </div> <!-- /big-container -->
 
     <div id="banner-bottom">
 
-      
-      <div class="paypal-button">
+      <div class="leftfloat">
+        <a href="/about">About</a> /
+        <a href="/partners-and-donors">Contributors</a> /
+        <a href="http://github.com/kerzol/papers">Source code</a> /
+        <a href="/dump"> Open data</a>
+        <br>
+        <a href="/faq">F.A.Q, terms of use, privacy policy</a><br>
+        <small>
+          Broadcast tower icon comes from <a href="https://icons8.com">icon8 set</a>
+        </small>
+      </div>
+
+      <div class="rightfloat">
+        <div class="nowrap">
+          Papersᵞ — Discussion board for scientific
+          papers <br>
+          <em> Founded in 2015
+        </div>
+      </div>
+
+      <div class="center">
         {% include "donate.html" %}
       </div>
-
-      <div class="about-info">
-        Papersᵞ — Discussion board for scientific
-        papers <br>
-        <em> Founded in 2015 </em> <br>
-        <a href="/partners-and-donors">Partners & Donors</a> /
-        <a href="http://github.com/kerzol/papers">Source code</a> /
-        <a href="/dump"> Open data </a> /
-        <a href="/about">About</a> 
-        <br>
-        <a href="/faq">F.A.Q, terms of use, privacy policy notes</a><br>
-        
-        <small>
-          Broadcast tower icon comes from <a href="https://icons8.com">icon8 set</a> 
-        </small> <br>
-
-      </div>
-
 
 
     </div> <!-- /banner-bottom -->

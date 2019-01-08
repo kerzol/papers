@@ -55,10 +55,6 @@ body {
    color: grey;
 }
 
-.paypal-button {
-    float: left;
-}
-
 .about-info {
     float: left;
     margin-left: 1ex;
@@ -69,16 +65,27 @@ body {
     text-align: left;
 }
 
-#banner-bottom {
+.rightfloat {
     float: right;
+    text-align: right;
+}
+
+.center {
+    margin: 0 auto;
+}
+
+#banner-bottom {
     color: grey;
     margin:0;
     padding-top: 0.5em;
+    padding-left: 1em;
     padding-right: 1em;
     padding-bottom: 0.5em;
     text-align: right;
     margin-left: 7%;
     margin-right: 7%;
+    overflow: auto;
+    clear: both;
 /*    background-color: #73A0C5;*/
 }
 
@@ -768,8 +775,8 @@ hr {
 }
 
 .about {
-    font-size: large;
     margin: 2em;
+    font-size: large;
 }
 .about li {
     margin: 1.3em;
@@ -1266,4 +1273,11 @@ See more here: https://stackoverflow.com/questions/14202856/background-image-for
     transform: translate(0, 2px);
     background-image: linear-gradient(bottom, rgb(88,154,204) 0%, rgb(90,150,199) 100%);
     box-shadow: 0px 1px 6px rgba(0,0,0,.4), inset 0px 1px 0px rgba(255,255,255,.3), inset 0px 0px 3px rgba(255,255,255,.5);
+}
+
+
+.mymark:hover {
+/*                     white */
+    background-color: #538fbe;
+    color: white;
 }
