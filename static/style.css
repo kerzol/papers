@@ -43,12 +43,9 @@ body {
     float: right;
 }
 
-#banner .homepagelink {
-    float: right;
-    margin-right: 3em;
-}
-#banner .homepagelink a {
-    text-decoration: underline;
+.homepagelink {
+    font-size: 140%;
+    font-weight: bold;
 }
 
 #banner-bottom a {
@@ -649,7 +646,10 @@ hr {
     background-color: #73A0C5;
 }
 
-
+.search input::placeholder {
+    color: #eee;
+    opacity: 1;
+}
 
 .search-big {
     font-size: large;
@@ -720,7 +720,7 @@ hr {
     background-color: #FBFBFF;
     border-color: #DDDDDD #F0F0F0 #DDDDDD #DDDDDD ;
     border-style: solid;
-    border-width: 1px 0 1px 1px;
+    border-width: 1px 0 0px 0px;
     line-height: 1.5em;
 }
 

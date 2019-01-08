@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <link rel="icon" type="image/png" href="/static/img/favicon.png" />
-    <link rel="stylesheet" href="/static/style.css?8">
+    <link rel="stylesheet" href="/static/style.css?9">
 
     <!-- wtf? from MathJax sample.html -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -221,6 +221,11 @@
 
 
       <div class="menuitem">
+          {% if user_authenticated() %}
+          <a class="homepagelink"
+             href="/{{session['user']['username'] | e}}"
+             title="Your home page">Your personal library</a> /
+         {% endif %}
           <a href="/paper/add" title="add a new paper">Add paper</a> /
           <a href="/catalog"
              title="lists of domains, authors, keywords and users">See catalog</a> /
@@ -245,18 +250,6 @@
          {% endif %}
 
       </div>
-
-      {% if user_authenticated() %}
-        <div class="homepagelink">
-
-            <a
-                href="/{{session['user']['username'] | e}}"
-                title="Your home page">
-              Your personal library
-            </a>
-
-        </div>
-      {% endif %}
 
     </div> <!-- /banner -->
 
