@@ -159,7 +159,7 @@ def usersite(username,page=1):
                           p.paperid = l.paperid and l.userid = ?  \
                           and p.userid <> ?                       \
                   order by sorttime DESC                          \
-                  limit ?, ?", [u['userid'],u['userid'],u['userid']
+                  limit ?, ?", [u['userid'],u['userid'],u['userid'],
                                 (page-1)*onpage,onpage])
 
     (commentsTail, commentsHead, liked_by, liked) = previews(seq)
