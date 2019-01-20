@@ -140,8 +140,11 @@ def usersite(username,page=1):
     # how many papers on page?
     onpage = 3
     maxpage = int(ceil(float(count)/onpage))
-    # todo. some papers ... are bad
-    #       in which sense bad ?
+
+    # submitted papers by user
+    # +
+    # other user papers liked by him
+    # ordered by submition time or like time :)
     seq=query_db("select *, lastcommentat as sorttime             \
                     from papers                                   \
                     where deleted_at is null and                  \
@@ -154,9 +157,11 @@ def usersite(username,page=1):
                     from papers as p, likes as l                  \
                     where p.deleted_at is null and                \
                           p.paperid = l.paperid and l.userid = ?  \
+                          and p.userid <> ?                       \
                   order by sorttime DESC                          \
                   limit ?, ?", [u['userid'],u['userid'],
-                                (page-1)*onpage,onpage])
+                                (page-1)*onpage,onpage],
+                                u['userid'])
 
     (commentsTail, commentsHead, liked_by, liked) = previews(seq)
 
