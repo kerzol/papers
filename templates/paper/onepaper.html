@@ -10,12 +10,12 @@
             {% if user_authenticated() %}
              {% if liked %}
               <a 
-                href="/paper/{{ entry.paperid|e }}/{{ entry.title|e}}/unlike"
+                href="/paper/{{ entry.paperid|e }}/title-placeholder/unlike"
                 title="Unlike the paper"
                 class="liked"
                 >★</a>
               {% else %}
-               <a href="/paper/{{ entry.paperid|e }}/{{ entry.title|e}}/like"
+               <a href="/paper/{{ entry.paperid|e }}/title-placeholder/like"
                   title="Click if you like the paper">☆</a>
               {% endif %}
             {% else %} {# anonymous #}
