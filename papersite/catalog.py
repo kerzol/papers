@@ -11,7 +11,7 @@ def render_catalog(template_name, **context):
     domains=query_db ("select * from domains order by domainname")
     keywords=query_db ("select * from keywords order by keyword")
     authors=query_db ("select * from authors order by fullname")
-    users=query_db ("select * from users order by username")
+    users=query_db ("select * from users where valid = 1 or userid = 1 order by username")
     return render_template(template_name,
                            domains=domains,
                            keywords=keywords,
