@@ -148,16 +148,14 @@ CommentPreview.callback.autoReset = true;  // make sure it can run more than onc
       id="reply"
       >
 
-      {% if user_authenticated() %}
-      <h4>Your comment</h4>
-      {% else %}
-      <h4> You comment anonymously! You will not be able to edit/delete the comment.
-      </h4>
-      <h3> Please consider to <a href="/register">register</a> or
-        <a href="/login">login</a>.
-      </h3>
-      {% endif %}
-    </h4>
+{% if not user_authenticated() %}
+    <h3> Please consider to <a href="/register">register</a> or
+      <a href="/login">login</a> to comment on the paper.
+   </h3>
+{% else %}
+
+ <h4>Your comment</h4>
+
   <div class="tab-frame tab-frame2">
       <input type="radio" checked name="tab_" id="tab_1">
       <label for="tab_1">Edit</label>
@@ -190,10 +188,13 @@ CommentPreview.callback.autoReset = true;  // make sure it can run more than onc
   <div class="send">
     <input class="btn" type="submit" value="Submit comment"/>
   </div>
-
+{% endif %}
+  
 </form>
 
+{% if user_authenticated() %}
 <script>
   CommentPreview.Init();
   CommentPreview.Update();
 </script>
+{% endif %}

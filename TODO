@@ -1,5 +1,5 @@
-★ Mobile version
-★ ActivityPub integration
+★ When register, come back to the page when you were before
+★ Mobile version ?
 
  ________________________________________________________________________________
  \ \                                                                          / /
@@ -29,11 +29,9 @@ DEPLOY COMME IL FAUT: automatically change id at the end of style.css?id
 
 ★ Notify users when comments was changed
 ★ Notify users when paper info was changed
-★ ActivityPub integration
 
 ▽ Take info about paper from google scholar
 ▽ Mark posts as community wiki, when more than one user can edit
-▽ Mobile version
 
 ▪ Smth againsth spam
   Use https://cleantalk.org to check spam emals
@@ -46,8 +44,8 @@ DEPLOY COMME IL FAUT: automatically change id at the end of style.css?id
 ▽ Auto first page, recommendations (Machine learning?)
 ▽ Arxiv/hal/google scholar integration
 
-✦ Twitter, Facebook, Linkedin, Openid, Oauth integrations
 ✦ Userpics
 ✦ Cache
 
 ★ Large "Terms of use" and "privacy policy"
+★ ActivityPub integration ?

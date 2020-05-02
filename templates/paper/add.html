@@ -91,19 +91,15 @@ $(function() {
 {% block body %}
 
 
-    {% if not user_authenticated() %} 
+ {% if not user_authenticated() %} 
      <div style="margin-left:auto; margin-right:auto; max-width:37em">
       <p>
-        Hello stranger, <br><br>
-        if you want to be a recognized user, you should
+        Hello stranger, <br><br> if you want to upload a paper, became
+        a recognized user by
         <a href="/login">login</a> or <a href="/register">register</a>.
-        Otherwise you may upload a paper anonymously.
-        <br>
-        <br>
       </p>
      </div>
-    {% endif %}
-
+ {% else %}
   <form action="/paper/add" 
         method="post" 
         class="addarticleform"
@@ -170,5 +166,5 @@ $(function() {
     </div>
 
   </form>
-
+ {% endif %}
 {% endblock %}

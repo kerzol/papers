@@ -11,4 +11,5 @@ logger = logging.getLogger('werkzeug')
 handler = logging.FileHandler('./logs/access.log')
 logger.addHandler(handler)
 
+app.config.update(SERVER_NAME='localhost:5000')
 app.run(host='0.0.0.0', debug=True)

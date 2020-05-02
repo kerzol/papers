@@ -13,7 +13,7 @@ from papersite.db import (query_db, get_db, get_authors, get_domains,
 )
 from papersite.user import (get_user_id, is_super_admin, is_author_of_paper,
                             is_author_of_comment, user_authenticated, ANONYMOUS)
-from werkzeug import secure_filename
+from werkzeug.utils import secure_filename
 from flask import render_template, request, flash, redirect, url_for
 from papersite.notifications import (new_paper_was_added,
                                      comment_was_added)
@@ -175,6 +175,8 @@ def edit_comment(commentid):
 @app.route('/paper/<int:paperid>/add-comment',
            methods=['POST'])
 def add_comment(paperid):
+    if not user_authenticated():
+            return "<h1>Forbidden</h1>", 403
     con = get_db()
     error = None
     with con:
@@ -225,6 +227,8 @@ def parse_list(list):
 def add_paper():
     error = None
     if request.method == 'POST':
+        if not user_authenticated():
+            return "<h1>Forbidden (maybe you forgot to login)</h1>", 403
         paper_file = request.files['pdf']
         if not paper_file or not allowed_file(paper_file.filename):
             error = 'Please choose a pdf file'
