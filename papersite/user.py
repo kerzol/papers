@@ -103,7 +103,7 @@ def register():
                 send_confirmation_mail (request.form['username'],
                                         request.form['email'])
                 flash('A confirmation link has been sent to you. \n\
-Please, check your mailbox (%s)' % request.form['email'])
+Please, check your mailbox (%s). If it is not the case, please contact us.' % request.form['email'])
                 return redirect(url_for('index'))
             except sqlite3.IntegrityError as err:
                 error = handle_sqlite_exception(err)
