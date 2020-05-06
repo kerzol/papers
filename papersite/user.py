@@ -64,7 +64,7 @@ def handle_sqlite_exception(err):
 def utility_processor():
     return dict(user_authenticated=user_authenticated)
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/hi', methods=['GET', 'POST'])
 def register():
     error = None
     if request.method == 'POST':
@@ -166,7 +166,7 @@ def new_password_link():
             error = 'User with this email does not exists'
     return render_template('users/restore.html', error = error)
 
-@app.route('/register/<string:key>')
+@app.route('/hi/<string:key>')
 def register_confirmation(key):
     error = None
     u = query_db('select userid,username,email,   \
