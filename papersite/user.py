@@ -12,6 +12,7 @@ from papersite.email import send_confirmation_mail, \
     send_password_change_mail
 from math import ceil
 from papersite.spamdetector import is_spam
+from papersite import CAPTCHA
 
 def hash(password):
     m = hashlib.sha256()
@@ -64,9 +65,10 @@ def handle_sqlite_exception(err):
 def utility_processor():
     return dict(user_authenticated=user_authenticated)
 
-@app.route('/hi', methods=['GET', 'POST'])
+@app.route('/reg', methods=['GET', 'POST'])
 def register():
     error = None
+    print(request.form)
     if request.method == 'POST':
         if request.form['email'] == "":
             error = 'Please use a valid email address'
@@ -85,6 +87,9 @@ def register():
                     '", please choose another.'
         elif is_spam(request):
             return "<h1>Posted data looks like a spam, contact us if not</h1>", 403
+        elif not CAPTCHA.verify (request.form['captcha-text'],
+                                 request.form['captcha-hash']):
+            error = 'Watch captcha!!!'
         else:
             con = get_db()
             try:
@@ -107,7 +112,8 @@ Please, check your mailbox (%s). If it is not the case, please contact us.' % re
                 return redirect(url_for('index'))
             except sqlite3.IntegrityError as err:
                 error = handle_sqlite_exception(err)
-    return render_template('users/register.html', error=error)
+    captcha = CAPTCHA.create()
+    return render_template('users/register.html', error = error, captcha = captcha)
 
 @app.route('/change-password/<string:key>', methods=['GET','POST'])
 def set_new_password(key):
@@ -166,7 +172,7 @@ def new_password_link():
             error = 'User with this email does not exists'
     return render_template('users/restore.html', error = error)
 
-@app.route('/hi/<string:key>')
+@app.route('/reg/<string:key>')
 def register_confirmation(key):
     error = None
     u = query_db('select userid,username,email,   \

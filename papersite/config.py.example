@@ -7,7 +7,8 @@ SALT2='another random string'
 MAIL_SERVER = 'smtp.hushmail.com:25'
 MAIL_USER = 'username'
 MAIL_PASS = 'password'
-
+CAPTCHA_CONFIG = {'SECRET_CSRF_KEY':'changemeplease!!!',
+                  'BACKGROUND_COLOR':(115, 160, 197, 255)}}
 
 # Load default config and override config from an environment variable
 appc = dict(

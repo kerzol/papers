@@ -1,3 +1,5 @@
+(excluding third-party libraries from static/lib and libs directories)
+
 Creative Commons Legal Code
 
 CC0 1.0 Universal

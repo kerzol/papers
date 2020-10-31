@@ -15,7 +15,7 @@ got published.
 Installation
 ------------
 
-Install python3, flask, sqlite3, and ghostscript
+Install python3, flask, flask-simple-captcha, sqlite3, and ghostscript
 
 0. run 'git submodule init && git submodule update' to fetch required librarires (MathJax and marked)
 
@@ -43,8 +43,8 @@ LICENSE
 
 To the  extent possible  under law, the  author(s) have  dedicated all
 copyright  and  related  and   neighboring  rights  to  this  software
-(excluding third-party libraries from static/lib) to the public domain
-worldwide.  This software is distributed without any warranty.
+(excluding third-party libraries from static/lib and libs directories)
+to the public domain worldwide.  This software is distributed without any warranty.
 
 You should have received a copy of the CC0 Public Domain Dedication
 along    with   this    software.   If    not,   see
