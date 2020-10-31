@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask_simple_captcha.config import config
+from .config import config
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 from werkzeug.security import generate_password_hash, check_password_hash
