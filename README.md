@@ -15,7 +15,7 @@ got published.
 Installation
 ------------
 
-Install python3, flask, flask-simple-captcha, sqlite3, and ghostscript
+Install python3, flask, Pillow, sqlite3, and ghostscript
 
 0. run 'git submodule init && git submodule update' to fetch required librarires (MathJax and marked)
 
