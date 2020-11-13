@@ -1,0 +1,134 @@
+{% extends "layout.html" %}
+{% block bigcontainerclass %}white{% endblock %}
+
+{% block scripts %}
+
+<script>
+    $(function () {
+        var availableKeywords = [
+            {% set jn = joiner('","') %}
+    "{% for k in keywords %}{{jn()|safe}}{{k.keyword}}{% endfor %}"
+  ];
+
+    var availableAuthors = [
+        {% set jn = joiner('","') %}
+    "{% for a in authors %}{{jn()|safe}}{{a.fullname}}{% endfor %}"
+  ];
+
+    var availableDomains = [
+        {% set jn = joiner('","') %}
+    "{% for d in domains %}{{jn()|safe}}{{d.domainname}}{% endfor %}"
+  ];
+
+    var availableNames = availableDomains.concat(availableAuthors, availableKeywords);
+
+    function split(val) {
+        return val.split(/,\s*/);
+    }
+    function extractLast(term) {
+        return split(term).pop();
+    }
+
+    function autocomplete_init(id, source) {
+        $(id)
+            // don't navigate away from the field on tab when selecting an item
+            .bind("keydown", function (event) {
+                if (event.keyCode === $.ui.keyCode.TAB &&
+                    $(this).data("ui-autocomplete").menu.active) {
+                    event.preventDefault();
+                }
+            })
+            .autocomplete({
+                minLength: 1,
+                source: function (request, response) {
+                    // delegate back to autocomplete, but extract the last term
+                    response($.ui.autocomplete.filter(
+                        source, extractLast(request.term)));
+                },
+                focus: function () {
+                    // prevent value inserted on focus
+                    return false;
+                },
+                select: function (event, ui) {
+                    var terms = split(this.value);
+                    // remove the current input
+                    terms.pop();
+                    // add the selected item
+                    terms.push(ui.item.value);
+                    // add placeholder to get the comma-and-space at the end
+                    //terms.push("");
+                    //this.value = terms.join(", ");
+                    //return false;
+                }
+            });
+    }
+
+    //autocomplete_init('#name', availableKeywords);
+    //autocomplete_init('#name', availableDomains);
+    //autocomplete_init('#name', availableAuthors);
+    autocomplete_init('#name', availableNames);
+    console.log(availableNames);
+
+
+});
+</script>
+
+<link rel="stylesheet" href="/static/lib/jquery-ui-1.10.4.custom/css/no-theme/jquery-ui-1.10.4.custom.min.css">
+<style>
+    .ui-autocomplete {
+        border-style: solid;
+        border-color: #CCCCCC;
+        border-width: 1px;
+        background-color: #F5f5f5;
+    }
+
+    .ui-state-focus {
+        background-color: #A5B7C5;
+    }
+</style>
+
+{% endblock %}
+
+{% block title %}Edit existing {{editname}} – {% endblock %}
+{% block body %}
+
+
+{% if not user_authenticated() %}
+<div style="margin-left:auto; margin-right:auto; max-width:37em">
+    <p>
+        Hello stranger, <br><br>
+        if you want to be a recognized user, you should
+        <a href="/login">login</a> or <a href="/reg">register</a>.
+        Otherwise you may upload a paper anonymously.
+        <br>
+        <br>
+    </p>
+</div>
+{% endif %}
+
+<form action="/{{editname}}/edit/{{name}}" method="post" class="addarticleform" enctype="multipart/form-data">
+    {% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+        {% endif %}
+
+    <h1>{{titleD}}</h1>
+
+    <div class=right>
+
+        <label for=id> ID: </label>
+        <input id=id type=text name=id readonly autofocus value="{{ request.form.id|e }}">
+        <br>
+
+        <label for=name> <span style="text-transform:capitalize">{{editname}}: </span></label>
+        <input id=name type=text name=name required value="{{ request.form.name|e }}" />
+        <br>
+
+    </div>
+    <div class="send">
+        <input class=btn type=submit value="Update the {{editname}}" />
+    </div>
+
+</form>
+
+
+{% endblock %}
