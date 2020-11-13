@@ -1,5 +1,33 @@
 {% extends "catalog/catalog.html" %}
 {% block title %} Author {{fullname}} – {% endblock %}
 {% block before_list %}
-  <h4>Papers of <em>{{fullname}}:</em></h4>
+<h4>Papers of <em>{{fullname}}:</em></h4>
+
+
+{% if user_authenticated() %}
+
+<div class="paper">
+
+  <div class="paper-info">
+
+
+    {% if entry.fullname | can_edit_author %}
+    <div class="paper-action delete float-right">
+      <a title="Delete the domain" onclick="return confirm('You really want to delete the author ?')"
+        href="/author/delete/{{fullname}}">
+        Remove author</a>
+    </div>
+
+
+    <div class="paper-action edit float-right">
+      <a title="Modify the author's fullname  " href="/author/edit/{{fullname}}">
+        Edit author </a>
+    </div>
+
+
+    {% endif %}
+
+  </div>
+</div>
+{% endif %}
 {% endblock %}
