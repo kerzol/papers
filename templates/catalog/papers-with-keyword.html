@@ -1,33 +1,15 @@
 {% extends "catalog/catalog.html" %}
 {% block title %} {{keyword}} – {% endblock %}
 {% block before_list %}
-  <h4>Papers with tag <em>{{keyword}}:</em></h4>
-
+<h4>Papers with tag <em>{{keyword}}</em>
   {% if user_authenticated() %}
-
-  <div class="paper">
-  
-    <div class="paper-info">
-  
-  
       {% if entry.keyword | can_edit_tag %}
-      <div class="paper-action delete float-right">
-        <a title="Delete the domain" onclick="return confirm('You really want to delete the tag ?')"
-          href="/tag/delete/{{keyword}}">
-          Remove tag</a>
-      </div>
-  
-  
-      <div class="paper-action edit float-right">
-        <a title="Modify the tag name  " href="/tag/edit/{{keyword}}">
-          Edit tag </a>
-      </div>
-  
-  
+        [{% if tag_not_assc %}
+          <a title="Delete the tag" onclick="return confirm('You really want to delete the tag ?')"
+            href="/tag/delete/{{keyword}}">remove</a> / 
+        {% endif %}
+        <a title="Modify the tag name  " href="/tag/edit/{{keyword}}">edit</a> ]
       {% endif %}
-
-    </div>
-  </div>
-
   {% endif %}
+</h4>
 {% endblock %}

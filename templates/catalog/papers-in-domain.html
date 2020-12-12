@@ -1,33 +1,15 @@
 {% extends "catalog/catalog.html" %}
 {% block title %} Domain {{domainname}} – {% endblock %}
 {% block before_list %}
-
-
-
-<h4>Papers in domain <em>{{domainname}}</em></h4>
-
-{% if user_authenticated() %}
-
-<div class="paper">
-
-  <div class="paper-info">
-
-
-    {% if entry.domainname | can_edit_domain %}
-    <div class="paper-action delete float-right">
-      <a title="Delete the domain" onclick="return confirm('You really want to delete the domain ?')"
-        href="/domain/delete/{{domainname}}">
-        Remove domain</a>
-    </div>
-
-    
-    <div class="paper-action edit float-right">
-      <a title="Modify the domain name  " href="/domain/edit/{{domainname}}">
-        Edit domain </a>
-    </div>
+<h4>Papers in domain <em>{{domainname}}</em>
+  {% if user_authenticated() %}
+    {% if entry.domainname | can_edit_domain  %}
+      [{% if domain_not_assc %}
+        <a title="Delete the domain" onclick="return confirm('You really want to delete the domain ?')"
+        href="/domain/delete/{{domainname}}">remove</a> / 
+      {% endif %}
+    <a title="Modify the domain name  " href="/domain/edit/{{domainname}}">edit</a> ]
     {% endif %}
-  </div>
-</div>
-
-{% endif %}
+  {% endif %}
+</h4>
 {% endblock %}

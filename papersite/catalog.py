@@ -5,8 +5,8 @@
 from papersite import app
 from flask import request, render_template, flash, redirect, url_for
 from papersite.db import (query_db, get_db, get_domains, get_keywords, get_authors,
-                         delete_author, delete_domain, delete_tag, delete_paper, 
-                         delete_papers_domain, delete_papers_authors, delete_papers_tags)
+                          delete_author, delete_domain, delete_tag, delete_paper,
+                          delete_papers_domain, delete_papers_authors, delete_papers_tags)
 from papersite.user import (get_user_id, is_super_admin, is_author_of_paper,
                             is_author_of_comment, user_authenticated, ANONYMOUS)
 
@@ -25,7 +25,6 @@ def render_catalog(template_name, **context):
                            **context)
 
 # add descriptions to the papers
-
 
 def with_description(papers):
     for p in papers:
@@ -60,6 +59,8 @@ def domain(domainname):
     domain = query_db("select domainid from domains where      \
                        domainname = ?",
                       [domainname], one=True)
+    domain_not_assc = query_db('SELECT domainid FROM domains WHERE domainname = ?  \
+                                and domainid not in (SELECT DISTINCT domainid FROM papers_domains)',[domainname])
     if (domain is None):
         return render_catalog('catalog/papers-in-domain.html',
                               error="Domain " +
@@ -76,6 +77,7 @@ def domain(domainname):
     return render_catalog('catalog/papers-in-domain.html',
                           entry=domain,
                           papers=with_description(papers),
+                          domain_not_assc=domain_not_assc,
                           domainname=domainname)
 
 
@@ -84,6 +86,8 @@ def keyword(keyword):
     k = query_db("select keywordid from keywords where      \
                        keyword = ?",
                  [keyword], one=True)
+    tag_not_assc = query_db('SELECT keyword FROM keywords WHERE keyword = ?  \
+                                and keywordid not in (SELECT DISTINCT keywordid FROM papers_keywords)',[keyword])
     if (k is None):
         return render_catalog('catalog/papers-with-keyword.html',
                               error="Tag " +
@@ -101,6 +105,7 @@ def keyword(keyword):
     return render_catalog('catalog/papers-with-keyword.html',
                           entry=k,
                           papers=with_description(papers),
+                          tag_not_assc=tag_not_assc,
                           keyword=keyword)
 
 
@@ -109,6 +114,8 @@ def author(fullname):
     a = query_db("select authorid from authors where      \
                        fullname = ?",
                  [fullname], one=True)
+    author_not_assc = query_db('SELECT authorid FROM authors WHERE fullname = ?  \
+                                and authorid not in (SELECT DISTINCT authorid FROM papers_authors)',[fullname])
     if (a is None):
         return render_catalog('catalog/papers-of-author.html',
                               error="Author " +
@@ -126,6 +133,7 @@ def author(fullname):
     return render_catalog('catalog/papers-of-author.html',
                           entry=a,
                           papers=with_description(papers),
+                          author_not_assc=author_not_assc,
                           fullname=fullname)
 
 
@@ -133,7 +141,7 @@ def author(fullname):
 def catalog():
     if request.args.get('q'):
         q = '%' + request.args.get('q') + '%'
-        papers = query_db("select * from papers                      \
+        papers = query_db("select * from papers                    \
                          where                                     \
                                deleted_at is null and              \
                                lower(title) like  lower(?)         \
@@ -144,15 +152,12 @@ def catalog():
                           papers=with_description(papers))
 
 
-####################### My Modifications ##############################
+####################### Modifications by Devhub01 ##############################
 
 ##### Domains #####
-
-
 @app.template_filter('can_edit_domain')
 def can_edit_domain(domainname):
     return can_delete_domain(domainname)
-
 
 @app.template_filter('can_delete_domain')
 def can_delete_domain(domainname):
@@ -163,56 +168,43 @@ def can_delete_domain(domainname):
         return is_super_admin(userid)
 
 ##### Authors #####
-
 @app.template_filter('can_edit_author')
 def can_edit_author(fullname):
     return can_delete_author(fullname)
 
-
 @app.template_filter('can_delete_author')
 def can_delete_author(fullname):
-    # Can an author delete his data ??
     userid = get_user_id()
     if (userid == ANONYMOUS):
         return False
     else:
         return is_super_admin(userid)
 
-
-
 ##### Tags #####
-
 @app.template_filter('can_edit_tag')
 def can_edit_tag(tagname):
     return can_delete_tag(tagname)
 
-
 @app.template_filter('can_delete_tag')
 def can_delete_tag(tagname):
-    # Can an author delete his data ??
     userid = get_user_id()
     if (userid == ANONYMOUS):
         return False
     else:
         return is_super_admin(userid)
 
-
-
-# Deleting/Modifying the domains
-#############################
-
+##### Deleting/Modifying the domains #####
 @app.route('/domain/delete/<string:domainname>', methods=['GET'])
 def delete_domain_with_check(domainname):
     if can_delete_domain(domainname):
         dom = query_db("select * from domains where domainname = ?",
-                       [domainname], one=True)
+                     [domainname], one=True)
         delete_domain(domainname)
         delete_papers_domain(dom['domainid'])
         flash('You successfully removed the domain')
         return redirect(url_for('catalog'))
     else:
         return "<h1>Forbidden</h1>", 403
-
 
 @app.route('/domain/edit/<string:domainname>', methods=['GET', 'POST'])
 def edit_domain(domainname):
@@ -229,7 +221,6 @@ def edit_domain(domainname):
         request.form.name = domain['domainname']
 
     if request.method == 'POST':
-
         if request.form['name'] == "":
             error = 'Please enter a valid name'
 
@@ -237,27 +228,19 @@ def edit_domain(domainname):
             con = get_db()
             with con:
                 con.execute('update domains set domainname = ? \
-                                    where domainid = ?',
+                            where domainid = ? ',
                             [request.form['name'], request.form['id']])
-
-                # TODO:
-
                 flash('You successfully modified the domain')
-                return redirect(url_for('domain',
-                                        domainname=request.form['name']))
+                return redirect(url_for('domain', domainname=request.form['name']))
     return render_template('catalog/edit.html',
                            entry=domain,
-
                            editname="domain",
                            error=error,
                            name=domainname,
-                           titleD="Edit the domain",
+                           titleP="Edit the domain",
                            domains=query_db("select * from domains"))
 
-
-
-# Deleting/Modifying the Authors
-########################################
+##### Deleting/Modifying the Authors ######
 @app.route('/author/delete/<string:fullname>', methods=['GET'])
 def delete_author_with_check(fullname):
     if can_delete_author(fullname):
@@ -269,7 +252,6 @@ def delete_author_with_check(fullname):
         return redirect(url_for('catalog'))
     else:
         return "<h1>Forbidden</h1>", 403
-
 
 @app.route('/author/edit/<string:fullname>', methods=['GET', 'POST'])
 def edit_author(fullname):
@@ -284,34 +266,26 @@ def edit_author(fullname):
     if request.method == 'GET':
         request.form.id = author['authorid']
         request.form.name = author['fullname']
-
     if request.method == 'POST':
-
         if request.form['name'] == "":
             error = 'Please enter a valid name'
-
         else:
             con = get_db()
             with con:
                 con.execute('update authors set fullname = ? \
-                                    where authorid = ?',
+                            where authorid = ?',
                             [request.form['name'], request.form['id']])
-
-                # TODO:
-
                 flash('You successfully modified the author')
-                return redirect(url_for('author',
-                                        fullname=request.form['name']))
+                return redirect(url_for('author',fullname=request.form['name']))
     return render_template('catalog/edit.html',
-                           editname="author",
-                           error=error,
-                           name=fullname,
-                           titleD="Edit the author",
-                           authors=query_db("select * from authors"))
+                        editname="author",
+                        error=error,
+                        name=fullname,
+                        titleP="Edit the author",
+                        authors=query_db("select * from authors"))
 
 
-# Deleting/Modifying the tags
-########################################
+###### Deleting/Modifying the tags ######
 @app.route('/tag/delete/<string:keyword>', methods=['GET'])
 def delete_tag_with_check(keyword):
     if can_delete_tag(keyword):
@@ -334,26 +308,21 @@ def edit_tag(keyword):
     tag = query_db("select *     \
                      from keywords   \
                      where keyword = ?",
-                   [keyword], one=True)
+                     [keyword], one=True)
 
     if request.method == 'GET':
         request.form.id = tag['keywordid']
         request.form.name = tag['keyword']
 
     if request.method == 'POST':
-
-        if request.form['name'] == "":
-            error = 'Please enter a valid name'
-
+        if request.form['name'] =="":
+            error = 'Please fill the name'
         else:
             con = get_db()
             with con:
                 con.execute('update keywords set keyword = ? \
                                     where keywordid = ?',
                             [request.form['name'], request.form['id']])
-
-                # TODO:
-
                 flash('You successfully modified the tag')
                 return redirect(url_for('keyword',
                                         keyword=request.form['name']))
@@ -361,5 +330,5 @@ def edit_tag(keyword):
                            editname="tag",
                            error=error,
                            name=keyword,
-                           titleD="Edit the tag",
+                           titleP="Edit the tag",
                            keywords=query_db("select * from keywords"))

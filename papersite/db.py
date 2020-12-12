@@ -172,7 +172,6 @@ def get_insert_domain(domainname):
     return id
  
 
-
 def likes(paperid):
     return query_db(
         "select count(*) as c                   \
@@ -250,13 +249,12 @@ def histore_paper_info(paper):
                     )
 
 
-############ My modifications ###############
-
+############ Modifications by Devhub01 ############### 
 def delete_domain(domainname):
     con = get_db()
     with con:
-        con.execute('delete from domains \
-                     where domainname = ?', [domainname])
+        con.execute('delete from domains WHERE domainname = ? \
+         and domainid not in (SELECT DISTINCT domainid FROM papers_domains)', [domainname])
     return id
 
 
