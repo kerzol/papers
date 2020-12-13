@@ -238,7 +238,7 @@ def edit_domain(domainname):
                            error=error,
                            name=domainname,
                            titleP="Edit the domain",
-                           domains=query_db("select * from domains"))
+                           domains=query_db("select * from domains where not (domainname = ?)", [domainname]))
 
 ##### Deleting/Modifying the Authors ######
 @app.route('/author/delete/<string:fullname>', methods=['GET'])
@@ -282,7 +282,7 @@ def edit_author(fullname):
                         error=error,
                         name=fullname,
                         titleP="Edit the author",
-                        authors=query_db("select * from authors"))
+                        authors=query_db("select * from authors where not (fullname = ?)",[fullname]))
 
 
 ###### Deleting/Modifying the tags ######
@@ -331,4 +331,4 @@ def edit_tag(keyword):
                            error=error,
                            name=keyword,
                            titleP="Edit the tag",
-                           keywords=query_db("select * from keywords"))
+                           keywords=query_db("select * from keywords where not (keyword = ?)", [keyword]))
