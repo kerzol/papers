@@ -277,9 +277,11 @@ def add_paper():
               paper_file.save(ppdf)
               ## this is just a hack.
               ## In order to generate first page
+              # should we use a hash value as file name ???
               filename_png = str(paperid) + ".png"
               ppng = os.path.join(app.config['PREVIEW_FOLDER'],filename_png)
               os.system('papersite/gen.sh ' + ppdf +  ' ' + ppng)
+              con.execute('update papers set img = ? where paperid = ?', [filename_png, paperid])
               # end of hack
 
               ## Sometimes authors provide a url to their paper
@@ -460,9 +462,29 @@ def edit_paper(paperid):
                   paper_file.save(ppdf)
                   ## this is just a hack.
                   ## In order to generate first page
-                  filename_png = str(paperid) + ".png"
+                  # should we use a hash value as file name ???
+                  oldfilename = query_db('select img from papers where paperid = ?',
+                           [paperid], one = True)['img']
+                  # Two cases we have. The transformations are the following
+                  # * 12312.png    -->   12312-1.png
+                  # * 213123-12.png -->  213123-13.png
+                  #
+                  print (oldfilename)
+                  if oldfilename is None:
+                      oldfilename = str(paperid) + ".png" # Another hack, lol
+                  ab = oldfilename.split('.')[0].split('-')
+                  if len(ab) == 1:
+                      # first case here, so
+                      filename_png = str(paperid) + "-1.png"
+                  else:
+                      # second case, already updated at least once
+                      # we Increment
+                      incu = str(int(ab[1]) + 1)
+                      filename_png = str(paperid) + "-" + incu + ".png"
+                  os.remove (os.path.join(app.config['PREVIEW_FOLDER'],oldfilename))
                   ppng = os.path.join(app.config['PREVIEW_FOLDER'],filename_png)
                   os.system('papersite/gen.sh ' + ppdf +  ' ' + ppng)
+                  con.execute('update papers set img = ? where paperid = ?', [filename_png, paperid])
                   # end of hack
 
               ## Sometimes authors provide a url to their paper

@@ -179,4 +179,13 @@ create table papers_history (
 
 create index ph_index1 on papers_history(paperid);
 
+-- cache control over paper images
+ALTER TABLE papers
+  ADD img TEXT;
+
+-- execute the following once, if you have an old db
+-- update papers set img = paperid||'.png';
+
+
+
 .quit
