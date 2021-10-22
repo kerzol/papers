@@ -140,12 +140,40 @@ def author(fullname):
 @app.route('/catalog', methods=['GET'])
 def catalog():
     if request.args.get('q'):
+        # Check if the string q is white space?
         q = '%' + request.args.get('q') + '%'
         papers = query_db("select * from papers                    \
                          where                                     \
                                deleted_at is null and              \
                                lower(title) like  lower(?)         \
                          order by title", [q])
+        ##### Search by Author #####
+        papers += query_db("select p.* from                        \
+                            papers p, authors a, papers_authors pa \
+                            where                                  \
+                                p.paperid = pa.paperid  and        \
+                                a.authorid = pa.authorid and       \
+                                p.deleted_at is null and           \
+                                lower(a.fullname) like lower(?)    \
+                            order by title", [q])
+        ##### Search by Domain #####
+        papers += query_db("select p.* from                        \
+                            papers p, domains d, papers_domains pd \
+                            where                                  \
+                                p.paperid = pd.paperid  and        \
+                                d.domainid = pd.domainid and       \
+                                p.deleted_at is null and           \
+                                lower(d.domainname) like lower(?)  \
+                            order by title", [q])
+        ##### Search by Keyword #####
+        papers += query_db("select p.* from                          \
+                            papers p, keywords k, papers_keywords pk \
+                            where                                    \
+                                p.paperid = pk.paperid  and          \
+                                k.keywordid = pk.keywordid and       \
+                                p.deleted_at is null and             \
+                                lower(k.keyword) like lower(?)       \
+                            order by title", [q])
     else:
         papers = []
     return render_catalog('catalog/catalog-search.html',
