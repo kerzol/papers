@@ -2,7 +2,8 @@
 ###############################
                   ##################
             ############
-import os, re
+import os, re, requests
+import xml.etree.cElementTree as et
 from papersite import app
 from papersite.db import (query_db, get_db, get_authors, get_domains,
                           get_keywords, get_comment, get_comments,
@@ -226,12 +227,15 @@ def parse_list(list):
 @app.route('/paper/add', methods=['GET','POST'])
 def add_paper():
     error = None
+    downLoadPaper = True
     if request.method == 'POST':
         if not user_authenticated():
             return "<h1>Forbidden (maybe you forgot to login)</h1>", 403
-        paper_file = request.files['pdf']
-        if not paper_file or not allowed_file(paper_file.filename):
-            error = 'Please choose a pdf file'
+        if request.form['arxiv-url'] == "":
+            downLoadPaper = False
+            paper_file = request.files['pdf']
+            if not paper_file or not allowed_file(paper_file.filename):
+                error = 'Please choose a pdf file'
         elif request.form['title'] == "":
             error = 'Please add a title'
         elif request.form['domains'] == "":
@@ -241,6 +245,9 @@ def add_paper():
         elif request.form['keywords'] == "":
             error = 'Please add some keywords'
         else:
+            if downLoadPaper:
+                url = 'https://arxiv.org/pdf/'+request.form['arxiv-url'].split('/abs/')[1]
+                paper_file = requests.get(url, stream= True)
             con = get_db()
             with con:
               con.execute('insert into papers(title,userid)         \
@@ -271,10 +278,17 @@ def add_paper():
                             (paperid, keywordid)                      \
                             values(?,?)',[paperid, keywordid])
 
-              filename_pdf = str(paperid) + "-" +                       \
-                             secure_filename(paper_file.filename)
-              ppdf = os.path.join(app.config['UPLOAD_FOLDER'],filename_pdf)
-              paper_file.save(ppdf)
+              if downLoadPaper:
+                    filename_pdf = request.form['arxiv-url'].split('/abs/')[1]+'.pdf'
+                    filename_pdf = filename_pdf.replace('/', '-')
+                    with open(app.config['UPLOAD_FOLDER']+'/'+filename_pdf, 'wb') as fd:
+                        fd.write(paper_file.content)
+                    ppdf = os.path.join(app.config['UPLOAD_FOLDER'],filename_pdf)
+              else:
+                    filename_pdf = str(paperid) + "-" +                       \
+                        secure_filename(paper_file.filename)
+                    ppdf = os.path.join(app.config['UPLOAD_FOLDER'],filename_pdf)
+                    paper_file.save(ppdf)
               ## this is just a hack.
               ## In order to generate first page
               # should we use a hash value as file name ???
@@ -552,3 +566,48 @@ def unlike_paper(paperid,title):
                      paperid = ? and userid=?',
                     [paperid, get_user_id()])
     return str(likes(paperid))
+
+### Get paper informations from ArXiv
+###############################
+                  ##################
+            ############
+
+
+@app.route('/paper/arxiv/<string:field>', methods=['GET'])
+@app.route('/paper/arxiv/<string:field>/<string:paperid>', methods=['GET'])
+def get_arxiv_paper(field, paperid = ""):
+    error = ""
+    code = 0
+    if field == "" or field.isspace() :
+        error = "Please enter a valid id"
+        code = 400
+    else:
+        if paperid == "" or paperid.isspace():
+            r = requests.get('http://export.arxiv.org/api/query?id_list=' + field)
+        else:
+            r = requests.get('http://export.arxiv.org/api/query?id_list=' + field + "/" + paperid)
+        if(r.status_code != 200):
+            if(r.status_code == 404):
+                error = "The paper with this id was not found"
+                code = 404
+            elif(r.status_code == 400):
+                error = "Invalid ArXiv id"
+                code = 400
+            else:
+                error = "An error occured"
+                code = r.status_code
+        else:            
+            content = r.content.decode("utf-8")
+            content = content.replace("\n", "")
+            title = re.findall("<title>(.*?)</title>",content, re.DOTALL)
+            title = " ".join(title[0].split())
+            authors_name = re.findall("<name>(.*?)</name>",content, re.DOTALL)
+            domains = re.findall("<category term=\"(.*?)\"", content, re.DOTALL)
+            paper_info = {
+                "title": title,
+                "authors": ",".join(authors_name),
+                "domains": ",".join(domains)
+            }
+            return paper_info, 200
+    er = {"error": error}
+    return er, code
