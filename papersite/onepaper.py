@@ -300,11 +300,13 @@ def add_paper():
 
               ## Sometimes authors provide a url to their paper
               ## in this case we don't store a full paper, we use the url instead
-              if request.form['url'] != "":
+              if request.form['url'] != "" or request.form['arxiv-url'] != "":
                   os.remove(ppdf)
+                  if request.form['url'] != "":
+                      url = request.form['url']
                   con.execute("update papers set getlink = ?             \
                                where paperid=?",
-                              [request.form['url'], paperid])
+                              [url, paperid])
               else:
                   con.execute("update papers set getlink = ?             \
                                where paperid=?",
