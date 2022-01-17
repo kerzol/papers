@@ -65,6 +65,36 @@ $(function() {
  autocomplete_init ('#domains', availableDomains);
  autocomplete_init ('#authors', availableAuthors);
 
+// Search for article using ArXiv URL
+ document.getElementById ("arxiv-button").addEventListener ("click", getArXivArtivle);
+ function getArXivArtivle(){
+   var url = document.getElementById("arxiv-url").value;
+   if(url == undefined || url === "" ){
+      alert("Please enter a valid ArXiv URL");
+      return;
+   }
+   id = url.split('/abs/')[1];
+   // Getting the article info
+   $.ajax({
+      type: "GET",
+      url: "/paper/arxiv/" + id,
+      dataType: "json",
+      success: function (result) {
+          var title = result.title;
+          document.getElementById("title").value = result.title;
+          document.getElementById("authors").value = result.authors;
+          document.getElementById("domains").value = result.domains;
+      },
+      error: function (error) {
+          if(error.status == 400){
+            alert("The ArXiv url is invalid!");
+          }
+          if(error.status == 404){
+            alert("ArXiv article not found!");
+          }
+      }
+  });
+  }
 
 });
 </script>
@@ -111,6 +141,12 @@ $(function() {
     <h1>Add a paper</h1>
     
     <div class=right>
+
+      <label for=arxiv-url> ArXiv URL: </label>
+      <input id=arxiv-url type=text name=arxiv-url autofocus
+              placeholder="https://arxiv.org/abs/example-paper">
+      <button id="arxiv-button" type="button">Search article</button>
+      <br>
 
       <label for=title> Title: </label>
       <input id=title type=text name=title autofocus
