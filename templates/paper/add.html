@@ -179,6 +179,11 @@ $(function() {
       <label for=pdf> PDF: </label>
       <input id=pdf type=file name=pdf accept="application/pdf">
 
+      <div class="remark">
+        If ArXiv URL is specified, the system will fetch the fist paper's page from ArXiv.
+        The field 'PDF' becomes useless in this case.
+      </div>
+
       {% include "remark.html" %}
 
       <div class="url">
