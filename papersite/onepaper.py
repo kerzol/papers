@@ -227,15 +227,13 @@ def parse_list(list):
 @app.route('/paper/add', methods=['GET','POST'])
 def add_paper():
     error = None
-    downLoadPaper = True
     if request.method == 'POST':
         if not user_authenticated():
             return "<h1>Forbidden (maybe you forgot to login)</h1>", 403
-        if request.form['arxiv-url'] == "":
-            downLoadPaper = False
-            paper_file = request.files['pdf']
-            if not paper_file or not allowed_file(paper_file.filename):
-                error = 'Please choose a pdf file'
+        paper_file = request.files['pdf'] 
+        downLoadPaper = True if (request.form['arxiv-url'] != "") else False
+        if not downLoadPaper and (not paper_file or not allowed_file(paper_file.filename)):
+            error = 'Please choose a pdf file'
         elif request.form['title'] == "":
             error = 'Please add a title'
         elif request.form['domains'] == "":
@@ -246,7 +244,17 @@ def add_paper():
             error = 'Please add some keywords'
         else:
             if downLoadPaper:
-                url = 'https://arxiv.org/pdf/'+request.form['arxiv-url'].split('/abs/')[1]
+                # Checks if the arXiv URL is valid by getting the ID out of it.
+                try:
+                    arXivId = request.form['arxiv-url'].split('/abs/')[1]
+                except IndexError :
+                    error = 'Please enter a valid arXiv URL'
+                    return render_template('paper/add.html', 
+                           error=error,
+                           domains=query_db ("select * from domains"),
+                           keywords=query_db ("select * from keywords"),
+                           authors=query_db ("select * from authors"))
+                url = 'https://arxiv.org/pdf/'+arXivId
                 paper_file = requests.get(url, stream= True)
             con = get_db()
             with con:
@@ -279,7 +287,7 @@ def add_paper():
                             values(?,?)',[paperid, keywordid])
 
               if downLoadPaper:
-                    filename_pdf = request.form['arxiv-url'].split('/abs/')[1]+'.pdf'
+                    filename_pdf = arXivId+'.pdf'
                     filename_pdf = filename_pdf.replace('/', '-')
                     with open(app.config['UPLOAD_FOLDER']+'/'+filename_pdf, 'wb') as fd:
                         fd.write(paper_file.content)

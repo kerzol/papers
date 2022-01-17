@@ -84,10 +84,6 @@ $(function() {
           document.getElementById("title").value = result.title;
           document.getElementById("authors").value = result.authors;
           document.getElementById("domains").value = result.domains;
-          document.getElementById("pdf").disabled = true;
-          document.getElementById("arxiv-url").readOnly = true;
-          document.getElementById("arxiv-button").disabled =  true;
-          document.getElementById("url").readOnly =  true;
       },
       error: function (error) {
           if(error.status == 400){
