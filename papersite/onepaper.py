@@ -24,7 +24,7 @@ from papersite.notifications import (new_paper_was_added,
 
 @app.template_filter('is_internal_pdf')
 def is_internal_pdf(link):
-    return re.match('^/static/memory/pdfs/(.*)\.[Pp][Dd][Ff]$', str(link))
+    return re.match(r'^/static/memory/pdfs/(.*)\.[Pp][Dd][Ff]$', str(link))
 
 @app.template_filter('can_edit_comment')
 def can_edit_comment(commentid):
